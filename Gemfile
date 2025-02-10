@@ -46,7 +46,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # make sure references to sqlite3 gem ONLY appear in dev/test groups
-  gem 'sqlite3'
+  gem "sqlite3"
 end
 
 group :development do
@@ -56,15 +56,15 @@ end
 
 # make sure the following gems are in your production group:
 group :production do
-  gem 'pg'              # use PostgreSQL in production (Heroku)
+  gem "pg"              # use PostgreSQL in production (Heroku)
 end
 
 # setup Cucumber, RSpec, Guard support
 group :test do
-  gem 'rspec-rails'
-  gem 'guard-rspec'
-  gem 'simplecov', :require => false
-  gem 'cucumber-rails', :require => false
-  gem 'cucumber-rails-training-wheels' # basic imperative step defs like "Then I should see..."
-  gem 'database_cleaner' # required by Cucumber
+  gem "rspec-rails"
+  gem "guard-rspec"
+  gem "simplecov", require: false
+  gem "cucumber-rails", require: false
+  gem "cucumber-rails-training-wheels" # basic imperative step defs like "Then I should see..."
+  gem "database_cleaner" # required by Cucumber
 end
