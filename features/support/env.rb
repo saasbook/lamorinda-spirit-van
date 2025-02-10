@@ -5,6 +5,9 @@
 # files.
 
 
+require 'simplecov'
+SimpleCov.start
+
 require 'cucumber/rails'
 
 # By default, any exception happening in your Rails application will bubble up
