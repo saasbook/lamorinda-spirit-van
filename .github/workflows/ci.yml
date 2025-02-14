@@ -52,3 +52,57 @@ jobs:
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
+  
+  cucumber:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: rails
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_database
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+      
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 23.6.1
+    
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y libpq-dev postgresql-client
+          gem install bundler:2.6.2
+          bundle install
+          
+      - name: Setup Database
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://rails:password@localhost:5432/test_database
+        run: |
+          bundle exec rake db:setup
+          bundle exec rake db:test:prepare
+
+      - name: Run Cucumber Tests
+        env:
+          RAILS_ENV: test
+        run: bundle exec cucumber
+
