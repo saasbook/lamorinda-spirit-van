@@ -1,5 +1,4 @@
 module SeedData
-
   def self.drivers
     [
       {
