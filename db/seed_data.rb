@@ -7,7 +7,8 @@ module SeedData
         email:        'jd@lamorinda.com',
         shifts:       {
                         "sun": [
-                          "am"
+                          "am",
+                          "pm"
                         ],
                         "mon": [
                           "pm"
