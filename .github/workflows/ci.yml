@@ -106,4 +106,10 @@ jobs:
         env:
           RAILS_ENV: test
         run: bundle exec cucumber
-
+  codeclimate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v9.0.0
+        env:
+          CC_TEST_REPORTER_ID: c59906436459490bc1b25f332c52a4a5483316284a4def7f386f3c8c66fd575c
