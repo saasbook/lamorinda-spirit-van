@@ -15,8 +15,66 @@
   </p>
 
   <p>
-    <strong>Shifts:</strong>
-    <%= driver.shifts %>
+    <strong>Sunday Shifts:</strong>
+    <% driver.shifts['sun'].each do |shift| %>
+      <p>
+        <%= shift %>
+      </p>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Monday Shifts:</strong>
+    <% driver.shifts['mon'].each do |shift| %>
+      <p>
+        <%= shift %>
+      </p>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Tuesday Shifts:</strong>
+    <% driver.shifts['tue'].each do |shift| %>
+      <p>
+        <%= shift %>
+      </p>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Wednesday Shifts:</strong>
+    <% driver.shifts['wed'].each do |shift| %>
+      <p>
+        <%= shift %>
+      </p>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Thursday Shifts:</strong>
+    <% driver.shifts['thu'].each do |shift| %>
+      <p>
+        <%= shift %>
+      </p>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Friday Shifts:</strong>
+    <% driver.shifts['fri'].each do |shift| %>
+      <p>
+        <%= shift %>
+      </p>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Saturday Shifts:</strong>
+    <% driver.shifts['sat'].each do |shift| %>
+      <p>
+        <%= shift %>
+      </p>
+    <% end %>
   </p>
 
   <p>
