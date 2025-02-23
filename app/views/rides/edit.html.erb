@@ -1,0 +1,38 @@
+<% content_for :title, "Editing ride" %>
+
+<h1>Editing ride</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Day</th>
+      <th>Date</th>
+      <th>Driver</th>
+      <th>Van</th>
+      <th>Passenger Name & Phone</th>
+      <th>Passenger Address</th>
+      <th>Destination</th>
+      <th>Notes to Driver</th>
+      <th>Hours</th>
+      <th>Amount Paid</th>
+      <th>Ride Count</th>
+      <th>C</th>
+      <th>Notes/Date Reserved</th>
+      <th>Confirmed w/ Passenger</th>
+      <th>Driver Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <%= render partial: "ride", locals: { ride: @ride } %>
+    </tr>
+  </tbody>
+</table>
+
+<%= render "form", ride: @ride %>
+
+<br>
+
+<div>
+  <%= link_to "Back to rides", rides_path %>
+</div>
