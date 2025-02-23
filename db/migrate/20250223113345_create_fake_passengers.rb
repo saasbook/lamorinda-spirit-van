@@ -7,15 +7,15 @@ class CreateFakePassengers < ActiveRecord::Migration[7.2]
       t.string :address, null: false
       t.string :city, null: false
       t.string :state, default: "CA"
-      t.string :zip, null: false
-      t.string :phone, null: false
+      t.string :zip
+      t.string :phone
       t.string :alternative_phone
-      t.date :birthday, null: false
-      t.integer :race, null: false
+      t.date :birthday
+      t.integer :race
       t.string :hispanic
       t.string :email
       t.text :notes
-      t.date :date_registered, null: false
+      t.date :date_registered
       t.text :audit
 
       t.timestamps
