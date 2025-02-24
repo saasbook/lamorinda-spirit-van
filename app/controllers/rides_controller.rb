@@ -41,6 +41,13 @@ class RidesController < ApplicationController
         redirect_to rides_url, notice: "Ride was successfully destroyed."
     end
 
+    def filter
+        @rides = Ride.all
+        if params[:driver_name].present?
+        @rides = @rides.where("driver LIKE ?", "%#{params[:driver_name]}%")
+        end
+    end
+
     private
 
     def set_ride
