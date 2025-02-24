@@ -13,5 +13,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "rides#index"
 
-  resources :rides
+  resources :rides do
+    collection do
+      get "filter"
+    end
+  end
 end
