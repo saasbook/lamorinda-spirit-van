@@ -1,0 +1,57 @@
+<div id="<%= dom_id driver %>">
+  <p>
+    <strong>Name:</strong>
+    <%= driver.name %>
+  </p>
+
+  <p>
+    <strong>Phone:</strong>
+    <%= driver.phone %>
+  </p>
+
+  <p>
+    <strong>Email:</strong>
+    <%= driver.email %>
+  </p>
+
+  <p>
+    <strong>Sunday Shifts:</strong>
+    <%= driver.shifts['sun'].join(', ') %>
+  </p>
+
+  <p>
+    <strong>Monday Shifts:</strong>
+    <%= driver.shifts['mon'].join(', ') %>
+  </p>
+
+  <p>
+    <strong>Tuesday Shifts:</strong>
+    <%= driver.shifts['tue'].join(', ') %>
+  </p>
+
+  <p>
+    <strong>Wednesday Shifts:</strong>
+    <%= driver.shifts['wed'].join(', ') %>
+  </p>
+
+  <p>
+    <strong>Thursday Shifts:</strong>
+    <%= driver.shifts['thu'].join(', ') %>
+  </p>
+
+  <p>
+    <strong>Friday Shifts:</strong>
+    <%= driver.shifts['fri'].join(', ') %>
+  </p>
+
+  <p>
+    <strong>Saturday Shifts:</strong>
+    <%= driver.shifts['sat'].join(', ') %>
+  </p>
+
+  <p>
+    <strong>Active:</strong>
+    <%= driver.active %>
+  </p>
+
+</div>
