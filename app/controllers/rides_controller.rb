@@ -42,10 +42,7 @@ class RidesController < ApplicationController
     end
 
     def filter
-        @rides = Ride.all
-        if params[:driver_name].present?
-        @rides = @rides.where("driver LIKE ?", "%#{params[:driver_name]}%")
-        end
+        @rides = Ride.filtered_rides(params[:driver_name])
     end
 
     private
