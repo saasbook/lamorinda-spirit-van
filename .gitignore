@@ -36,3 +36,6 @@
 
 # Ignore simplecov output
 /coverage/*
+
+# Ignore .DS_Store file
+.DS_Store
