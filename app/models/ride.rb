@@ -10,4 +10,5 @@ class Ride < ApplicationRecord
   def self.filtered_rides(driver_name)
     today.filter_by_driver(driver_name)
   end
+  
 end

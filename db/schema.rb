@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.2].define(version: 2025_02_24_022846) do
+
   create_table "drivers", force: :cascade do |t|
     t.string "name"
     t.string "phone"
