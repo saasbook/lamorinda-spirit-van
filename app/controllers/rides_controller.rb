@@ -37,8 +37,8 @@ class RidesController < ApplicationController
     end
 
     def destroy
-        @ride.destroy
-        redirect_to rides_url, notice: "Ride was successfully destroyed."
+        @ride.destroy!
+        redirect_to rides_url, notice: "Ride was successfully removed."
     end
 
     private

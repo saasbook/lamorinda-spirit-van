@@ -11,99 +11,47 @@
   <% end %>
 
   <table>
-  <thead>
-    <tr>
-      <th>Day</th>
-      <th>Date</th>
-      <th>Driver</th>
-      <th>Van</th>
-      <th>Passenger Name & Phone</th>
-      <th>Passenger Address</th>
-      <th>Destination</th>
-      <th>Notes to Driver</th>
-      <th>Hours</th>
-      <th>Amount Paid</th>
-      <th>Ride Count</th>
-      <th>C</th>
-      <th>Notes/Date Reserved</th>
-      <th>Confirmed w/ Passenger</th>
-      <th>Driver Email</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <%= form.label :day %>
-      <%= form.text_field :day %>
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Date</th>
+        <th>Driver</th>
+        <th>Van</th>
+        <th>Passenger Name & Phone</th>
+        <th>Passenger Address</th>
+        <th>Destination</th>
+        <th>Notes to Driver</th>
+        <th>Hours</th>
+        <th>Amount Paid</th>
+        <th>Ride Count</th>
+        <th>C</th>
+        <th>Notes/Date Reserved</th>
+        <th>Confirmed w/ Passenger</th>
+        <th>Driver Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= form.text_field :day %></td>
+        <td><%= form.date_select :date %></td>
+        <td><%= form.text_field :driver %></td>
+        <td><%= form.number_field :van %></td>
+        <td><%= form.text_field :passenger_name_and_phone %></td>
+        <td><%= form.text_field :passenger_address %></td>
+        <td><%= form.text_field :destination %></td>
+        <td><%= form.text_area :notes_to_driver %></td>
+        <td><%= form.number_field :hours, step: 0.1 %></td>
+        <td><%= form.number_field :amount_paid, step: 0.01 %></td>
+        <td><%= form.number_field :ride_count %></td>
+        <td><%= form.text_field :c %></td>
+        <td><%= form.text_field :notes_date_reserved %></td>
+        <td><%= form.text_field :confirmed_with_passenger %></td>
+        <td><%= form.text_field :driver_email %></td>
+      </tr>
+    </tbody>
+  </table>
 
-      <%= form.label :date %>
-      <%= form.date_select :date %>
-
-      <div class="field">
-        <%= form.label :driver %>
-        <%= form.text_field :driver %>
-      </div>
-
-      <div class="field">
-        <%= form.label :van %>
-        <%= form.text_field :van %>
-      </div>
-
-      <div class="field">
-        <%= form.label :passenger_name_and_phone, "Passenger Name & Phone" %>
-        <%= form.text_field :passenger_name_and_phone %>
-      </div>
-
-      <div class="field">
-        <%= form.label :passenger_address %>
-        <%= form.text_field :passenger_address %>
-      </div>
-
-      <div class="field">
-        <%= form.label :destination %>
-        <%= form.text_field :destination %>
-      </div>
-
-      <div class="field">
-        <%= form.label :hours %>
-        <%= form.number_field :hours, step: 0.1 %>
-      </div>
-
-      <div class="field">
-        <%= form.label :amount_paid %>
-        <%= form.number_field :amount_paid, step: 0.01 %>
-      </div>
-
-      <div class="field">
-        <%= form.label :ride_count %>
-        <%= form.number_field :ride_count %>
-      </div>
-
-      <div class="field">
-        <%= form.label :c %>
-        <%= form.text_field :c %>
-      </div>
-
-      <div class="field">
-        <%= form.label :notes_date_reserved, "Notes/Date Reserved" %>
-        <%= form.text_field :notes_date_reserved %>
-      </div>
-
-      <div class="field">
-        <%= form.label :confirmed_with_passenger %>
-        <%= form.text_field :confirmed_with_passenger %>
-      </div>
-
-      <div class="field">
-        <%= form.label :driver_email %>
-        <%= form.text_field :driver_email %>
-      </div>
-
-      <div class="actions">
-        <%= form.submit %>
-      </div>
-
-    </tr>
-  </tbody>
-</table>        
-
+  <div class="actions">
+    <%= form.submit %>
+  </div>
 <% end %>
