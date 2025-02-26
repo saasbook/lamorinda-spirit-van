@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema[7.2].define(version: 2025_02_24_022846) do
   create_table "rides", force: :cascade do |t|
     t.string "day", null: false
@@ -28,5 +29,27 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_24_022846) do
     t.text "notes_date_reserved"
     t.text "confirmed_with_passenger"
     t.string "driver_email"
+  end
+end
+ActiveRecord::Schema[7.2].define(version: 2025_02_23_113345) do
+  create_table "passengers", force: :cascade do |t|
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "full_name", null: false
+    t.string "address", null: false
+    t.string "city", null: false
+    t.string "state", default: "CA"
+    t.string "zip"
+    t.string "phone"
+    t.string "alternative_phone"
+    t.date "birthday"
+    t.integer "race"
+    t.string "hispanic"
+    t.string "email"
+    t.text "notes"
+    t.date "date_registered"
+    t.text "audit"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 end

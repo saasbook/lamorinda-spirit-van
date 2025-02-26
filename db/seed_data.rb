@@ -1,125 +1,183 @@
-# module SeedData
-#   def self.rides
-#     [
-#       {
-#         day: "Monday",
-#         date: "2025-02-24",
-#         driver: "Lawrence",
-#         van: "Van #123",
-#         passenger_name_and_phone: "Herry (555) 123-4567",
-#         passenger_address: "Shattuck Avenue",
-#         destination: "Berkeley",
-#         notes_to_driver: "Please be on time",
-#         driver_initials: "L",
-#         hours: 2.5,
-#         amount_paid: 150.00,
-#         ride_count: 1,
-#         c: "common order",
-#         notes_date_reserved: "2025-02-20",
-#         confirmed_with_passenger: "confirmed"
-#       },
-#       {
-#         day: "Wednesday",
-#         date: "2025-02-26",
-#         driver: "Lawrence",
-#         van: "Van #123",
-#         passenger_name_and_phone: "Alice (555) 987-6543",
-#         passenger_address: "Maple Street",
-#         destination: "San Francisco",
-#         notes_to_driver: "Pick up at entrance B",
-#         driver_initials: "L",
-#         hours: 3.0,
-#         amount_paid: 200.00,
-#         ride_count: 2,
-#         c: "regular",
-#         notes_date_reserved: "2025-02-22",
-#         confirmed_with_passenger: "confirmed"
-#       },
-#       {
-#         day: "Friday",
-#         date: "2025-02-28",
-#         driver: "Lawrence",
-#         van: "Van #123",
-#         passenger_name_and_phone: "Bob (555) 555-1212",
-#         passenger_address: "Oak Avenue",
-#         destination: "Sacramento",
-#         notes_to_driver: "Wheelchair accessible",
-#         driver_initials: "L",
-#         hours: 4.5,
-#         amount_paid: 275.00,
-#         ride_count: 3,
-#         c: "priority",
-#         notes_date_reserved: "2025-02-24",
-#         confirmed_with_passenger: "not confirmed"
-#       },
-#       {
-#         day: "Tuesday",
-#         date: "2025-02-25",
-#         driver: "Emily",
-#         van: "Van #456",
-#         passenger_name_and_phone: "Tom (555) 111-2222",
-#         passenger_address: "Main Street",
-#         destination: "Oakland",
-#         notes_to_driver: "Please call before arrival",
-#         driver_initials: "E",
-#         hours: 3.0,
-#         amount_paid: 200.00,
-#         ride_count: 1,
-#         c: "special order",
-#         notes_date_reserved: "2025-02-21",
-#         confirmed_with_passenger: "confirmed"
-#       },
-#       {
-#         day: "Thursday",
-#         date: "2025-02-27",
-#         driver: "Emily",
-#         van: "Van #456",
-#         passenger_name_and_phone: "Diana (555) 333-4444",
-#         passenger_address: "Elm Street",
-#         destination: "San Jose",
-#         notes_to_driver: "Special meal request (vegetarian)",
-#         driver_initials: "E",
-#         hours: 3.5,
-#         amount_paid: 180.00,
-#         ride_count: 2,
-#         c: "dietary",
-#         notes_date_reserved: "2025-02-25",
-#         confirmed_with_passenger: "confirmed"
-#       },
-#       {
-#         day: "Wednesday",
-#         date: "2025-02-26",
-#         driver: "Sarah",
-#         van: "Van #789",
-#         passenger_name_and_phone: "Bob Smith Jr. (555) 987-6543",
-#         passenger_address: "456 Oak Lane #2B",
-#         destination: "Sacramento",
-#         notes_to_driver: "Luggage limit: 2 suitcases",
-#         driver_initials: "S",
-#         hours: 5.5,
-#         amount_paid: 325.00,
-#         ride_count: 1,
-#         c: "express",
-#         notes_date_reserved: "2025-02-23",
-#         confirmed_with_passenger: "not confirmed"
-#       },
-#       {
-#         day: "Friday",
-#         date: "2025-03-01",
-#         driver: "Sarah",
-#         van: "Van #789",
-#         passenger_name_and_phone: "Evelyn Garcia (555) 456-7890",
-#         passenger_address: "321 Elm Street",
-#         destination: "San Jose",
-#         notes_to_driver: "Meet at the hotel lobby at 10:00 AM, need assistance with luggage to room 312",
-#         driver_initials: "S",
-#         hours: 7.0,
-#         amount_paid: 500.00,
-#         ride_count: 2,
-#         c: "luxury",
-#         notes_date_reserved: "2025-02-26",
-#         confirmed_with_passenger: "confirmed"
-#       }
-#     ]
-#   end
-# end
+module SeedData
+  def self.drivers
+    [
+      {
+        name:         'John Doe',
+        phone:        '0000000000',
+        email:        'jd@lamorinda.com',
+        shifts:       {
+                        "sun": [
+                          "am",
+                          "pm"
+                        ],
+                        "mon": [
+                          "pm"
+                        ],
+                        "tue": [
+                          "LARC"
+                        ],
+                        "wed": [
+                          "shopping"
+                        ],
+                        "thu": [
+                          "Café Costa"
+                        ],
+                        "fri": [
+                          "am",
+                          "pm"
+                        ],
+                        "sat": [
+                          ""
+                        ]
+                      },
+        active:       true
+      },
+      {
+        name:         'Jane Dal',
+        phone:        '000-000-0000',
+        email:        'jd@lamorinda.com',
+        shifts:       {
+                        "sun": [
+                          "am"
+                        ],
+                        "mon": [
+                          "pm"
+                        ],
+                        "tue": [
+                          "LARC"
+                        ],
+                        "wed": [
+                          "shopping"
+                        ],
+                        "thu": [
+                          "Café Costa"
+                        ],
+                        "fri": [
+                          "am",
+                          "pm"
+                        ],
+                        "sat": [
+                          ""
+                        ]
+                      },
+        active:       true
+      },
+      {
+        name:         'Mike Jackson',
+        phone:        '510-687-8824',
+        email:        'mike@lamorinda.com',
+        shifts:       {
+                        "sun": [
+                          ""
+                        ],
+                        "mon": [
+                          "am"
+                        ],
+                        "tue": [
+                          "shopping"
+                        ],
+                        "wed": [
+                          "LARC"
+                        ],
+                        "thu": [
+                          ""
+                        ],
+                        "fri": [
+                          "am"
+                        ],
+                        "sat": [
+                          ""
+                        ]
+                      },
+        active:       true
+      },
+      {
+        name:         'Peter Packer',
+        phone:        '510-123-4567',
+        email:        'peter@lamorinda.com',
+        shifts:       {
+                        "sun": [
+                          "pm"
+                        ],
+                        "mon": [
+                          ""
+                        ],
+                        "tue": [
+                          ""
+                        ],
+                        "wed": [
+                          "LARC"
+                        ],
+                        "thu": [
+                          ""
+                        ],
+                        "fri": [
+                          "am"
+                        ],
+                        "sat": [
+                          ""
+                        ]
+                      },
+        active:       true
+      },
+      {
+        name:         'Robert Tony',
+        phone:        '510-123-3333',
+        email:        '',
+        shifts:       {
+                        "sun": [
+                          "pm"
+                        ],
+                        "mon": [
+                          ""
+                        ],
+                        "tue": [
+                          ""
+                        ],
+                        "wed": [
+                          "LARC"
+                        ],
+                        "thu": [
+                          ""
+                        ],
+                        "fri": [
+                          "am"
+                        ],
+                        "sat": [
+                          ""
+                        ]
+                      },
+        active:       true
+      },
+      {
+        name:         'Mary Jane',
+        phone:        '666-999-0000',
+        email:        'mary@lamorinda.com',
+        shifts:       {
+                        "sun": [
+                          "am"
+                        ],
+                        "mon": [
+                          "pm"
+                        ],
+                        "tue": [
+                          ""
+                        ],
+                        "wed": [
+                          ""
+                        ],
+                        "thu": [
+                          ""
+                        ],
+                        "fri": [
+                          ""
+                        ],
+                        "sat": [
+                          ""
+                        ]
+                      },
+        active:       false
+      }
+    ]
+  end
+end
