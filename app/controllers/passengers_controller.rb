@@ -25,7 +25,7 @@ class PassengersController < ApplicationController
 
     respond_to do |format|
       if @passenger.save
-        format.html { redirect_to @passenger, notice: "Passenger was successfully created." }
+        format.html { redirect_to passengers_path, notice: "Passenger created." }
         format.json { render :show, status: :created, location: @passenger }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +38,7 @@ class PassengersController < ApplicationController
   def update
     respond_to do |format|
       if @passenger.update(passenger_params)
-        format.html { redirect_to @passenger, notice: "Passenger was successfully updated." }
+        format.html { redirect_to edit_passenger_path(@passenger), notice: "Passenger updated." }
         format.json { render :show, status: :ok, location: @passenger }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,7 +52,7 @@ class PassengersController < ApplicationController
     @passenger.destroy!
 
     respond_to do |format|
-      format.html { redirect_to passengers_path, status: :see_other, notice: "Passenger was successfully destroyed." }
+      format.html { redirect_to passengers_path, status: :see_other, notice: "Passenger deleted." }
       format.json { head :no_content }
     end
   end
