@@ -34,6 +34,7 @@ gem "bootsnap", require: false
 
 # for importing excel databases
 gem "roo"
+
 gem "activerecord-import"
 gem "csv"
 
