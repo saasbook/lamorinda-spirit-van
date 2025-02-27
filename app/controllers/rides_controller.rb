@@ -19,7 +19,7 @@ class RidesController < ApplicationController
         if @ride.save
             redirect_to @ride, notice: "Ride was successfully created."
         else
-            render :new
+            render :new, status: :unprocessable_entity
         end
     end
 
@@ -31,7 +31,6 @@ class RidesController < ApplicationController
             flash[:notice] = "Ride was successfully updated."
             redirect_to @ride
         else
-            flash[:alert] = "There was an error updating the ride."
             render :edit, status: :unprocessable_entity
         end
     end
