@@ -441,6 +441,7 @@ DEPENDENCIES
   rspec-rails
   rubocop-rails-omakase
   simplecov
+  simplecov_json_formatter
   sprockets-rails
   sqlite3
   stimulus-rails
