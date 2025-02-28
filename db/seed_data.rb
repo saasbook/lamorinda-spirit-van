@@ -2,7 +2,7 @@ module SeedData
   def self.drivers
     [
       {
-        name:         'John Doe',
+        name:         'Sarah',
         phone:        '0000000000',
         email:        'jd@lamorinda.com',
         shifts:       {
@@ -33,7 +33,7 @@ module SeedData
         active:       true
       },
       {
-        name:         'Jane Dal',
+        name:         'Mike',
         phone:        '000-000-0000',
         email:        'jd@lamorinda.com',
         shifts:       {
@@ -63,7 +63,7 @@ module SeedData
         active:       true
       },
       {
-        name:         'Mike Jackson',
+        name:         'John',
         phone:        '510-687-8824',
         email:        'mike@lamorinda.com',
         shifts:       {
@@ -92,7 +92,7 @@ module SeedData
         active:       true
       },
       {
-        name:         'Peter Packer',
+        name:         'Emily',
         phone:        '510-123-4567',
         email:        'peter@lamorinda.com',
         shifts:       {
@@ -121,7 +121,7 @@ module SeedData
         active:       true
       },
       {
-        name:         'Robert Tony',
+        name:         'Robert',
         phone:        '510-123-3333',
         email:        '',
         shifts:       {
@@ -150,7 +150,7 @@ module SeedData
         active:       true
       },
       {
-        name:         'Mary Jane',
+        name:         'Mary',
         phone:        '666-999-0000',
         email:        'mary@lamorinda.com',
         shifts:       {
