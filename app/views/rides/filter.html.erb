@@ -1,7 +1,7 @@
 <div class="filter-page">
   <%= stylesheet_link_tag "rides", media: "all", "data-turbo-track": "reload" %>
 
-  <h1>Filtered Rides for <%= Date.today.strftime("%m/%d/%Y") %></h1>
+  <h1>Filtered Rides for <%= Time.zone.today.strftime("%m/%d/%Y") %></h1>
 
   <%= form_with url: filter_rides_path, method: :get, local: true, class: "filter-form" do |form| %>
     <div class="form-group">
