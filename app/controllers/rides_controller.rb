@@ -46,12 +46,8 @@ class RidesController < ApplicationController
 
         driver_name_text = params[:driver_name_text].presence
         driver_name_select = params[:driver_name_select].presence
-        if driver_name_text.present?
-            @rides = @rides.filtered_rides(driver_name_text)
-        end
-        if driver_name_select.present?
-            @rides = @rides.filtered_rides(driver_name_select)
-        end
+
+        @rides = Ride.filtered_rides(driver_name_text, driver_name_select)
 
         @drivers = Driver.all.pluck(:name).sort
     end
