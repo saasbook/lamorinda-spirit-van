@@ -6,6 +6,7 @@
 ## SP25 Badges
 [![All Specs](https://github.com/cs169/lamorinda-spirit-van/actions/workflows/ci.yml/badge.svg)](https://github.com/cs169/lamorinda-spirit-van/actions/workflows/ci.yml)
 [![Code Climate](https://codeclimate.com/github/cs169/lamorinda-spirit-van.png)](https://codeclimate.com/github/cs169/lamorinda-spirit-van)
+[![codecov](https://codecov.io/gh/cs169/lamorinda-spirit-van/graph/badge.svg?token=QOaGQgsitu)](https://codecov.io/gh/cs169/lamorinda-spirit-van)
 
 ## saasbook/lamorinda-spirit-van Badges
 
