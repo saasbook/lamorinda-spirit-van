@@ -12,8 +12,8 @@
 
 ActiveRecord::Schema[7.2].define(version: 2025_02_24_022846) do
   create_table "drivers", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "phone" null: false
+    t.string "name"
+    t.string "phone"
     t.string "email"
     t.json "shifts"
     t.boolean "active"
