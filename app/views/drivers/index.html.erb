@@ -8,10 +8,12 @@
     <div class="alert alert-danger"><%= flash[:alert] %></div>
   <% end %>
 
-  <!-- New Driver button -->
+  <!-- UI Buttons -->
   <div class="mb-3">
     <%= link_to "New Driver", new_driver_path, class: "btn btn-primary" %>
+    <%= link_to 'Back to Home', filter_rides_path, class: 'btn btn-secondary back-btn' %>
   </div>
 
   <%= render 'driver' %>
+
 </div>
