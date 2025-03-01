@@ -39,11 +39,12 @@ class RidesController < ApplicationController
     def destroy
         @ride.destroy!
         redirect_to rides_url, notice: "Ride was successfully removed."
+    rescue ActiveRecord::RecordNotDestroyed
+        flash[:alert] = "Failed to remove the ride."
+        redirect_to rides_url, status: :unprocessable_entity
     end
 
     def filter
-        @rides = Ride.filtered_rides(params[:driver_name])
-
         driver_name_text = params[:driver_name_text].presence
         driver_name_select = params[:driver_name_select].presence
 
