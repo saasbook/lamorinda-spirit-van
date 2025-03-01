@@ -21,7 +21,6 @@ class DriversController < ApplicationController
 
   # POST /drivers or /drivers.json
   def create
-
     # transform any comma-separated shifts into arrays:
     if params[:driver][:shifts].present?
       params[:driver][:shifts].each do |day_key, shift_string|
@@ -32,7 +31,7 @@ class DriversController < ApplicationController
         params[:driver][:shifts][day_key] = splits
       end
     end
-    
+
     @driver = Driver.new(driver_params)
 
     respond_to do |format|
