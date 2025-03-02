@@ -55,14 +55,14 @@ class RidesController < ApplicationController
 
     def filter
         @rides = Ride.all
-        @vans = Ride.distinct.pluck(:van) 
-    end 
+        @vans = Ride.distinct.pluck(:van)
+    end
 
     def filter_results
         @rides = Ride.filter_rides(params[:filters])
         @vans = Ride.distinct.pluck(:van)
         render :filter
-    end 
+    end
 
     private
 

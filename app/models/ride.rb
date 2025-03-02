@@ -36,23 +36,23 @@ class Ride < ApplicationRecord
     if filter_params[:destination].present?
       destination = filter_params[:destination]
       rides = rides.where("LOWER(destination) LIKE ?", "%#{destination.downcase}%")
-    end 
+    end
 
     if filter_params[:date_start].present?
       date_start = Date.parse(filter_params[:date_start])
       rides = rides.where("date >= ?", date_start) if date_start
-    end 
+    end
 
     if filter_params[:date_end].present?
       date_end = Date.parse(filter_params[:date_end])
-    else 
+    else
       date_end = Date.today
-    end 
+    end
     rides = rides.where("date <= ?", date_end) if date_end
 
     rides = rides.where(van: filter_params[:van].presence) if filter_params[:van].present?
     rides = rides.where(destination: filter_params[:destination].presence) if filter_params[:destination].present?
-    
+
     rides
   end
 end
