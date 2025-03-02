@@ -40,11 +40,23 @@ class RidesController < ApplicationController
         redirect_to rides_url, notice: "Ride was successfully removed."
     end
 
-    def filter
+    def today
         @rides = Ride.filtered_rides(params[:driver_name])
     end
 
+    def filter
+        @rides = Ride.all
+        @vans = Ride.distinct.pluck(:van) 
+    end 
+
+    def filter_results
+        @rides = Ride.filter_rides(params[:filters])
+        @vans = Ride.distinct.pluck(:van)
+        render :filter
+    end 
+
     private
+
 
     def set_ride
         @ride = Ride.find(params[:id])
