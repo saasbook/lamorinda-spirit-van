@@ -52,7 +52,7 @@ class Ride < ApplicationRecord
 
     rides = rides.where(van: filter_params[:van].presence) if filter_params[:van].present?
     rides = rides.where(destination: filter_params[:destination].presence) if filter_params[:destination].present?
-
+    
     rides
   end
 end
