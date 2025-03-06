@@ -21,7 +21,17 @@ class ShiftsController < ApplicationController
 
   # POST /shifts or /shifts.json
   def create
-    @shift = Shift.new(shift_params)
+    if params[:shift][:driver_id].present?
+      @driver = Driver.find(params[:shift][:driver_id])
+    end
+
+    # if driver_id is present, build the shift under the driver
+    # otherwise build a new shift
+    @shift = if @driver
+      @driver.shifts.build(shift_params)
+    else
+      Shift.new(shift_params)
+    end
 
     respond_to do |format|
       if @shift.save
@@ -65,6 +75,6 @@ class ShiftsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def shift_params
-      params.require(:shift).permit(:shift_date, :shift_type)
+      params.require(:shift).permit(:shift_date, :shift_type, :driver_id)
     end
 end
