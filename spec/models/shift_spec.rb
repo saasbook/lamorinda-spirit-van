@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 RSpec.describe Shift, type: :model do
   let(:driver) { Driver.create!(name: "Test Driver", phone: "000-000-0000", email: "jd@lamorinda.com", active: true) }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShiftsController < ApplicationController
   before_action :set_shift, only: %i[ show edit update destroy ]
 
@@ -70,13 +72,13 @@ class ShiftsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_shift
-      @shift = Shift.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_shift
+    @shift = Shift.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def shift_params
-      params.require(:shift).permit(:shift_date, :shift_type, :driver_id)
-    end
+  # Only allow a list of trusted parameters through.
+  def shift_params
+    params.require(:shift).permit(:shift_date, :shift_type, :driver_id)
+  end
 end
