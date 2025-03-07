@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given("I visit the Homepage") do
   visit root_path
 end

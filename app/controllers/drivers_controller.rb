@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DriversController < ApplicationController
   before_action :set_driver, only: %i[ show edit update destroy ]
 
@@ -58,13 +60,13 @@ class DriversController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_driver
-      @driver = Driver.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_driver
+    @driver = Driver.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def driver_params
-      params.require(:driver).permit(:name, :phone, :email, :shifts, :active)
-    end
+  # Only allow a list of trusted parameters through.
+  def driver_params
+    params.require(:driver).permit(:name, :phone, :email, :shifts, :active)
+  end
 end

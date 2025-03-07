@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module SeedData
   def self.drivers
     [
       {
-        name:         'Sarah',
-        phone:        '0000000000',
-        email:        'jd@lamorinda.com',
+        name:         "Sarah",
+        phone:        "0000000000",
+        email:        "jd@lamorinda.com",
         shifts:       {
                         "sun": [
                           "am",
@@ -33,9 +35,9 @@ module SeedData
         active:       true
       },
       {
-        name:         'Mike',
-        phone:        '000-000-0000',
-        email:        'jd@lamorinda.com',
+        name:         "Mike",
+        phone:        "000-000-0000",
+        email:        "jd@lamorinda.com",
         shifts:       {
                         "sun": [
                           "am"
@@ -63,9 +65,9 @@ module SeedData
         active:       true
       },
       {
-        name:         'John',
-        phone:        '510-687-8824',
-        email:        'mike@lamorinda.com',
+        name:         "John",
+        phone:        "510-687-8824",
+        email:        "mike@lamorinda.com",
         shifts:       {
                         "sun": [
                           ""
@@ -92,9 +94,9 @@ module SeedData
         active:       true
       },
       {
-        name:         'Emily',
-        phone:        '510-123-4567',
-        email:        'peter@lamorinda.com',
+        name:         "Emily",
+        phone:        "510-123-4567",
+        email:        "peter@lamorinda.com",
         shifts:       {
                         "sun": [
                           "pm"
@@ -121,9 +123,9 @@ module SeedData
         active:       true
       },
       {
-        name:         'Robert',
-        phone:        '510-123-3333',
-        email:        '',
+        name:         "Robert",
+        phone:        "510-123-3333",
+        email:        "",
         shifts:       {
                         "sun": [
                           "pm"
@@ -150,9 +152,9 @@ module SeedData
         active:       true
       },
       {
-        name:         'Mary',
-        phone:        '666-999-0000',
-        email:        'mary@lamorinda.com',
+        name:         "Mary",
+        phone:        "666-999-0000",
+        email:        "mary@lamorinda.com",
         shifts:       {
                         "sun": [
                           "am"

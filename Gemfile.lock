@@ -360,6 +360,8 @@ GEM
       rubocop-minitest
       rubocop-performance
       rubocop-rails
+    rubocop-rspec (3.4.0)
+      rubocop (~> 1.61)
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
     securerandom (0.4.1)
@@ -444,7 +446,11 @@ DEPENDENCIES
   rails-controller-testing
   roo
   rspec-rails
+  rubocop
+  rubocop-performance
+  rubocop-rails
   rubocop-rails-omakase
+  rubocop-rspec
   simplecov
   simplecov_json_formatter
   sprockets-rails
