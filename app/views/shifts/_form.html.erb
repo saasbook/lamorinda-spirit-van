@@ -13,14 +13,14 @@
 
   <div>
     <%= form.label :shift_date, style: "display: block" %>
-    <%= form.date_field :shift_date %>
+    <%= form.date_field :shift_date, required: true %>
   </div>
 
   <div>
     <%= form.label :driver_id, "Driver", style: "display: block" %>
-    <%= form.collection_select :driver_id, Driver.all, :id, :name, prompt: "Select a driver" %>
+    <%= form.collection_select :driver_id, Driver.all, :id, :name, { prompt: "Select a driver" }, required: true %>
     <%= form.label :shift_type, style: "display: block" %>
-    <%= form.text_field :shift_type %>
+    <%= form.text_field :shift_type, required: true %>
   </div>
 
   <div>
