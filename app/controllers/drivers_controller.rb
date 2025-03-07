@@ -21,22 +21,20 @@ class DriversController < ApplicationController
 
   # POST /drivers or /drivers.json
   def create
+    @driver = Driver.new(driver_params)
+
     respond_to do |format|
       if @driver.save
-        format.html { redirect_to drivers_path, notice: "Driver was successfully created." }
+        format.html { redirect_to @driver, notice: "Driver was successfully created." }
         format.json { render :show, status: :created, location: @driver }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @driver.errors, status: :unprocessable_entity }
-      end
-    end
-  end
 
   # PATCH/PUT /drivers/1 or /drivers/1.json
   def update
     respond_to do |format|
       if @driver.update(driver_params)
-        format.html { redirect_to edit_driver_path(@driver), notice: "Driver was successfully updated." }
+        format.html { redirect_to @driver, notice: "Driver was successfully updated." }
         format.json { render :show, status: :ok, location: @driver }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -50,7 +48,7 @@ class DriversController < ApplicationController
     @driver.destroy!
 
     respond_to do |format|
-      format.html { redirect_to drivers_path, status: :see_other, notice: "Driver was successfully deleted." }
+      format.html { redirect_to drivers_path, status: :see_other, notice: "Driver was successfully destroyed" }
       format.json { head :no_content }
     end
   end
@@ -63,6 +61,6 @@ class DriversController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def driver_params
-      params.require(:driver).permit(:name, :phone, :email, :active, shifts: {})
+      params.require(:driver).permit(:name, :phone, :email, :shifts, :active)
     end
 end
