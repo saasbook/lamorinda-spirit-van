@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "csv"
 
 namespace :import do
@@ -15,24 +17,24 @@ namespace :import do
     puts "Importing fake passengers from #{file_path}..."
 
     CSV.foreach(file_path, headers: true) do |row|
-        puts "Row Data: #{row.to_h}"
-        Passenger.create!(
-            first_name: row["First Name"],
-            last_name: row["Last Name"],
-            full_name: row["Name"],
-            address: row["Address"],
-            city: row["City"],
-            state: row["ST"],
-            zip: row["Zip"],
-            phone: row["Phone"],
-            alternative_phone: row["Alternative Phone"],
-            birthday: Date.parse(row["Birthday"]),
-            race: row["Race"].to_i,
-            hispanic: row["Hispanic"],
-            email: row["Email"].presence,
-            notes: row["Notes"].presence,
-            date_registered: Date.strptime(row["Date Registered"], "%m/%d/%Y"),
-            audit: row["Audit"]
+      puts "Row Data: #{row.to_h}"
+      Passenger.create!(
+          first_name: row["First Name"],
+          last_name: row["Last Name"],
+          full_name: row["Name"],
+          address: row["Address"],
+          city: row["City"],
+          state: row["ST"],
+          zip: row["Zip"],
+          phone: row["Phone"],
+          alternative_phone: row["Alternative Phone"],
+          birthday: Date.parse(row["Birthday"]),
+          race: row["Race"].to_i,
+          hispanic: row["Hispanic"],
+          email: row["Email"].presence,
+          notes: row["Notes"].presence,
+          date_registered: Date.strptime(row["Date Registered"], "%m/%d/%Y"),
+          audit: row["Audit"]
         )
     end
 
