@@ -1,4 +1,6 @@
-require_relative 'seed_data'
+# frozen_string_literal: true
+
+require_relative "seed_data"
 
 Driver.destroy_all
 
