@@ -23,26 +23,26 @@ class ShiftsController < ApplicationController
 
   # POST /shifts or /shifts.json
   def create
-    if params[:shift][:driver_id].present?
-      @driver = Driver.find(params[:shift][:driver_id])
+    # Check if there is a driver_id
+    if params[:shift][:driver_id].blank?
+      redirect_to new_shift_path, alert: "Driver is required to create a shift."
+      return
     end
 
-    # if driver_id is present, build the shift under the driver
-    # otherwise build a new shift
-    @shift = if @driver
-      @driver.shifts.build(shift_params)
+    # Find driver
+    @driver = Driver.find_by(id: params[:shift][:driver_id])
+    if @driver.nil?
+      redirect_to new_shift_path, alert: "Driver not found."
+      return
+    end
+
+    # Create shift
+    @shift = @driver.shifts.build(shift_params)
+
+    if @shift.save
+      redirect_to @shift, notice: "Shift was successfully created."
     else
-      Shift.new(shift_params)
-    end
-
-    respond_to do |format|
-      if @shift.save
-        format.html { redirect_to @shift, notice: "Shift was successfully created." }
-        format.json { render :show, status: :created, location: @shift }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @shift.errors, status: :unprocessable_entity }
-      end
+      render :new, status: :unprocessable_entity
     end
   end
 

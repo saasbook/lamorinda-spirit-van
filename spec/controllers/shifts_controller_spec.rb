@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe ShiftsController, type: :controller do
-  let(:driver) { Driver.create(name: "Test Driver") }
-  let(:shift) { Shift.create(shift_date: Date.today, shift_type: "morning", driver: driver) }
+  let!(:driver) { Driver.create!(name: "Test Driver", phone: "000-000-0000", email: "jd@lamorinda.com", active: true) }
+  let!(:shift) { Shift.create!(shift_date: Date.today, shift_type: "morning", driver: driver) }
 
   describe "GET #index" do
     it "returns a successful response" do
@@ -36,13 +36,25 @@ RSpec.describe ShiftsController, type: :controller do
       end
     end
 
-    context "with invalid parameters" do
-      it "does not create a shift and re-renders the new template" do
+    context "with missing driver_id" do
+      it "does not create a shift and redirects to new_shift_path with an alert" do
         expect {
-          post :create, params: { shift: { shift_date: nil, shift_type: "morning", driver_id: driver.id } }
+          post :create, params: { shift: { shift_date: Date.today, shift_type: "evening", driver_id: nil } }
         }.not_to change(Shift, :count)
 
-        expect(response).to render_template(:new)
+        expect(response).to redirect_to(new_shift_path)
+        expect(flash[:alert]).to eq("Driver is required to create a shift.")
+      end
+    end
+
+    context "with invalid driver_id" do
+      it "does not create a shift and redirects to new_shift_path with an alert" do
+        expect {
+          post :create, params: { shift: { shift_date: Date.today, shift_type: "evening", driver_id: 9999 } }
+        }.not_to change(Shift, :count)
+
+        expect(response).to redirect_to(new_shift_path)
+        expect(flash[:alert]).to eq("Driver not found.")
       end
     end
   end
@@ -76,7 +88,6 @@ RSpec.describe ShiftsController, type: :controller do
 
   describe "DELETE #destroy" do
     it "destroys the shift and redirects to the shifts index" do
-      shift
       expect {
         delete :destroy, params: { id: shift.id }
       }.to change(Shift, :count).by(-1)
