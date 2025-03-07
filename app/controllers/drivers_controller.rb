@@ -29,6 +29,10 @@ class DriversController < ApplicationController
         format.json { render :show, status: :created, location: @driver }
       else
         format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @driver.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # PATCH/PUT /drivers/1 or /drivers/1.json
   def update
@@ -48,7 +52,7 @@ class DriversController < ApplicationController
     @driver.destroy!
 
     respond_to do |format|
-      format.html { redirect_to drivers_path, status: :see_other, notice: "Driver was successfully destroyed" }
+      format.html { redirect_to drivers_path, status: :see_other, notice: "Driver was successfully destroyed." }
       format.json { head :no_content }
     end
   end
