@@ -18,23 +18,7 @@
           </p>
           <hr/>
 
-          <% day_mapping = {
-            "Sunday" => "sun",
-            "Monday" => "mon",
-            "Tuesday" => "tue",
-            "Wednesday" => "wed",
-            "Thursday" => "thu",
-            "Friday" => "fri",
-            "Saturday" => "sat"
-          } %>
-
-          <% day_mapping.each do |day_name, shift_key| %>
-            <% raw_shifts = (driver.shifts || {})[shift_key] || [] %>
-            <% shifts_for_day = raw_shifts.reject(&:blank?).join(", ") %>
-            <% shifts_for_day = "" if shifts_for_day.blank? %>
-
-            <strong><%= day_name %> Shifts:</strong> <%= shifts_for_day %><br/>
-          <% end %>
+          <strong>Shifts: TBD</strong>
 
           <hr/>
           <strong>Active:</strong> <%= driver.active? ? "Yes" : "No" %>

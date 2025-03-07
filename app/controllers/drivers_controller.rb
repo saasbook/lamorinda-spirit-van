@@ -21,19 +21,6 @@ class DriversController < ApplicationController
 
   # POST /drivers or /drivers.json
   def create
-    # transform any comma-separated shifts into arrays:
-    if params[:driver][:shifts].present?
-      params[:driver][:shifts].each do |day_key, shift_string|
-        # Split the input by commas, trim whitespace, remove empties
-        # Example: "am, pm" => ["am", "pm"]
-        # Blank or nil becomes an empty array
-        splits = shift_string.to_s.split(",").map(&:strip).reject(&:blank?)
-        params[:driver][:shifts][day_key] = splits
-      end
-    end
-
-    @driver = Driver.new(driver_params)
-
     respond_to do |format|
       if @driver.save
         format.html { redirect_to drivers_path, notice: "Driver was successfully created." }
