@@ -2,14 +2,25 @@
 
 <% content_for :title, "Shifts" %>
 
-<h1>Shifts</h1>
+<%= stylesheet_link_tag 'shifts', media: 'all' %>
 
-<div id="shifts">
-  <% @shifts.each do |shift| %>
-    <%= render shift %>
-    <p>
-      <%= link_to "Show this shift", shift %>
-    </p>
+<h1>Shifts Calendar</h1>
+
+<div id="shifts-calendar">
+  <%# The following line starts with the following parameter which can be replaced by
+  'week_calenda' or 'month_calendar' or 'calendar' %>
+  <%= month_calendar(attribute: :shift_date, events: @shifts) do |date, shifts| %>
+    <%= date %>
+
+    <% shifts.each do |shift| %>
+      <div>
+        <strong>
+          <%= link_to shift.driver.name, shift, style: "color: blue; text-decoration: underline;" %>
+        </strong>
+        <br>
+        <%= shift.shift_type %>
+      </div>
+    <% end %>
   <% end %>
 </div>
 
