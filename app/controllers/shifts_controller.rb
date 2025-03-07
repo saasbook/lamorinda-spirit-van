@@ -17,6 +17,7 @@ class ShiftsController < ApplicationController
   # GET /shifts/new
   def new
     @shift = Shift.new
+    @date = params[:date]
   end
 
   # GET /shifts/1/edit
