@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PassengersController < ApplicationController
   before_action :set_passenger, only: %i[ show edit update destroy ]
 
@@ -58,13 +60,13 @@ class PassengersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_passenger
-      @passenger = Passenger.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_passenger
+    @passenger = Passenger.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def passenger_params
-      params.require(:passenger).permit(:first_name, :last_name, :full_name, :address, :city, :state, :zip, :phone, :alternative_phone, :birthday, :race, :hispanic, :email, :notes, :date_registered, :audit)
-    end
+  # Only allow a list of trusted parameters through.
+  def passenger_params
+    params.require(:passenger).permit(:first_name, :last_name, :full_name, :address, :city, :state, :zip, :phone, :alternative_phone, :birthday, :race, :hispanic, :email, :notes, :date_registered, :audit)
+  end
 end
