@@ -22,8 +22,6 @@ class RidesController < ApplicationController
     else
         render :new, status: :unprocessable_entity
     end
-
-    end
   end
 
   def edit
@@ -42,9 +40,9 @@ class RidesController < ApplicationController
   def destroy
     @ride.destroy!
     redirect_to rides_url, notice: "Ride was successfully removed."
-rescue ActiveRecord::RecordNotDestroyed
-  flash[:alert] = "Failed to remove the ride."
-  redirect_to rides_url, status: :unprocessable_entity
+    rescue ActiveRecord::RecordNotDestroyed
+    flash[:alert] = "Failed to remove the ride."
+    redirect_to rides_url, status: :unprocessable_entity
   end
 
     def today
@@ -53,17 +51,33 @@ rescue ActiveRecord::RecordNotDestroyed
       
         @rides = Ride.driver_today_view(driver_name_text, driver_name_select)
         @drivers = Driver.all.pluck(:name).sort
-  end
+    end
 
     def filter
         @rides = Ride.all
-        @vans = Ride.distinct.pluck(:van)
     end
 
     def filter_results
-        @rides = Ride.filter_rides(params[:filters])
-        @vans = Ride.distinct.pluck(:van)
-        render :filter
+      filter_params = {
+        'day': params['day'],
+        'driver_name': params['driver_name'],
+        'passenger_name_and_phone': params['passenger_name_and_phone'],
+        'passenger_address': params['passenger_address'],
+        'destination': params['destination'],
+        'van': params['van'],
+        'start_date': params['start_date'],
+        'end_date': params['end_date'],
+        'driver_email': params['driver_email'],
+        'confirmed': params['confirmed'],
+        'ride_count': params['ride_count'],
+        'amount_paid': params['amount_paid'],
+        'hours': params['hours'],
+        'driver_initials': params['driver_initials']
+
+      }
+
+      @rides = Ride.filter_rides(filter_params)
+      render :filter
     end
 
     private
