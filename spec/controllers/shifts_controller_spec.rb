@@ -38,6 +38,17 @@ RSpec.describe ShiftsController, type: :controller do
       end
     end
 
+    context "with empty shift_type" do
+      it "does not create a shift and re-renders the new template" do
+        expect {
+          post :create, params: { shift: { shift_date: Date.today, shift_type: "", driver_id: driver.id } }
+        }.not_to change(Shift, :count)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template(:new)
+      end
+    end
+
     context "with missing driver_id" do
       it "does not create a shift and redirects to new_shift_path with an alert" do
         expect {
