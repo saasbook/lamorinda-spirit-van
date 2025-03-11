@@ -11,7 +11,7 @@ RSpec.describe RidesController, type: :controller do
 
     # warning: the weekday_abbreviation is a little diffrent from fake rides data
     # 2025-03-01 is a Friday, the weekday_abbreviation is 'Fri', but the fake rides data is 'F'
-    weekday_abbreviation = today.strftime("%a")
+    # weekday_abbreviation = today.strftime("%a")
     @ride1 = Ride.create(day: "F", date: today, driver: @driver1.name, van: 6, passenger_name_and_phone: "Brown, Patricia (555-475-3199)", passenger_address: "143 Pine Rd.", destination: "Walnut Creek", notes_to_driver: "Bring a mask", driver_initials: "JD", hours: 1.5, amount_paid: 20.0, ride_count: 1, c: "C", notes_date_reserved: "02/27/2025", confirmed_with_passenger: "Yes", driver_email: "sent")
     @ride2 = Ride.create(day: "M", date: today, driver: @driver2.name, van: 6, passenger_name_and_phone: "Brown, Patricia (555-475-3199)", passenger_address: "143 Pine Rd.", destination: "Walnut Creek", notes_to_driver: "Bring a mask", driver_initials: "JD", hours: 1.5, amount_paid: 20.0, ride_count: 1, c: "C", notes_date_reserved: "02/27/2025", confirmed_with_passenger: "Yes", driver_email: "sent")
     @ride3 = Ride.create(day: "W", date: today, driver: @driver1.name, van: 6, passenger_name_and_phone: "Brown, Patricia (555-475-3199)", passenger_address: "143 Pine Rd.", destination: "Walnut Creek", notes_to_driver: "Bring a mask", driver_initials: "JD", hours: 1.5, amount_paid: 20.0, ride_count: 1, c: "C", notes_date_reserved: "02/27/2025", confirmed_with_passenger: "Yes", driver_email: "sent")
