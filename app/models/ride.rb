@@ -38,17 +38,18 @@ class Ride < ApplicationRecord
 
     # Handle LIKE filters in a loop
     {
-      day: "day",
-      driver_name: "driver",
-      passenger_name_and_phone: "passenger_name_and_phone",
-      passenger_address: "passenger_address",
-      destination: "destination",
-      driver_email: "driver_email",
-      driver_initials: "driver_initials",
-      confirmed: "confirmed_with_passenger"
+      day: 'day',
+      driver_name: 'driver',
+      passenger_name_and_phone: 'passenger_name_and_phone',
+      passenger_address: 'passenger_address',
+      destination: 'destination',
+      driver_email: 'driver_email',
+      driver_initials: 'driver_initials',
+      confirmed: 'confirmed_with_passenger'
     }.each do |key, column|
       if filter_params[key].present?
-        rides = rides.where("LOWER(#{column}) LIKE ?", "%#{filter_params[key].downcase}%")
+        sanitized_column = Arel.sql(column) # Safely cast column name
+        rides = rides.where("LOWER(#{sanitized_column}) LIKE ?", "%#{filter_params[key].downcase}%")
       end
     end
 
