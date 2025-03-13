@@ -17,10 +17,14 @@ class Ride < ApplicationRecord
   # if driver_name_text is present, return rides that match driver_name_text
   # if driver_name_select is present, return rides that match driver_name_select
   # if neither driver_name_text nor driver_name_select are present, return all rides
+  #
+  # the date parameter is optional, if not present, return rides for Time.zone.today
+  # if date is present, return rides for that "date"(could be yesterday, tomorrow, etc, depends on how user selects)
+  # if date is not present, return rides for today
 
   def self.driver_today_view(driver_name_text = nil, driver_name_select = nil, date = nil)
-    # date = date.presence || Time.zone.today
-    date = date.presence
+    date = date.presence || Time.zone.today
+    # date = date.presence
     rides = today_rides(Ride.all, date)
     if driver_name_text.present? && driver_name_select.present?
       rides_text = rides_by_driver(rides, driver_name_text)
