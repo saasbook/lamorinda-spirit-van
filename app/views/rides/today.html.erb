@@ -1,66 +1,66 @@
 <div class="today-page">
-  <%= stylesheet_link_tag "rides", media: "all", "data-turbo-track": "reload" %>
-
   <h1>Rides for <%= @current_date.strftime("%m/%d/%Y") %></h1>
-
-  <%= form_with url: today_rides_path, method: :get, local: true, class: "today-form" do |form| %>
-    <%# <div class="form-group"> %>
-      <%# <%= form.label :driver_name, "Search by Driver Name", class: "form-label" %> 
-      <%# <%= form.text_field :driver_name_text, value: params[:driver_name_text], class: "form-control", placeholder: "Enter driver name" %> 
-      <%# <%= form.select :driver_name_select, options_for_select(@drivers, params[:driver_name_select]), { include_blank: "Select a driver" }, class: "form-control" %> 
-    <%# </div> %>
-    <%# <div class="button-group"> %>
-      <%# <%= form.submit 'That\'s me!', class: 'btn btn-primary' %> 
-      <%# <%= link_to 'Clear', today_rides_path, class: 'btn btn-secondary' %> 
-    <%# </div> %>
+  <form class="today-form">
     <div class="button-group">
       <%= link_to 'Yesterday', today_rides_path(date: @current_date - 1.day), class: 'btn btn-secondary' %>
       <%= link_to 'Today', today_rides_path(date: Time.zone.today), class: 'btn btn-primary' %>
       <%= link_to 'Tomorrow', today_rides_path(date: @current_date + 1.day), class: 'btn btn-secondary' %>
     </div>
+  </form>
 
-  <% end %>
-
-  <% if @rides.present? %>
-    <table class="rides-table">
-      <thead>
-        <tr>
-          <th>Day</th>
-          <th>Date</th>
-          <th>Driver</th>
-          <th>Van</th>
-          <th>Passenger Name & Phone</th>
-          <th>Passenger Address</th>
-          <th>Destination</th>
-          <th>Notes to Driver</th>
-          <th>Hours</th>
-          <th>Amount Paid</th>
-          <th>Ride Count</th>
-          <th>Confirmed with Passenger</th>
-          <th>Driver Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @rides.each do |ride| %>
+  <% if @rides.any? %>
+    <div class="rides-container">
+      
+      <!-- Table for PC users -->
+      <table class="rides-table">
+        <thead>
           <tr>
-            <td><%= ride.day %></td>
-            <td><%= ride.date.strftime("%m/%d/%Y") %></td>
-            <td><%= ride.driver %></td>
-            <td><%= ride.van %></td>
-            <td><%= ride.passenger_name_and_phone %></td>
-            <td><%= ride.passenger_address %></td>
-            <td><%= ride.destination %></td>
-            <td><%= ride.notes_to_driver %></td>
-            <td><%= ride.hours %></td>
-            <td><%= number_to_currency(ride.amount_paid) %></td>
-            <td><%= ride.ride_count %></td>
-            <td><%= ride.confirmed_with_passenger %></td>
-            <td><%= ride.driver_email %></td>
+            <th>Day</th>
+            <th>Date</th>
+            <th>Van</th>
+            <th>Passenger</th>
+            <th>Address</th>
+            <th>Destination</th>
+            <th>Notes</th>
+            <th>Hours</th>
+            <th>Fee</th>
           </tr>
+        </thead>
+        <tbody>
+          <% @rides.each do |ride| %>
+            <tr>
+              <td><%= ride.day %></td>
+              <td><%= ride.date.strftime("%m/%d/%Y") %></td>
+              <td><%= ride.van %></td>
+              <td><%= ride.passenger_name_and_phone %></td>
+              <td><%= ride.passenger_address %></td>
+              <td><%= ride.destination %></td>
+              <td><%= ride.notes_to_driver %></td>
+              <td><%= ride.hours %></td>
+              <td><%= number_to_currency(ride.amount_paid) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <!-- Block-based ride info for mobile users -->
+      <div class="rides-list">
+        <% @rides.each do |ride| %>
+          <div class="ride-block">
+            <p><strong>Day:</strong> <%= ride.day %></p>
+            <p><strong>Date:</strong> <%= ride.date.strftime("%m/%d/%Y") %></p>
+            <p><strong>Van:</strong> <%= ride.van %></p>
+            <p><strong>Passenger:</strong> <%= ride.passenger_name_and_phone %></p>
+            <p><strong>Address:</strong> <%= ride.passenger_address %></p>
+            <p><strong>Destination:</strong> <%= ride.destination %></p>
+            <p><strong>Notes:</strong> <%= ride.notes_to_driver %></p>
+            <p><strong>Hours:</strong> <%= ride.hours %></p>
+            <p><strong>Fee:</strong> <%= number_to_currency(ride.amount_paid) %></p>
+          </div>
         <% end %>
-      </tbody>
-    </table>
+      </div>
+    </div>
   <% else %>
-    <p class="no-rides">No rides found for this date.</p>
+    <p class="no-rides">No rides available</p>
   <% end %>
 </div>
