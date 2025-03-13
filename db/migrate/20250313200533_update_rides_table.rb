@@ -17,6 +17,7 @@ class UpdateRidesTable < ActiveRecord::Migration[7.2]
     remove_column :rides, :driver_email, :string, if_exists: true
 
     add_column :rides, :notes, :text
+    add_column :rides, :emailed_driver, :binary
     
 
   end

@@ -60,6 +60,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_13_204013) do
     t.integer "driver_id"
     t.integer "address_id"
     t.text "notes"
+    t.binary "emailed_driver"
     t.index ["address_id"], name: "index_rides_on_address_id"
     t.index ["driver_id"], name: "index_rides_on_driver_id"
     t.index ["passenger_id"], name: "index_rides_on_passenger_id"
