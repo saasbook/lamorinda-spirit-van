@@ -80,3 +80,10 @@
         font-weight: bold;
     }
 }
+
+@media print {
+  .today-page .no-rides {
+        color: green;
+        font-weight: bold;
+    }
+}
