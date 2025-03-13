@@ -3,7 +3,9 @@
 class Ride < ApplicationRecord
   belongs_to :passenger, optional: true
   belongs_to :driver
-  has_one :address, dependent: :destroy
+  has_one :start_address, class: 'Address', foreign_key: :start_address_id
+  has_one :dest_address, class: 'Address', foreign_key: :dest_address_id
+
 
   # def self.today_rides(rides)
   #   rides.where(date: Time.zone.today)
