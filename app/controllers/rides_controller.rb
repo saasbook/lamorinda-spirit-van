@@ -46,10 +46,16 @@ class RidesController < ApplicationController
   end
 
   def today
+    @current_date = begin
+                      Date.parse(params[:date])
+                    rescue ArgumentError, TypeError
+                      Time.zone.today
+                    end
+
     driver_name_text = params[:driver_name_text].presence
     driver_name_select = params[:driver_name_select].presence
 
-    @rides = Ride.driver_today_view(driver_name_text, driver_name_select)
+    @rides = Ride.driver_today_view(driver_name_text, driver_name_select, @current_date)
     @drivers = Driver.all.pluck(:name).sort
   end
 

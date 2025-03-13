@@ -1,7 +1,7 @@
 <div class="today-page">
   <%= stylesheet_link_tag "rides", media: "all", "data-turbo-track": "reload" %>
 
-  <h1>Today's Rides (<%= Time.zone.today.strftime("%m/%d/%Y") %>)</h1>
+  <h1>Rides for <%= @current_date.strftime("%m/%d/%Y") %></h1>
 
   <%= form_with url: today_rides_path, method: :get, local: true, class: "today-form" do |form| %>
     <div class="form-group">
@@ -13,11 +13,13 @@
       <%= form.submit 'That\'s me!', class: 'btn btn-primary' %>
       <%= link_to 'Clear', today_rides_path, class: 'btn btn-secondary' %>
     </div>
-  <% end %>
+    <div class="button-group">
+      <%= link_to 'Yesterday', today_rides_path(date: @current_date - 1.day), class: 'btn btn-secondary' %>
+      <%= link_to 'Today', today_rides_path(date: Time.zone.today), class: 'btn btn-primary' %>
+      <%= link_to 'Tomorrow', today_rides_path(date: @current_date + 1.day), class: 'btn btn-secondary' %>
+    </div>
 
-  <%= link_to 'Back to All Rides', rides_path, class: 'btn btn-secondary back-btn' %>
-  <%= link_to 'Drivers', drivers_path, class: 'btn btn-primary' %>
-  <%= link_to 'Passengers', passengers_path, class: 'btn btn-primary' %>
+  <% end %>
 
   <% if @rides.present? %>
     <table class="rides-table">
@@ -34,8 +36,6 @@
           <th>Hours</th>
           <th>Amount Paid</th>
           <th>Ride Count</th>
-          <th>C</th>
-          <th>Notes Date Reserved</th>
           <th>Confirmed with Passenger</th>
           <th>Driver Email</th>
         </tr>
@@ -54,8 +54,6 @@
             <td><%= ride.hours %></td>
             <td><%= number_to_currency(ride.amount_paid) %></td>
             <td><%= ride.ride_count %></td>
-            <td><%= ride.c %></td>
-            <td><%= ride.notes_date_reserved %></td>
             <td><%= ride.confirmed_with_passenger %></td>
             <td><%= ride.driver_email %></td>
           </tr>
@@ -63,6 +61,6 @@
       </tbody>
     </table>
   <% else %>
-    <p class="no-rides">No rides found for today.</p>
+    <p class="no-rides">No rides found for this date.</p>
   <% end %>
 </div>
