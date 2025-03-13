@@ -2,9 +2,9 @@
   <h1>Rides for <%= @current_date.strftime("%m/%d/%Y") %></h1>
   <form class="today-form">
     <div class="button-group">
-      <%= link_to 'Yesterday', today_rides_path(date: @current_date - 1.day), class: 'btn btn-secondary' %>
-      <%= link_to 'Today', today_rides_path(date: Time.zone.today), class: 'btn btn-primary' %>
-      <%= link_to 'Tomorrow', today_rides_path(date: @current_date + 1.day), class: 'btn btn-secondary' %>
+      <%= link_to 'Last Day', today_rides_path(date: @current_date - 1.day), class: 'btn btn-secondary' %>
+      <%= link_to 'Back to Today', today_rides_path(date: Time.zone.today), class: 'btn btn-primary' %>
+      <%= link_to 'Next day', today_rides_path(date: @current_date + 1.day), class: 'btn btn-secondary' %>
     </div>
   </form>
 
