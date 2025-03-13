@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
 class Passenger < ApplicationRecord
-  validates :first_name, :last_name, :full_name, :address, :city, presence: true
-  validates :state, presence: true, inclusion: { in: [ "CA" ] }
+  has_one :address, dependent: :destroy
+  has_many :rides, dependent: :nullify
 end
