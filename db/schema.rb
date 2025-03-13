@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_13_204013) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_13_224622) do
   create_table "addresses", force: :cascade do |t|
     t.string "street"
     t.string "city"
@@ -53,15 +53,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_13_204013) do
     t.integer "van"
     t.float "hours"
     t.decimal "amount_paid", precision: 10, scale: 2
-    t.integer "ride_count"
     t.text "notes_date_reserved"
     t.text "confirmed_with_passenger"
     t.integer "passenger_id"
     t.integer "driver_id"
-    t.integer "address_id"
     t.text "notes"
     t.binary "emailed_driver"
-    t.index ["address_id"], name: "index_rides_on_address_id"
+    t.integer "start_address_id"
+    t.integer "dest_address_id"
     t.index ["driver_id"], name: "index_rides_on_driver_id"
     t.index ["passenger_id"], name: "index_rides_on_passenger_id"
   end
@@ -77,7 +76,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_13_204013) do
 
   add_foreign_key "drivers", "shifts", column: "shifts_id"
   add_foreign_key "passengers", "addresses"
-  add_foreign_key "rides", "addresses"
   add_foreign_key "rides", "drivers"
   add_foreign_key "rides", "passengers"
   add_foreign_key "shifts", "drivers"
