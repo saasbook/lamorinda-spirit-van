@@ -73,3 +73,10 @@
     color: red;
     font-weight: bold;
 }
+
+@media (pointer:none), (pointer:coarse) {
+    .today-page .no-rides {
+        color: blue;
+        font-weight: bold;
+    }
+}
