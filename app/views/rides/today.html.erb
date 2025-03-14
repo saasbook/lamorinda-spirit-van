@@ -1,5 +1,5 @@
 <div class="today-page">
-  <h1>Rides for <%= @current_date.strftime("%m/%d/%Y") %></h1>
+  <h1>Rides for <%= @current_date.strftime("%m/%d/%Y %A") %></h1>
   <form class="today-form">
     <div class="button-group">
       <%= link_to 'Last Day', today_rides_path(date: @current_date - 1.day), class: 'btn btn-secondary' %>
