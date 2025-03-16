@@ -1,4 +1,4 @@
-Day,Date,Driver,Van,Passenger Name and Phone,Passenger Address,Destination,Notes to Driver,Driver Initials,Hours,Amount Paid,Ride Count,C,Notes/Date reserved,Confirmed w/passenger,Driver email
+Day,Date,Driver,Van,Passenger Name and Phone,Passenger Address,Destination,Notes to Driver,Driver Initials,Hours,Amount Paid,Ride Count,C,Notes/Date reserved,Confirmed with passenger,Driver email
 F,02/28/2025,Sarah P. am,6,"Brown, Patricia (555-475-3199)",664 Main St.,171 Doctor's Office,60 min,SP,2.5,10.86,3,m,10/18:tel rqst (SP),10/18:tel,
 F,02/28/2025,Mike S. pm,5,"Brown, Robert (555-311-7172)",604 Birch Blvd.,387 Library,"r/t, Wheelchair, 60 min",MS,4.0,32.16,2,m,10/18:tel rqst (MS),10/18:tel,
 M,02/24/2025,Mike S. pm,3,"Smith, James (555-548-2851)",837 Pine Rd.,223 Library,60 min,MS,3.4,27.17,3,m,10/18:tel rqst (MS),10/18:tel,

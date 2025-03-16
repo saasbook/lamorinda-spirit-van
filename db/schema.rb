@@ -58,6 +58,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_220111) do
     t.text "notes_date_reserved"
     t.text "confirmed_with_passenger"
     t.string "driver_email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "shifts", force: :cascade do |t|
