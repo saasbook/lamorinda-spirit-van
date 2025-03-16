@@ -15,6 +15,10 @@ class PassengersController < ApplicationController
   # GET /passengers/new
   def new
     @passenger = Passenger.new
+    # since creating new passenger also have address, 
+    # this will also create new address record and associates it
+    @passenger.build_address
+
   end
 
   # GET /passengers/1/edit
@@ -24,6 +28,14 @@ class PassengersController < ApplicationController
   # POST /passengers or /passengers.json
   def create
     @passenger = Passenger.new(passenger_params)
+
+    # find existing address if matches, else create new address record
+    @passenger.assign_address(
+      street: params[:passenger][:address_attributes][:street],
+      city: params[:passenger][:address_attributes][:city],
+      state: params[:passenger][:address_attributes][:state],
+      zip: params[:passenger][:address_attributes][:zip]
+    )
 
     respond_to do |format|
       if @passenger.save
@@ -67,6 +79,8 @@ class PassengersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def passenger_params
-    params.require(:passenger).permit(:first_name, :last_name, :full_name, :address, :city, :state, :zip, :phone, :alternative_phone, :birthday, :race, :hispanic, :email, :notes, :date_registered, :audit)
+    params.require(:passenger).permit(:name, :phone, :alternative_phone, :birthday, :race, :hispanic, :email, :notes, :date_registered, :audit,
+                              address_attributes: [:street, :city, :state, :zip])
   end
+
 end

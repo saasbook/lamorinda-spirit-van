@@ -3,16 +3,26 @@ import "@hotwired/turbo-rails"
 import "controllers"
 
 document.addEventListener('turbo:load', () => {
-  // Make table rows clickable (except for links/buttons inside them)
-  document.querySelectorAll('.clickable-row').forEach(row => {
-    row.addEventListener('click', function(event) {
-      if (event.target.closest('a') || event.target.closest('button')) {
-        return;
-      }
-      window.location = this.dataset.href;
-    });
-  });
 
+  const tableElement = document.querySelector('#passengers-table');
+  if (tableElement) {
+    if ($.fn.DataTable.isDataTable('#passengers-table')) {
+      $('#passengers-table').DataTable().destroy();
+    }
+    
+    $('#passengers-table').DataTable({
+      paging: true,
+      searching: true,
+      ordering: true,
+      pageLength: 10,  
+      order: [[0, 'asc']],
+      language: {
+        searchPlaceholder: "Search passengers..."
+      },
+      scrollX: true
+    });
+  }
+  
   // Flash message auto-hide after 5 seconds
   let flashMessage = document.querySelector(".alert");
   if (flashMessage) {
