@@ -155,3 +155,37 @@ h1 {
         max-width: 100%;
     }
 }
+
+@media print and (pointer:none), (pointer:coarse) {
+    .today-page .btn,
+    .today-page .button-group {
+        display: none;
+    }
+
+    .today-page .rides-table {
+        width: 100%;
+        border: 1px solid black;
+        font-size: 12px;
+    }
+
+    .today-page .rides-table th,
+    .today-page .rides-table td {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    .today-page .no-rides {
+        color: black;
+        font-weight: bold;
+    }
+
+    /* Ensure table fits A4 */
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    .today-page {
+        max-width: 100%;
+    }
+}
