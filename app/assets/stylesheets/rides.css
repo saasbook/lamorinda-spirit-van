@@ -101,11 +101,11 @@ h1 {
 /* Mobile-friendly layout */
 @media (pointer:none), (pointer:coarse) {
     .today-page .rides-table {
-        display: table !important;
+        display: none;
     }
     
     .today-page .rides-list {
-        display: none !important;
+        display: block;
     }
 
     .today-page .ride-block {
@@ -132,6 +132,11 @@ h1 {
         width: 100%;
         border: 1px solid black;
         font-size: 12px;
+        display: table !important;
+    }
+
+    .today-page .rides-list {
+        display: none !important;
     }
 
     .today-page .rides-table th,
