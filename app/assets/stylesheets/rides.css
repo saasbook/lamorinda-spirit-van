@@ -101,11 +101,11 @@ h1 {
 /* Mobile-friendly layout */
 @media (pointer:none), (pointer:coarse) {
     .today-page .rides-table {
-        display: none; /* Hide table on mobile */
+        display: table !important;
     }
     
     .today-page .rides-list {
-        display: block;
+        display: none !important;
     }
 
     .today-page .ride-block {
