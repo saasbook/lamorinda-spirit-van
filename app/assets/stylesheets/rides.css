@@ -54,6 +54,12 @@ h1 {
     color: white;
 }
 
+.today-page .btn-print {
+    background-color: #007bff;
+    color: white;
+    margin-left: auto;
+}
+
 /* Table for PC */
 .today-page .rides-table {
     width: 100%;
@@ -121,7 +127,11 @@ h1 {
 @media print {
     .today-page .btn,
     .today-page .button-group {
-        display: none; /* Hide buttons in print */
+        /* Hide buttons in print */
+        /* display: none; */
+        
+        /* Show buttons in print */
+        display: flex;
     }
 
     .today-page .rides-table {

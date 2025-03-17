@@ -5,6 +5,7 @@
       <%= link_to 'Last Day', today_rides_path(date: @current_date - 1.day), class: 'btn btn-secondary' %>
       <%= link_to 'Back to Today', today_rides_path(date: Time.zone.today), class: 'btn btn-primary' %>
       <%= link_to 'Next day', today_rides_path(date: @current_date + 1.day), class: 'btn btn-secondary' %>
+      <button onclick="window.print()" class="btn btn-print">🖨 Print</button>
     </div>
   </form>
 
