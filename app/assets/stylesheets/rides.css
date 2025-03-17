@@ -54,9 +54,7 @@ h1 {
     color: white;
 }
 
-.today-page .btn-print {
-    background-color: #007bff;
-    color: white;
+.today-page #btn-print {
     margin-left: auto;
 }
 
@@ -127,11 +125,7 @@ h1 {
 @media print {
     .today-page .btn,
     .today-page .button-group {
-        /* Hide buttons in print */
-        /* display: none; */
-        
-        /* Show buttons in print */
-        display: flex;
+        display: none;
     }
 
     .today-page .rides-table {
