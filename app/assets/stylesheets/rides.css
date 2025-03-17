@@ -156,7 +156,7 @@ h1 {
     }
 }
 
-@media print and (pointer:none), (pointer:coarse) {
+@media print and (pointer:none), print and (pointer:coarse) {
     .today-page .btn,
     .today-page .button-group {
         display: none;
