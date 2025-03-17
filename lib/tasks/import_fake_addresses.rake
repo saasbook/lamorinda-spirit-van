@@ -27,6 +27,5 @@ namespace :import do
               zip: row["zip"]
             )
         end
-
   end
 end
