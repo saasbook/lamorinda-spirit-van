@@ -172,6 +172,7 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    humanize (3.1.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.1.0)
@@ -440,6 +441,7 @@ DEPENDENCIES
   database_cleaner
   debug
   guard-rspec
+  humanize
   importmap-rails
   jbuilder
   pg
