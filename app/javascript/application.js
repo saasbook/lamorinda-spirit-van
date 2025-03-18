@@ -15,7 +15,7 @@ document.addEventListener('turbo:load', () => {
       searching: true,
       ordering: true,
       pageLength: 10,  
-      order: [[0, 'asc']],
+      order: [[2, 'asc']],
       language: {
         searchPlaceholder: "Search passengers..."
       },
