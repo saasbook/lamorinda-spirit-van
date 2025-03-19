@@ -7,8 +7,8 @@ class Ride < ApplicationRecord
   belongs_to :dest_address, class_name: "Address", foreign_key: :dest_address_id
 
 
-  def self.today_rides(rides)
-    rides.where(date: Time.zone.today)
+  def self.rides_by_date(rides, date)
+    rides.where(date: date)
   end
 
   def self.rides_by_driver(rides, driver_name)
@@ -21,18 +21,14 @@ class Ride < ApplicationRecord
   # if driver_name_text is present, return rides that match driver_name_text
   # if driver_name_select is present, return rides that match driver_name_select
   # if neither driver_name_text nor driver_name_select are present, return all rides
+  #
+  # the date parameter is optional, if not present, return rides for Time.zone.today
+  # if date is present, return rides for that "date"(could be yesterday, tomorrow, etc, depends on how user selects)
+  # if date is not present, return rides for today
 
-  def self.driver_today_view(driver_name_text = nil, driver_name_select = nil)
-    rides = today_rides(Ride.all)
-    if driver_name_text.present? && driver_name_select.present?
-      rides_text = rides_by_driver(rides, driver_name_text)
-      rides_select = rides_by_driver(rides, driver_name_select)
-      rides = rides_text.or(rides_select).distinct
-    elsif driver_name_text.present?
-      rides = rides_by_driver(rides, driver_name_text)
-    elsif driver_name_select.present?
-      rides = rides_by_driver(rides, driver_name_select)
-    end
+  def self.driver_today_view(date = nil)
+    date = date.presence || Time.zone.today
+    rides = rides_by_date(Ride.all, date)
     rides
   end
 

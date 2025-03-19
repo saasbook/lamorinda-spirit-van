@@ -1,5 +1,14 @@
+h1 {
+    padding-top: 10px;
+}
+
+.today-page {
+    max-width: 90%;
+    margin: auto;
+}
+
 .today-page .today-form {
-    max-width: 400px;
+    max-width: 100%;
     margin-bottom: 20px;
 }
 
@@ -15,10 +24,9 @@
 
 .today-page .form-control {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-
+    border-radius: 5px;
 }
 
 .today-page .button-group {
@@ -28,9 +36,9 @@
 }
 
 .today-page .btn {
-    padding: 8px 12px;
+    padding: 10px 15px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
     font-size: 14px;
@@ -46,21 +54,31 @@
     color: white;
 }
 
-.today-page .back-btn {
-    margin-top: 10px;
-    display: inline-block;
+.today-page #btn-print {
+    margin-left: auto;
 }
 
+/* Table for PC */
 .today-page .rides-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    table-layout: auto;
+    overflow-x: auto;
+}
+
+/* Sticky header */
+.today-page .rides-table thead {
+    position: sticky;
+    top: 0;
+    background-color: #f4f4f4;
+    z-index: 10;
 }
 
 .today-page .rides-table th,
 .today-page .rides-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 10px;
     text-align: left;
 }
 
@@ -69,7 +87,76 @@
     font-weight: bold;
 }
 
+/* Block-style rides for mobile */
+.today-page .rides-list {
+    display: none;
+}
+
+/* No rides styling */
 .today-page .no-rides {
     color: red;
     font-weight: bold;
+}
+
+/* Mobile-friendly layout */
+@media (pointer:none), (pointer:coarse) {
+    .today-page .rides-table {
+        display: none;
+    }
+    
+    .today-page .rides-list {
+        display: block;
+    }
+
+    .today-page .ride-block {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .today-page .ride-block p {
+        margin: 5px 0;
+    }
+}
+
+/* Print styling */
+@media print {
+    .today-page .btn,
+    .today-page .button-group {
+        display: none;
+    }
+
+    .today-page .rides-table {
+        width: 100%;
+        border: 1px solid black;
+        font-size: 12px;
+        display: table !important;
+    }
+
+    .today-page .rides-list {
+        display: none !important;
+    }
+
+    .today-page .rides-table th,
+    .today-page .rides-table td {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    .today-page .no-rides {
+        color: black;
+        font-weight: bold;
+    }
+
+    /* Ensure table fits A4 */
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    .today-page {
+        max-width: 100%;
+    }
 }

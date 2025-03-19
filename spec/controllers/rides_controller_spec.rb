@@ -24,28 +24,10 @@ RSpec.describe RidesController, type: :controller do
       expect(assigns(:rides)).to match_array([ @ride1, @ride2, @ride3 ])
     end
 
-    # Tests todaying by only driver_name_text
-    it "returns rides matching driver_name_text" do
-      get :today, params: { driver_name_text: @driver1.name }
-      expect(assigns(:rides)).to match_array([ @ride1, @ride3 ])
-    end
-
-    # Tests todaying by only driver_name_select
-    it "returns rides matching driver_name_select" do
-      get :today, params: { driver_name_select: @driver2.name }
-      expect(assigns(:rides)).to match_array([ @ride2 ])
-    end
-
     # Tests when no today parameters are provided, all rides should be returned
     it "returns all rides when no today is applied" do
       get :today
       expect(assigns(:rides)).to match_array([ @ride1, @ride2, @ride3 ])
-    end
-
-    # Tests if all drivers are assigned correctly to @drivers variable
-    it "assigns all drivers to @drivers" do
-      get :today
-      expect(assigns(:drivers)).to match_array([ @driver1.name, @driver2.name ])
     end
   end
 

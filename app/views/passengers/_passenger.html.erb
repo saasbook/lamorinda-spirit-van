@@ -30,7 +30,7 @@
 
       <tbody>
         <% @passengers.each do |passenger| %>
-          <tr class="clickable-row" data-href="<%= edit_passenger_path(passenger) %>" style="cursor: pointer;">
+          <tr>
             <td><%= passenger.full_name %></td>
             <td><%= passenger.address %></td>
             <td><%= passenger.city %></td>

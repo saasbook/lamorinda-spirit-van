@@ -39,26 +39,42 @@ RSpec.describe Ride, type: :model do
     #   end
   end
 
-  describe ".today_rides" do
+  describe ".rides_by_date" do
     it "returns rides that are scheduled for today" do
-      rides = Ride.today_rides(Ride.all)
-      expect(rides).to match_array([ @ride1, @ride2, @ride3 ])
+      rides = Ride.rides_by_date(Ride.all, Time.zone.today)
+      expect(rides).to match_array([ @ride2, @ride3 ])
+    end
+
+    it "returns rides that are scheduled for yesterday" do
+      rides = Ride.rides_by_date(Ride.all, Time.zone.today - 1.day)
+      expect(rides).to match_array([ @ride1 ])
+    end
+
+    it "returns rides that are scheduled for tomorrow" do
+      rides = Ride.rides_by_date(Ride.all, Time.zone.today + 1.day)
+      expect(rides).to match_array([ @ride4 ])
     end
   end
 
   describe ".rides_by_driver" do
     it "returns rides for a given driver" do
+<<<<<<< HEAD
       rides = Ride.rides_by_driver(Ride.all, @driver1.name)
       expect(rides).to match_array([ @ride1, @ride3 ])
+=======
+      rides = Ride.rides_by_driver(Ride.all, "Driver A")
+      expect(rides).to match_array([ @ride1, @ride3, @ride4 ])
+>>>>>>> 41-ui-driver-today-mobile-view
     end
 
     it "returns all rides when driver_name is nil" do
       rides = Ride.rides_by_driver(Ride.all, nil)
-      expect(rides).to match_array([ @ride1, @ride2, @ride3 ])
+      expect(rides).to match_array([ @ride1, @ride2, @ride3, @ride4 ])
     end
   end
 
   describe ".driver_today_view" do
+<<<<<<< HEAD
     it "returns rides that match driver_name_text" do
       rides = Ride.driver_today_view(@driver1.name, nil)
       expect(rides).to match_array([ @ride1, @ride3 ])
@@ -74,9 +90,11 @@ RSpec.describe Ride, type: :model do
       expect(rides).to match_array([ @ride1, @ride2, @ride3 ])
     end
 
+=======
+>>>>>>> 41-ui-driver-today-mobile-view
     it "returns all rides when no filters are applied" do
-      rides = Ride.driver_today_view(nil, nil)
-      expect(rides).to match_array([ @ride1, @ride2, @ride3 ])
+      rides = Ride.driver_today_view(nil)
+      expect(rides).to match_array([@ride2, @ride3])
     end
   end
 
