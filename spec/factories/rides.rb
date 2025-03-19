@@ -8,7 +8,7 @@ FactoryBot.define do
       association :driver
       van { 1 }
       hours { 1.0 }
-      date { Date.current }
+      date { Time.zone.today }
       amount_paid { 0 }
       emailed_driver { false }
     end

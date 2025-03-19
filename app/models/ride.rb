@@ -11,20 +11,10 @@ class Ride < ApplicationRecord
     rides.where(date: date)
   end
 
-  def self.rides_by_driver(rides, driver_name)
-    rides = rides.where("driver LIKE ?", "%#{driver_name}%") if driver_name.present?
+  def self.rides_by_driver(rides, driver_id)
+    rides = rides.where(driver_id: driver_id) if driver_id.present?
     rides
   end
-
-  # Filter rides by driver_name_text and driver_name_select
-  # if driver_name_text and driver_name_select are present, return rides that match either driver_name_text OR driver_name_select
-  # if driver_name_text is present, return rides that match driver_name_text
-  # if driver_name_select is present, return rides that match driver_name_select
-  # if neither driver_name_text nor driver_name_select are present, return all rides
-  #
-  # the date parameter is optional, if not present, return rides for Time.zone.today
-  # if date is present, return rides for that "date"(could be yesterday, tomorrow, etc, depends on how user selects)
-  # if date is not present, return rides for today
 
   def self.driver_today_view(date = nil)
     date = date.presence || Time.zone.today
