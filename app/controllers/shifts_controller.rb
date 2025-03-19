@@ -10,6 +10,12 @@ class ShiftsController < ApplicationController
     @shifts = Shift.where(shift_date: @date.beginning_of_month..@date.end_of_month)
   end
 
+  # GET /drivers/:driver_id/shifts
+  def driver_all_shifts
+    @driver = Driver.find(params[:driver_id])
+    @shifts = @driver.shifts
+  end
+
   # GET /shifts/1 or /shifts/1.json
   def show
   end

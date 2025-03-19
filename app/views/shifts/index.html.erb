@@ -16,7 +16,7 @@
     <% shifts.each do |shift| %>
       <div>
         <strong>
-          <%= shift.driver.name %>
+          <%= link_to shift.driver.name, driver_driver_all_shifts_path(shift.driver) %>
         </strong>
          - 
         <%= link_to shift.shift_type, shift, style: "color: blue; text-decoration: underline;" %>
