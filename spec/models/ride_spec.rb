@@ -59,19 +59,19 @@ RSpec.describe Ride, type: :model do
     end
   end
 
-  describe ".today_rides" do
+  describe ".rides_by_date" do
     it "returns rides that are scheduled for today" do
-      rides = Ride.today_rides(Ride.all, Time.zone.today)
+      rides = Ride.rides_by_date(Ride.all, Time.zone.today)
       expect(rides).to match_array([ @ride2, @ride3 ])
     end
 
     it "returns rides that are scheduled for yesterday" do
-      rides = Ride.today_rides(Ride.all, Time.zone.today - 1.day)
+      rides = Ride.rides_by_date(Ride.all, Time.zone.today - 1.day)
       expect(rides).to match_array([ @ride1 ])
     end
 
     it "returns rides that are scheduled for tomorrow" do
-      rides = Ride.today_rides(Ride.all, Time.zone.today + 1.day)
+      rides = Ride.rides_by_date(Ride.all, Time.zone.today + 1.day)
       expect(rides).to match_array([ @ride4 ])
     end
   end
@@ -89,23 +89,8 @@ RSpec.describe Ride, type: :model do
   end
 
   describe ".driver_today_view" do
-    it "returns rides that match driver_name_text" do
-      rides = Ride.driver_today_view("Driver A", nil, Time.zone.today)
-      expect(rides).to match_array([ @ride3 ])
-    end
-
-    it "returns rides that match driver_name_select" do
-      rides = Ride.driver_today_view(nil, "Driver B", Time.zone.today)
-      expect(rides).to match_array([ @ride2 ])
-    end
-
-    it "returns rides that match either driver_name_text OR driver_name_select" do
-      rides = Ride.driver_today_view("Driver A", "Driver B", nil)
-      expect(rides).to match_array([ @ride2, @ride3 ])
-    end
-
     it "returns all rides when no filters are applied" do
-      rides = Ride.driver_today_view(nil, nil, nil)
+      rides = Ride.driver_today_view(nil)
       expect(rides).to match_array([@ride2, @ride3])
     end
   end

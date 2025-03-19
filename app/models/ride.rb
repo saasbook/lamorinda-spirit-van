@@ -3,7 +3,7 @@
 class Ride < ApplicationRecord
   validates :day, :date, :passenger_name_and_phone, presence: true
 
-  def self.today_rides(rides, date)
+  def self.rides_by_date(rides, date)
     rides.where(date: date)
   end
 
@@ -22,19 +22,9 @@ class Ride < ApplicationRecord
   # if date is present, return rides for that "date"(could be yesterday, tomorrow, etc, depends on how user selects)
   # if date is not present, return rides for today
 
-  def self.driver_today_view(driver_name_text = nil, driver_name_select = nil, date = nil)
+  def self.driver_today_view(date = nil)
     date = date.presence || Time.zone.today
-    # date = date.presence
-    rides = today_rides(Ride.all, date)
-    if driver_name_text.present? && driver_name_select.present?
-      rides_text = rides_by_driver(rides, driver_name_text)
-      rides_select = rides_by_driver(rides, driver_name_select)
-      rides = rides_text.or(rides_select).distinct
-    elsif driver_name_text.present?
-      rides = rides_by_driver(rides, driver_name_text)
-    elsif driver_name_select.present?
-      rides = rides_by_driver(rides, driver_name_select)
-    end
+    rides = rides_by_date(Ride.all, date)
     rides
   end
 
