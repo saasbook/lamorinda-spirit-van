@@ -29,14 +29,6 @@ class PassengersController < ApplicationController
   def create
     @passenger = Passenger.new(passenger_params)
 
-    # find existing address if matches, else create new address record
-    @passenger.assign_address(
-      street: params[:passenger][:address_attributes][:street],
-      city: params[:passenger][:address_attributes][:city],
-      state: params[:passenger][:address_attributes][:state],
-      zip: params[:passenger][:address_attributes][:zip]
-    )
-
     respond_to do |format|
       if @passenger.save
         format.html { redirect_to passengers_path, notice: "Passenger created." }
@@ -50,6 +42,8 @@ class PassengersController < ApplicationController
 
   # PATCH/PUT /passengers/1 or /passengers/1.json
   def update
+    @passenger = Passenger.find(params[:id])
+
     respond_to do |format|
       if @passenger.update(passenger_params)
         format.html { redirect_to edit_passenger_path(@passenger), notice: "Passenger updated." }
@@ -80,7 +74,7 @@ class PassengersController < ApplicationController
   # Only allow a list of trusted parameters through.
   def passenger_params
     params.require(:passenger).permit(:name, :phone, :alternative_phone, :birthday, :race, :hispanic, :email, :notes, :date_registered, :audit,
-                              address_attributes: [:street, :city, :state, :zip])
+                                      address_attributes: [:street, :city, :state, :zip])
   end
 
 end

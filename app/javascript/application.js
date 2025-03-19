@@ -4,32 +4,39 @@ import "controllers"
 
 document.addEventListener('turbo:load', () => {
 
-  const tableElement = document.querySelector('#passengers-table');
-  if (tableElement) {
-    if ($.fn.DataTable.isDataTable('#passengers-table')) {
-      $('#passengers-table').DataTable().destroy();
+  const tables = [
+    { selector: '#passengers-table', order: [[2, 'asc']], searchPlaceholder: "Search passengers..." },
+    { selector: '#rides-table', order: [[2, 'desc']], searchPlaceholder: "Search rides..." }
+  ];
+
+  tables.forEach(table => {
+    const tableElement = document.querySelector(table.selector);
+    if (tableElement) {
+      if ($.fn.DataTable.isDataTable(table.selector)) {
+        $(table.selector).DataTable().destroy();
+      }
+
+      $(table.selector).DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        pageLength: 10,
+        order: table.order,
+        language: {
+          searchPlaceholder: table.searchPlaceholder
+        },
+        scrollX: true
+      });
     }
-    
-    $('#passengers-table').DataTable({
-      paging: true,
-      searching: true,
-      ordering: true,
-      pageLength: 10,  
-      order: [[2, 'asc']],
-      language: {
-        searchPlaceholder: "Search passengers..."
-      },
-      scrollX: true
-    });
-  }
-  
+  });
+
   // Flash message auto-hide after 5 seconds
-  let flashMessage = document.querySelector(".alert");
+  const flashMessage = document.querySelector(".alert");
   if (flashMessage) {
     setTimeout(() => {
       flashMessage.style.transition = "opacity 2s ease-in-out";
       flashMessage.style.opacity = "0";
-      setTimeout(() => flashMessage.remove(), 2000); 
-    }, 5000); 
+      setTimeout(() => flashMessage.remove(), 2000);
+    }, 5000);
   }
 });

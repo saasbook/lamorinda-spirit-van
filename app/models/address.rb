@@ -6,8 +6,11 @@ class Address < ApplicationRecord
     validates :street, :city, :state, :zip, presence: true
     validates :street, uniqueness: { scope: [:city, :state, :zip] }
 
-    # Normalize data
     before_validation :normalize_fields
+
+    def full_address
+        [street, city, state, zip].compact.join(', ')
+    end
 
     private
 
