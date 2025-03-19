@@ -58,13 +58,8 @@ RSpec.describe Ride, type: :model do
 
   describe ".rides_by_driver" do
     it "returns rides for a given driver" do
-<<<<<<< HEAD
       rides = Ride.rides_by_driver(Ride.all, @driver1.name)
       expect(rides).to match_array([ @ride1, @ride3 ])
-=======
-      rides = Ride.rides_by_driver(Ride.all, "Driver A")
-      expect(rides).to match_array([ @ride1, @ride3, @ride4 ])
->>>>>>> 41-ui-driver-today-mobile-view
     end
 
     it "returns all rides when driver_name is nil" do
@@ -74,24 +69,6 @@ RSpec.describe Ride, type: :model do
   end
 
   describe ".driver_today_view" do
-<<<<<<< HEAD
-    it "returns rides that match driver_name_text" do
-      rides = Ride.driver_today_view(@driver1.name, nil)
-      expect(rides).to match_array([ @ride1, @ride3 ])
-    end
-
-    it "returns rides that match driver_name_select" do
-      rides = Ride.driver_today_view(nil, @driver2.name)
-      expect(rides).to match_array([ @ride2 ])
-    end
-
-    it "returns rides that match either driver_name_text OR driver_name_select" do
-      rides = Ride.driver_today_view(@driver1.name, @driver2.name)
-      expect(rides).to match_array([ @ride1, @ride2, @ride3 ])
-    end
-
-=======
->>>>>>> 41-ui-driver-today-mobile-view
     it "returns all rides when no filters are applied" do
       rides = Ride.driver_today_view(nil)
       expect(rides).to match_array([@ride2, @ride3])
