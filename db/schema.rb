@@ -27,8 +27,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_13_224622) do
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "shifts_id"
-    t.index ["shifts_id"], name: "index_drivers_on_shifts_id"
   end
 
   create_table "passengers", force: :cascade do |t|
@@ -74,7 +72,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_13_224622) do
     t.index ["driver_id"], name: "index_shifts_on_driver_id"
   end
 
-  add_foreign_key "drivers", "shifts", column: "shifts_id"
   add_foreign_key "passengers", "addresses"
   add_foreign_key "rides", "drivers"
   add_foreign_key "rides", "passengers"
