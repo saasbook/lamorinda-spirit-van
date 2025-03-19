@@ -9,27 +9,12 @@ RSpec.describe RidesController, type: :controller do
 
      Time.zone.today
 
-     # warning: the weekday_abbreviation is a little diffrent from fake rides data
-     # 2025-03-01 is a Friday, the weekday_abbreviation is 'Fri', but the fake rides data is 'F'
-     # weekday_abbreviation = today.strftime("%a")
+
      @passenger1 = FactoryBot.create(:passenger)
-     @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1) # F
-     @ride2 = FactoryBot.create(:ride, driver: @driver2, passenger: @passenger1) # M
-     @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1) # W
+     @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
+     @ride2 = FactoryBot.create(:ride, driver: @driver2, passenger: @passenger1) 
+     @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
      @ride4 = FactoryBot.create(:ride, date: Date.today - 5.days)
-     # day: "Tu",
-     # driver: "Driver C",
-     # passenger_name_and_phone: "Lu, Chang (987-654-3210)",
-     # passenger_address: "456 Elm St.",
-     # destination: "Train Station",
-     # van: "8",
-     # date: Date.today - 5.days,
-     # driver_email: "sent",
-     # confirmed_with_passenger: "",
-     # ride_count: 3,
-     # amount_paid: 10.32,
-     # hours: 3,
-     # driver_initials: "JD")
    end
 
   describe "GET #today" do
@@ -129,12 +114,12 @@ RSpec.describe RidesController, type: :controller do
   end
 
   # non trivial to switch this test from old model relations
-  # describe "when filtering by day" do
-  #   it "returns rides matching the specified day" do
-  #     post :filter_results, params: { day: "Tu" }
-  #     expect(assigns(:rides)).to contain_exactly(@ride4)
-  #   end
-  # end
+  describe "when filtering by day" do
+    it "returns rides matching the specified day" do
+      post :filter_results, params: { day: "Tu" }
+      expect(assigns(:rides)).to contain_exactly(@ride4)
+    end
+  end
 
   after(:each) do
     Ride.delete_all
