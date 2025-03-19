@@ -10,6 +10,9 @@ Rails.application.routes.draw do
     get "driver_all_shifts", to: "shifts#driver_all_shifts", as: "driver_all_shifts"
   end
 
+  # Shifts Calendar's Read-only view for drivers
+  get "read_only_shifts", to: "shifts#readonly_index", as: "read_only_shifts"
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
