@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :shifts
 
   # Shift, get one certain driver's id, return all related shifts
-  get "driver_all_shifts", to: "shifts#driver_all_shifts", as: "driver_all_shifts"
+  get "drivers/:driver_id/shifts", to: "shifts#driver_all_shifts", as: "driver_all_shifts"
 
   # Shift, Shift Calendar's Read-only view for drivers
   get "read_only_shifts", to: "shifts#readonly_index", as: "read_only_shifts"
