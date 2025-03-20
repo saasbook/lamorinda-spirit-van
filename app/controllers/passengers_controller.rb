@@ -15,10 +15,9 @@ class PassengersController < ApplicationController
   # GET /passengers/new
   def new
     @passenger = Passenger.new
-    # since creating new passenger also have address, 
+    # since creating new passenger also have address,
     # this will also create new address record and associates it
     @passenger.build_address
-
   end
 
   # GET /passengers/1/edit
@@ -76,5 +75,4 @@ class PassengersController < ApplicationController
     params.require(:passenger).permit(:name, :phone, :alternative_phone, :birthday, :race, :hispanic, :email, :notes, :date_registered, :audit,
                                       address_attributes: [:street, :city, :state, :zip])
   end
-
 end

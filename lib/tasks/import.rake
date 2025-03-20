@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :import do
     desc "Import all data in below order"
     task all: :environment do
