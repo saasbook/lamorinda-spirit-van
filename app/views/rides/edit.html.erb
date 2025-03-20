@@ -74,9 +74,9 @@
   
         <!-- Driver Email Sent? -->
         <div class="mb-3">
-          <%= form.label :emailed_driver, "Emailed Driver?", class: "form-label" %>
+          <%= f.label :emailed_driver, "Emailed Driver?", class: "form-label" %>
         
-          <%= form.select :emailed_driver, 
+          <%= f.select :emailed_driver, 
                           [['Yes', true], ['No', false]], 
                           {}, 
                           class: "form-select", required: true %>
