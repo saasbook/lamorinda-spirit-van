@@ -33,6 +33,8 @@ class RidesController < ApplicationController
   end
 
   def update
+    @ride = Ride.find(params[:id])
+    @drivers = Driver.order(:name)
     if @ride.update(ride_params)
       flash[:notice] = "Ride was successfully updated."
       redirect_to edit_ride_path(@ride)

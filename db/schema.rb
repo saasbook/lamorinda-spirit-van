@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_13_224622) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_15_042409) do
   create_table "addresses", force: :cascade do |t|
     t.string "street"
     t.string "city"
@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_13_224622) do
     t.string "zip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["street", "city", "state", "zip"], name: "index_addresses_on_full_address", unique: true
   end
 
   create_table "drivers", force: :cascade do |t|
