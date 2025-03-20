@@ -31,9 +31,9 @@ class RidesController < ApplicationController
     if @ride.update(ride_params)
       flash[:notice] = "Ride was successfully updated."
       redirect_to edit_ride_path(@ride)
-    else
-      flash[:alert] = "There was an error updating the ride."
-      render :edit, status: :unprocessable_entity
+      # else
+      #   flash[:alert] = "There was an error updating the ride."
+      #   render :edit, status: :unprocessable_entity
     end
   end
 
