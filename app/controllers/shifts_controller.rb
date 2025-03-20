@@ -38,6 +38,11 @@ class ShiftsController < ApplicationController
   def edit
   end
 
+  # GET /shifts/1/edit
+  def feedback
+    @shift = Shift.find(params[:id])
+  end
+
   # POST /shifts or /shifts.json
   def create
     # Check if there is a driver_id

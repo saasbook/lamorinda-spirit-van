@@ -31,4 +31,10 @@ Rails.application.routes.draw do
       get "filter_results"
     end
   end
+
+  resources :shifts do
+    member do
+      get "feedback"
+    end
+  end
 end
