@@ -5,12 +5,10 @@ Rails.application.routes.draw do
   resources :drivers
   resources :shifts
 
-  # get one certain driver's id, return all related shifts
-  resources :drivers do
-    get "driver_all_shifts", to: "shifts#driver_all_shifts", as: "driver_all_shifts"
-  end
+  # Shift, get one certain driver's id, return all related shifts
+  get "driver_all_shifts", to: "shifts#driver_all_shifts", as: "driver_all_shifts"
 
-  # Shifts Calendar's Read-only view for drivers
+  # Shift, Shift Calendar's Read-only view for drivers
   get "read_only_shifts", to: "shifts#readonly_index", as: "read_only_shifts"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
