@@ -2,6 +2,115 @@
 <div class="container my-4" style="max-width: 80%;">
   <h1 class="mb-4">Edit Ride</h1>
   
-  <%= render 'form' %>
+  <!-- app/views/rides/_form.html.erb -->
+
+  <!-- Display error messages -->
+  <% if @ride.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(@ride.errors.count, "error") %> prohibited this ride from being saved:</h4>
+      <ul>
+        <% @ride.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <!-- Display success notice -->
+  <% if flash[:notice].present? %>
+    <div class="alert alert-success">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+  
+  <%= form_with(model: @ride, local: true) do |f| %>
+    <div class="row">
+      
+      <!-- Left Column -->
+      <div class="col-md-4 border-end">
+        <h5 class="fw-bold text-success">Ride Details</h5>
+  
+        <div class="mb-3">
+          <%= f.label :date, "Date" %> <span class="text-danger">*</span>
+          <%= f.date_field :date, class: "form-control", required: true %>
+        </div>
+  
+        <div class="mb-3">
+          <%= f.label :hours, "Hours" %>
+          <%= f.number_field :hours, step: 0.1, class: "form-control" %>
+        </div>
+  
+        <div class="mb-3">
+          <%= f.label :amount_paid, "Amount Paid" %>
+          <%= f.number_field :amount_paid, step: 0.01, class: "form-control" %>
+        </div>
+  
+        <div class="mb-3">
+          <%= f.label :notes_date_reserved, "Notes / Date Reserved" %>
+          <%= f.text_area :notes_date_reserved, class: "form-control", rows: 3 %>
+        </div>
+  
+      </div>
+  
+      <!-- Middle Column -->
+      <div class="col-md-4 border-end">
+        <h5 class="fw-bold text-success">Driver & Van</h5>
+  
+        <div class="mb-3">
+          <%= f.label :driver, "Driver" %>
+          <%= f.text_field @ride.driver&.name, class: "form-control" %>
+        </div>
+  
+        <div class="mb-3">
+          <%= f.label :van, "Van" %>
+          <%= f.number_field :van, class: "form-control" %>
+        </div>
+  
+        <div class="mb-3">
+          <%= f.label :notes, "Notes" %>
+          <%= f.text_area :notes, class: "form-control", rows: 3 %>
+        </div>
+  
+  
+        <!-- Driver Email Sent? -->
+        <div class="mb-3">
+          <%= form.label :emailed_driver, "Emailed Driver?", class: "form-label" %>
+        
+          <%= form.select :emailed_driver, 
+                          [['Yes', true], ['No', false]], 
+                          {}, 
+                          class: "form-select", required: true %>
+        </div>
+  
+  
+      </div>
+  
+      <!-- Right Column -->
+      <div class="col-md-4">
+        <h5 class="fw-bold text-success">Passenger Details</h5>
+  
+        <!-- Passenger Name -->
+        # get from associated passenger's name, :passenger.name
+  
+        <!-- Passenger Home Address -->
+        # get from associated passenger's home address :passenger.full_address
+  
+        <!-- Passenger Origin Address (This ride) -->
+        # association to start_address_id, get value from belongs_to :start_address
+  
+        <!-- Passenger Destination Address (This ride) --> 
+        # association to dest_address_id, get value from belongs_to :dests_address
+  
+      </div>
+    </div>
+  
+    <!-- Action Buttons -->
+    <div class="mt-4">
+      <%= f.submit(@ride.new_record? ? "Create Ride" : "Update Ride", class: @ride.new_record? ? "btn btn-success" : "btn btn-primary") %>
+      <%= link_to "Back to Rides", rides_path, class: "btn btn-secondary" %>
+    </div>
+    
+  <% end %>
+  
 </div>
 
