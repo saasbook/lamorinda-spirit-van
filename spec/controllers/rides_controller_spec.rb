@@ -41,7 +41,7 @@ RSpec.describe RidesController, type: :controller do
 
     # Tests failed creation due to missing required parameters
     it "renders new when ride creation fails" do
-      post :create, params: { ride: { driver: nil } }
+      post :create, params: { ride: { driver_id: nil } }
       expect(response).to render_template(:new)
     end
   end
@@ -56,7 +56,7 @@ RSpec.describe RidesController, type: :controller do
 
     # Tests failed update due to invalid parameters
     it "renders edit when ride update fails" do
-      put :update, params: { id: @ride1.id, ride: { date: nil } } # date 是 presence: true
+      put :update, params: { id: @ride1.id, ride: { date: nil } }
       expect(response).to have_http_status(:unprocessable_entity)
       expect(response).to render_template(:edit)
     end
