@@ -80,6 +80,7 @@
               <%= f.label :passenger_name, "Passenger Name" %>
               <input type="text" 
                      class="form-control bg-secondary text-white opacity-50"
+                     style="cursor: not-allowed"
                      value="<%= @ride.passenger&.name || 'N/A' %>" 
                      readonly>
             </div>
@@ -88,6 +89,7 @@
               <%= f.label :passenger_home_address, "Home Address" %>
               <input type="text" 
                      class="form-control bg-secondary text-white opacity-50"
+                     style="cursor: not-allowed"
                      value="<%= @ride.passenger&.full_address || 'N/A' %>"
                      readonly>
             </div>
