@@ -13,6 +13,8 @@ class RidesController < ApplicationController
   # new (GET Request, displays form)
   def new
     @ride = Ride.new
+    # For driver dropdown list in creating / updating
+    @drivers = Driver.order(:name)
   end
 
   def create
@@ -25,6 +27,9 @@ class RidesController < ApplicationController
   end
 
   def edit
+    # For driver dropdown list in creating / updating
+    @ride = Ride.find(params[:id])
+    @drivers = Driver.order(:name)
   end
 
   def update
@@ -86,6 +91,21 @@ class RidesController < ApplicationController
   end
 
   def ride_params
-    params.require(:ride).permit(:day, :date, :driver, :van, :passenger_name_and_phone, :passenger_address, :destination, :notes_to_driver, :hours, :amount_paid, :ride_count, :c, :notes_date_reserved, :confirmed_with_passenger, :driver_email)
+    params.require(:ride).permit(
+      :date,
+      :van,
+      :hours,
+      :amount_paid,
+      :notes_date_reserved,
+      :confirmed_with_passenger,
+      :passenger_id,
+      :driver_id,
+      :notes,
+      :emailed_driver,
+      :start_address_id,
+      :dest_address_id,
+      start_address_attributes: [:street, :city, :state, :zip],
+      dest_address_attributes: [:street, :city, :state, :zip]
+    )
   end
 end
