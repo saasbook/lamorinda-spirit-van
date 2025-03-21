@@ -66,10 +66,10 @@ RSpec.describe DriversController, type: :controller do
     context "with valid attributes" do
       let(:valid_attributes) do
         {
-          name: "New Driver",
-          phone: "555-123-4567",
-          email: "newdriver@example.com",
-          active: true
+          name: @driver1.name,
+          phone: @driver1.phone,
+          email: @driver1.email,
+          active: @driver1.active
         }
       end
 

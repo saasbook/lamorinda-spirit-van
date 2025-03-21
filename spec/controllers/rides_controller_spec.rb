@@ -8,7 +8,7 @@ RSpec.describe RidesController, type: :controller do
      @driver2 = FactoryBot.create(:driver)
 
      Time.zone.today
-
+     @address1 = FactoryBot.create(:address)
 
      @passenger1 = FactoryBot.create(:passenger)
      @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
@@ -32,17 +32,39 @@ RSpec.describe RidesController, type: :controller do
   end
 
   describe "POST #create" do
-    # Tests successful creation of a ride
-    it "creates a new ride and redirects" do
-      post :create, params: { ride: { day: "F", date: "2025-03-01", driver: "Driver A", van: 6, passenger_name_and_phone: "John Doe (555-123-4567)", passenger_address: "456 Oak St.", destination: "Pleasant Hill", notes_to_driver: "Call before arriving", driver_initials: "JD", hours: 2.0, amount_paid: 25.0, ride_count: 1, c: "C", notes_date_reserved: "02/29/2025", confirmed_with_passenger: "Yes", driver_email: "sent" } }
-      expect(response).to redirect_to(rides_path)
-      expect(flash[:notice]).to eq("Ride was successfully created.")
-    end
+    context "with valid attributes" do
+      let(:valid_attributes) do
+        {
+          date: @ride1.date,
+          van: @ride1.van,
+          hours: @ride1.hours,
+          amount_paid: @ride1.amount_paid,
+          notes_date_reserved: @ride1.notes_date_reserved,
+          confirmed_with_passenger: @ride1.confirmed_with_passenger,
+          created_at: @ride1.created_at,
+          updated_at: @ride1.updated_at,
+          passenger_id: @ride1.passenger_id,
+          driver_id: @ride1.driver_id,
+          notes: @ride1.notes,
+          emailed_driver: @ride1.emailed_driver,
+          start_address_id: @ride1.start_address_id,
+          dest_address_id: @ride1.dest_address_id
+        }
+      end
 
-    # Tests failed creation due to missing required parameters
-    it "renders new when ride creation fails" do
-      post :create, params: { ride: { driver_id: nil } }
-      expect(response).to render_template(:new)
+      # Tests successful creation of a ride
+      it "creates a new ride and redirects" do
+        puts(valid_attributes)
+        post :create, params: { ride: valid_attributes }
+        expect(response).to redirect_to(rides_path)
+        expect(flash[:notice]).to eq("Ride was successfully created.")
+      end
+
+      # Tests failed creation due to missing required parameters
+      it "renders new when ride creation fails" do
+        post :create, params: { ride: { driver_id: nil } }
+        expect(response).to render_template(:new)
+      end
     end
   end
 

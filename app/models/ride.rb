@@ -93,7 +93,6 @@ class Ride < ApplicationRecord
   end
 
   private
-
   def normalize_address(attrs)
     {
       street: attrs[:street].to_s.strip.titleize,
