@@ -10,7 +10,7 @@ RSpec.describe Ride, type: :model do
     today = Time.zone.today
     today.strftime("%a")
 
-    @ride1 = FactoryBot.create(:ride, driver: @driver1, date: Time.zone.today - 1.day)
+    @ride1 = FactoryBot.create(:ride, driver: @driver1, date: Time.zone.today - 1.day, emailed_driver: true)
     @ride2 = FactoryBot.create(:ride, driver: @driver2)
     @ride3 = FactoryBot.create(:ride, driver: @driver1, date: Time.zone.today + 1.day)
   end
@@ -20,23 +20,9 @@ RSpec.describe Ride, type: :model do
       expect(@ride1).to be_valid
     end
 
-    #   it "is invalid without a day" do
-    #     ride = Ride.new(date: Time.zone.today, passenger_name_and_phone: "John Doe (555-123-4567)")
-    #     expect(ride).not_to be_valid
-    #     expect(ride.errors[:day]).to include("can't be blank")
-    #   end
-
-    #   it "is invalid without a date" do
-    #     ride = Ride.new(day: "F", passenger_name_and_phone: "John Doe (555-123-4567)")
-    #     expect(ride).not_to be_valid
-    #     expect(ride.errors[:date]).to include("can't be blank")
-    #   end
-
-    #   it "is invalid without passenger_name_and_phone" do
-    #     ride = Ride.new(day: "F", date: Time.zone.today)
-    #     expect(ride).not_to be_valid
-    #     expect(ride.errors[:passenger_name_and_phone]).to include("can't be blank")
-    #   end
+    it "is certain fields valid" do
+      expect(@ride1.emailed_driver?).to eq(true)
+    end
   end
 
   describe ".rides_by_date" do

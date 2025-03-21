@@ -7,7 +7,6 @@ RSpec.describe RidesController, type: :controller do
      @driver1 = FactoryBot.create(:driver)
      @driver2 = FactoryBot.create(:driver)
 
-     Time.zone.today
      @address1 = FactoryBot.create(:address)
 
      @passenger1 = FactoryBot.create(:passenger)
@@ -41,8 +40,6 @@ RSpec.describe RidesController, type: :controller do
           amount_paid: @ride1.amount_paid,
           notes_date_reserved: @ride1.notes_date_reserved,
           confirmed_with_passenger: @ride1.confirmed_with_passenger,
-          created_at: @ride1.created_at,
-          updated_at: @ride1.updated_at,
           passenger_id: @ride1.passenger_id,
           driver_id: @ride1.driver_id,
           notes: @ride1.notes,
@@ -52,9 +49,13 @@ RSpec.describe RidesController, type: :controller do
         }
       end
 
+      it "GET #new" do
+        get :new
+        expect(response).to have_http_status(:success)
+      end
+
       # Tests successful creation of a ride
       it "creates a new ride and redirects" do
-        puts(valid_attributes)
         post :create, params: { ride: valid_attributes }
         expect(response).to redirect_to(rides_path)
         expect(flash[:notice]).to eq("Ride was successfully created.")
