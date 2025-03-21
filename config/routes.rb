@@ -26,7 +26,6 @@ Rails.application.routes.draw do
 
   resources :shifts do
     collection do
-      # get "all_shifts"
       get "read_only"
     end
     member do
@@ -36,7 +35,6 @@ Rails.application.routes.draw do
 
   resources :drivers do
     member do
-      # get "read_only"
       get "all_shifts"
     end
   end
