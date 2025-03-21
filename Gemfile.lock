@@ -145,6 +145,11 @@ GEM
     docile (1.4.1)
     drb (2.2.1)
     erubi (1.13.1)
+    factory_bot (6.5.1)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.4.4)
+      factory_bot (~> 6.5)
+      railties (>= 5.0.0)
     ffi (1.17.1-aarch64-linux-gnu)
     ffi (1.17.1-aarch64-linux-musl)
     ffi (1.17.1-arm-linux-gnu)
@@ -172,6 +177,7 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    humanize (3.1.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.1.0)
@@ -439,7 +445,9 @@ DEPENDENCIES
   cucumber-rails-training-wheels
   database_cleaner
   debug
+  factory_bot_rails
   guard-rspec
+  humanize
   importmap-rails
   jbuilder
   pg

@@ -6,6 +6,8 @@ class DriversController < ApplicationController
   # GET /drivers or /drivers.json
   def index
     @drivers = Driver.all
+    # @drivers = @drivers.filter_by_active(params[:active])
+    # @drivers = @drivers.filter_by_name(params[:name])
   end
 
   # GET /drivers/1 or /drivers/1.json
@@ -52,12 +54,17 @@ class DriversController < ApplicationController
   # DELETE /drivers/1 or /drivers/1.json
   def destroy
     @driver.destroy!
-
     respond_to do |format|
       format.html { redirect_to drivers_path, status: :see_other, notice: "Driver was successfully destroyed." }
       format.json { head :no_content }
     end
+  rescue ActiveRecord::RecordNotDestroyed
+    respond_to do |format|
+      format.html { redirect_to drivers_path, alert: "Failed to remove the driver.", status: :unprocessable_entity }
+      format.json { render json: { error: "Failed to remove the driver." }, status: :unprocessable_entity }
+    end
   end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.

@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_03_06_220111) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_15_042409) do
+  create_table "addresses", force: :cascade do |t|
+    t.string "street"
+    t.string "city"
+    t.string "state"
+    t.string "zip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["street", "city", "state", "zip"], name: "index_addresses_on_full_address", unique: true
+  end
+
   create_table "drivers", force: :cascade do |t|
     t.string "name"
     t.string "phone"
@@ -21,45 +31,39 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_220111) do
   end
 
   create_table "passengers", force: :cascade do |t|
-    t.string "first_name", null: false
-    t.string "last_name", null: false
-    t.string "full_name", null: false
-    t.string "address", null: false
-    t.string "city", null: false
-    t.string "state", default: "CA"
-    t.string "zip"
     t.string "phone"
     t.string "alternative_phone"
-    t.date "birthday"
     t.integer "race"
-    t.string "hispanic"
     t.string "email"
     t.text "notes"
-    t.date "date_registered"
     t.text "audit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "address_id"
+    t.string "name"
+    t.datetime "birthday"
+    t.binary "hispanic"
+    t.datetime "date_registered"
+    t.index ["address_id"], name: "index_passengers_on_address_id"
   end
 
   create_table "rides", force: :cascade do |t|
-    t.string "day", null: false
     t.date "date", null: false
-    t.text "driver"
     t.integer "van"
-    t.text "passenger_name_and_phone"
-    t.text "passenger_address"
-    t.text "destination"
-    t.text "notes_to_driver"
-    t.string "driver_initials"
     t.float "hours"
     t.decimal "amount_paid", precision: 10, scale: 2
-    t.integer "ride_count"
-    t.string "c"
     t.text "notes_date_reserved"
     t.text "confirmed_with_passenger"
-    t.string "driver_email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "passenger_id"
+    t.integer "driver_id"
+    t.text "notes"
+    t.binary "emailed_driver"
+    t.integer "start_address_id"
+    t.integer "dest_address_id"
+    t.index ["driver_id"], name: "index_rides_on_driver_id"
+    t.index ["passenger_id"], name: "index_rides_on_passenger_id"
   end
 
   create_table "shifts", force: :cascade do |t|
@@ -71,5 +75,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_06_220111) do
     t.index ["driver_id"], name: "index_shifts_on_driver_id"
   end
 
+  add_foreign_key "passengers", "addresses"
+  add_foreign_key "rides", "drivers"
+  add_foreign_key "rides", "passengers"
   add_foreign_key "shifts", "drivers"
 end

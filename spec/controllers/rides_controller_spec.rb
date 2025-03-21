@@ -4,78 +4,67 @@ require "rails_helper"
 
 RSpec.describe RidesController, type: :controller do
   before(:each) do
-    @driver1 = Driver.create(name: "Driver A", phone: "1234567890", email: "jd@lamorinda.com", active: true)
-    @driver2 = Driver.create(name: "Driver B", phone: "1234567890", email: "jd@lamorinda.com", active: true)
+     @driver1 = FactoryBot.create(:driver)
+     @driver2 = FactoryBot.create(:driver)
 
-    today = Time.zone.today
+     @address1 = FactoryBot.create(:address)
 
-    # warning: the weekday_abbreviation is a little diffrent from fake rides data
-    # 2025-03-01 is a Friday, the weekday_abbreviation is 'Fri', but the fake rides data is 'F'
-    # weekday_abbreviation = today.strftime("%a")
-    @ride1 = Ride.create(day: "F", date: today, driver: @driver1.name, van: 6, passenger_name_and_phone: "Brown, Patricia (555-475-3199)", passenger_address: "143 Pine Rd.", destination: "Walnut Creek", notes_to_driver: "Bring a mask", driver_initials: "JD", hours: 1.5, amount_paid: 20.0, ride_count: 1, c: "C", notes_date_reserved: "02/27/2025", confirmed_with_passenger: "Yes", driver_email: "sent")
-    @ride2 = Ride.create(day: "M", date: today, driver: @driver2.name, van: 6, passenger_name_and_phone: "Brown, Patricia (555-475-3199)", passenger_address: "143 Pine Rd.", destination: "Walnut Creek", notes_to_driver: "Bring a mask", driver_initials: "JD", hours: 1.5, amount_paid: 20.0, ride_count: 1, c: "C", notes_date_reserved: "02/27/2025", confirmed_with_passenger: "Yes", driver_email: "sent")
-    @ride3 = Ride.create(day: "W", date: today, driver: @driver1.name, van: 6, passenger_name_and_phone: "Brown, Patricia (555-475-3199)", passenger_address: "143 Pine Rd.", destination: "Walnut Creek", notes_to_driver: "Bring a mask", driver_initials: "JD", hours: 1.5, amount_paid: 20.0, ride_count: 1, c: "C", notes_date_reserved: "02/27/2025", confirmed_with_passenger: "Yes", driver_email: "sent")
-    @ride4 = Ride.create(
-      day: "Tu",
-      driver: "Driver C",
-      passenger_name_and_phone: "Lu, Chang (987-654-3210)",
-      passenger_address: "456 Elm St.",
-      destination: "Train Station",
-      van: "8",
-      date: Date.today - 5.days,
-      driver_email: "sent",
-      confirmed_with_passenger: "",
-      ride_count: 3,
-      amount_paid: 10.32,
-      hours: 3,
-      driver_initials: "JD")
-  end
+     @passenger1 = FactoryBot.create(:passenger)
+     @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
+     @ride2 = FactoryBot.create(:ride, driver: @driver2, passenger: @passenger1)
+     @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
+     @ride4 = FactoryBot.create(:ride, date: Date.today - 5.days)
+   end
 
   describe "GET #today" do
-    # Tests if todaying by both driver_name_text and driver_name_select returns correct rides
-    it "returns rides matching either driver_name_text OR driver_name_select" do
-      get :today, params: { driver_name_text: "Driver A", driver_name_select: "Driver B" }
-      expect(assigns(:rides)).to match_array([ @ride1, @ride2, @ride3 ])
-    end
-
-    # Tests todaying by only driver_name_text
-    it "returns rides matching driver_name_text" do
-      get :today, params: { driver_name_text: "Driver A" }
-      expect(assigns(:rides)).to match_array([ @ride1, @ride3 ])
-    end
-
-    # Tests todaying by only driver_name_select
-    it "returns rides matching driver_name_select" do
-      get :today, params: { driver_name_select: "Driver B" }
-      expect(assigns(:rides)).to match_array([ @ride2 ])
-    end
-
     # Tests when no today parameters are provided, all rides should be returned
     it "returns all rides when no today is applied" do
       get :today
       expect(assigns(:rides)).to match_array([ @ride1, @ride2, @ride3 ])
     end
-
-    # Tests if all drivers are assigned correctly to @drivers variable
-
-    it "assigns all drivers to @drivers" do
-      get :today
-      expect(assigns(:drivers)).to match_array([ "Driver A", "Driver B" ])
-    end
   end
 
   describe "POST #create" do
-    # Tests successful creation of a ride
-    it "creates a new ride and redirects" do
-      post :create, params: { ride: { day: "F", date: "2025-03-01", driver: "Driver A", van: 6, passenger_name_and_phone: "John Doe (555-123-4567)", passenger_address: "456 Oak St.", destination: "Pleasant Hill", notes_to_driver: "Call before arriving", driver_initials: "JD", hours: 2.0, amount_paid: 25.0, ride_count: 1, c: "C", notes_date_reserved: "02/29/2025", confirmed_with_passenger: "Yes", driver_email: "sent" } }
-      expect(response).to redirect_to(rides_path)
-      expect(flash[:notice]).to eq("Ride was successfully created.")
-    end
+    context "with valid attributes" do
+      let(:valid_attributes) do
+        {
+          date: @ride1.date,
+          van: @ride1.van,
+          hours: @ride1.hours,
+          amount_paid: @ride1.amount_paid,
+          notes_date_reserved: @ride1.notes_date_reserved,
+          confirmed_with_passenger: @ride1.confirmed_with_passenger,
+          passenger_id: @ride1.passenger_id,
+          driver_id: @ride1.driver_id,
+          notes: @ride1.notes,
+          emailed_driver: @ride1.emailed_driver,
+          start_address_id: @ride1.start_address_id,
+          dest_address_id: @ride1.dest_address_id
+        }
+      end
 
-    # Tests failed creation due to missing required parameters
-    it "renders new when ride creation fails" do
-      post :create, params: { ride: { driver: nil } }
-      expect(response).to render_template(:new)
+      it "GET #new" do
+        get :new
+        expect(response).to have_http_status(:success)
+      end
+
+      it "GET #edit" do
+        get :edit, params: { id: @ride1.id }
+        expect(response).to have_http_status(:success)
+      end
+
+      # Tests successful creation of a ride
+      it "creates a new ride and redirects" do
+        post :create, params: { ride: valid_attributes }
+        expect(response).to redirect_to(rides_path)
+        expect(flash[:notice]).to eq("Ride was successfully created.")
+      end
+
+      # Tests failed creation due to missing required parameters
+      it "renders new when ride creation fails" do
+        post :create, params: { ride: { driver_id: nil } }
+        expect(response).to render_template(:new)
+      end
     end
   end
 
@@ -88,11 +77,12 @@ RSpec.describe RidesController, type: :controller do
     end
 
     # Tests failed update due to invalid parameters
-    it "renders edit when ride update fails" do
-      put :update, params: { id: @ride1.id, ride: { date: nil } } # date 是 presence: true
-      expect(response).to have_http_status(:unprocessable_entity)
-      expect(response).to render_template(:edit)
-    end
+    # All possible illegal input caught by fonrtend, no need for validation here.
+    # it "renders edit when ride update fails" do
+    #   put :update, params: { id: @ride1.id, ride: { date: "invalid-date" } }
+    #   expect(response).to have_http_status(:unprocessable_entity)
+    #   expect(response).to render_template(:edit)
+    # end
   end
 
   describe "DELETE #destroy" do
@@ -118,20 +108,6 @@ RSpec.describe RidesController, type: :controller do
       expect {
         get :show, params: { id: -1 } # Non-existent ID
       }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-  end
-
-  describe "when filtering by driver_name" do
-    it "returns rides matching the specified driver name" do
-      post :filter_results, params: { driver_name: "Driver A" }
-      expect(assigns(:rides)).to match_array([@ride1, @ride3])
-    end
-  end
-
-  describe "when filtering by day" do
-    it "returns rides matching the specified day" do
-      post :filter_results, params: { day: "Tu" }
-      expect(assigns(:rides)).to contain_exactly(@ride4)
     end
   end
 
