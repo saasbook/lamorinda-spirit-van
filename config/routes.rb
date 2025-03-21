@@ -3,7 +3,6 @@
 Rails.application.routes.draw do
   resources :passengers
   resources :drivers
-  resources :shifts
 
   # Shift, get one certain driver's id, return all related shifts
   get "driver_all_shifts", to: "shifts#driver_all_shifts", as: "driver_all_shifts"
