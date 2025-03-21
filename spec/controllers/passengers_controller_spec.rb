@@ -10,34 +10,23 @@ RSpec.describe PassengersController, type: :controller do
    end
 
   describe "POST #create" do
-    context "with valid attributes" do
-      let(:valid_attributes) do
-        {
-          street: "1",
-          city: "1",
-          state: "1",
-          zip: "1",
-          race: 1,
-          name: "1",
-          birthday: Time.zone.today,
-          hispanic: true,
-          date_registered: Time.zone.today
-        }
-      end
+    it "GET #new" do
+      get :new
+      expect(response).to have_http_status(:success)
+    end
 
-      # Tests successful creation of a passenger
-      # it "creates a new passenger and redirects" do
-      #   puts(valid_attributes)
-      #   post :create, params: { passenger: valid_attributes }
-      #   expect(response).to redirect_to(passengers_path)
-      #   expect(flash[:notice]).to eq("Passenger was successfully created.")
-      # end
+    # Tests successful creation of a passenger
+    # it "creates a new passenger and redirects" do
+    #   puts(valid_attributes)
+    #   post :create, params: { passenger: valid_attributes }
+    #   expect(response).to redirect_to(passengers_path)
+    #   expect(flash[:notice]).to eq("Passenger was successfully created.")
+    # end
 
-      # Tests failed creation due to missing required parameters
-      it "renders new when passenger creation fails" do
-        post :create, params: { passenger: { address_id: nil } }
-        expect(response).to render_template(:new)
-      end
+    # Tests failed creation due to missing required parameters
+    it "renders new when passenger creation fails" do
+      post :create, params: { passenger: { address_id: nil } }
+      expect(response).to render_template(:new)
     end
   end
 
