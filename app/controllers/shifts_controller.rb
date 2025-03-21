@@ -10,16 +10,9 @@ class ShiftsController < ApplicationController
     @shifts = Shift.where(shift_date: @date.beginning_of_month..@date.end_of_month)
   end
 
-  # GET /drivers/:driver_id/shifts
-  # Display all shifts for a certain driver
-  def driver_all_shifts
-    @driver = Driver.find(params[:driver_id])
-    @shifts = @driver.shifts
-  end
-
   # GET /read_only_shifts
   # Read-only view for drivers
-  def readonly_index
+  def read_only
     @date = params[:start_date] ? Date.parse(params[:start_date]) : Date.today
     @shifts = Shift.where(shift_date: @date.beginning_of_month..@date.end_of_month)
   end
