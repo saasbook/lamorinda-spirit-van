@@ -1,7 +1,7 @@
 Feature: Navigation from Homepage to Shifts Calendar
 
-  Scenario: User navigates from "homepage" to "Today's Rides"
-    Given I am on the "homepage" page
+  Scenario: User navigates from "home" to "Today's Rides"
+    Given I am on the "home" page
     When I click on "Today's Rides" button
     Then I should be on the "Today's Rides" page
     
@@ -23,3 +23,9 @@ Feature: Navigation from Homepage to Shifts Calendar
     When I click on "Next Month" button
     Then I should see the month title change
 
+  Scenario: User opeate on driver's shifts
+    Given I am on the "Shifts Calendar" page
+    Then I should see each day has a button for create a new shift
+    When I click one day's "New shift" button
+    Then I should be on the "New Shift" page
+    And the date should initially be the date of the corresponding table
