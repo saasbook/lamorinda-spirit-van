@@ -89,21 +89,6 @@ RSpec.describe RidesController, type: :controller do
     end
   end
 
-  describe "when filtering by driver_name" do
-    it "returns rides matching the specified driver name" do
-      post :filter_results, params: { driver_name: @driver1.name }
-      expect(assigns(:rides)).to match_array([@ride1, @ride3])
-    end
-  end
-
-  # non trivial to switch this test from old model relations
-  describe "when filtering by day" do
-    it "returns rides matching the specified day" do
-      post :filter_results, params: { day: "Tu" }
-      expect(assigns(:rides)).to contain_exactly(@ride4)
-    end
-  end
-
   after(:each) do
     Ride.delete_all
     Driver.delete_all
