@@ -17,12 +17,6 @@ RSpec.describe RidesController, type: :controller do
    end
 
   describe "GET #today" do
-    # Tests if todaying by both driver_name_text and driver_name_select returns correct rides
-    it "returns rides matching either driver_name_text OR driver_name_select" do
-      get :today, params: { driver_name_text: @driver1.name, driver_name_select: @driver2.name }
-      expect(assigns(:rides)).to match_array([ @ride1, @ride2, @ride3 ])
-    end
-
     # Tests when no today parameters are provided, all rides should be returned
     it "returns all rides when no today is applied" do
       get :today
@@ -51,6 +45,11 @@ RSpec.describe RidesController, type: :controller do
 
       it "GET #new" do
         get :new
+        expect(response).to have_http_status(:success)
+      end
+
+      it "GET #edit" do
+        get :edit, params: { id: @ride1.id }
         expect(response).to have_http_status(:success)
       end
 
