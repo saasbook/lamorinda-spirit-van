@@ -3,8 +3,13 @@
 require "rails_helper"
 
 RSpec.describe ShiftsController, type: :controller do
-  let!(:driver) { Driver.create!(name: "Test Driver", phone: "000-000-0000", email: "jd@lamorinda.com", active: true) }
-  let!(:shift) { Shift.create!(shift_date: Date.today, shift_type: "morning", driver: driver) }
+  before(:each) do
+    @driver = FactoryBot.create(:driver)
+    @shift = FactoryBot.create(:shift, driver: @driver)
+
+    Time.zone.today
+  end
+
 
   describe "GET #index" do
     it "returns a successful response" do
@@ -15,7 +20,7 @@ RSpec.describe ShiftsController, type: :controller do
 
   describe "GET #show" do
     it "returns a successful response" do
-      get :show, params: { id: shift.id }
+      get :show, params: { id: @shift.id }
       expect(response).to be_successful
     end
   end
@@ -31,7 +36,7 @@ RSpec.describe ShiftsController, type: :controller do
     context "with valid parameters" do
       it "creates a new shift and redirects to the shift page" do
         expect {
-          post :create, params: { shift: { shift_date: Date.today, shift_type: "evening", driver_id: driver.id } }
+          post :create, params: { shift: { shift_date: Date.today, shift_type: "evening", driver_id: @driver.id } }
         }.to change(Shift, :count).by(1)
 
         expect(response).to redirect_to(Shift.last)
@@ -41,7 +46,7 @@ RSpec.describe ShiftsController, type: :controller do
     context "with empty shift_type" do
       it "does not create a shift and re-renders the new template" do
         expect {
-          post :create, params: { shift: { shift_date: Date.today, shift_type: "", driver_id: driver.id } }
+          post :create, params: { shift: { shift_date: Date.today, shift_type: "", driver_id: @driver.id } }
         }.not_to change(Shift, :count)
 
         expect(response).to have_http_status(:unprocessable_entity)
@@ -74,7 +79,7 @@ RSpec.describe ShiftsController, type: :controller do
 
   describe "GET #edit" do
     it "returns a successful response" do
-      get :edit, params: { id: shift.id }
+      get :edit, params: { id: @shift.id }
       expect(response).to be_successful
     end
   end
@@ -82,18 +87,18 @@ RSpec.describe ShiftsController, type: :controller do
   describe "PATCH #update" do
     context "with valid parameters" do
       it "updates the shift and redirects to the shift page" do
-        patch :update, params: { id: shift.id, shift: { shift_type: "night" } }
-        shift.reload
-        expect(shift.shift_type).to eq("night")
-        expect(response).to redirect_to(shift)
+        patch :update, params: { id: @shift.id, shift: { shift_type: "night" } }
+        @shift.reload
+        expect(@shift.shift_type).to eq("night")
+        expect(response).to redirect_to(@shift)
       end
     end
 
     context "with invalid parameters" do
       it "does not update the shift and re-renders the edit template" do
-        patch :update, params: { id: shift.id, shift: { shift_date: nil } }
-        shift.reload
-        expect(shift.shift_date).not_to be_nil
+        patch :update, params: { id: @shift.id, shift: { shift_date: nil } }
+        @shift.reload
+        expect(@shift.shift_date).not_to be_nil
         expect(response).to render_template(:edit)
       end
     end
@@ -102,7 +107,7 @@ RSpec.describe ShiftsController, type: :controller do
   describe "DELETE #destroy" do
     it "destroys the shift and redirects to the shifts index" do
       expect {
-        delete :destroy, params: { id: shift.id }
+        delete :destroy, params: { id: @shift.id }
       }.to change(Shift, :count).by(-1)
 
       expect(response).to redirect_to(shifts_path)
