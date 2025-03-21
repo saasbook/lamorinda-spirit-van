@@ -20,7 +20,7 @@ RSpec.describe ShiftsController, type: :controller do
 
   describe "GET #read_only" do
     it "returns a successful response" do
-      get :index
+      get :read_only
       expect(response).to be_successful
     end
   end
