@@ -76,6 +76,13 @@ RSpec.describe DriversController, type: :controller do
     end
   end
 
+  describe "GET #all_shifts" do
+    it "assigns the requested driver to @driver" do
+      get :all_shifts, params: { id: @driver1.id }
+      expect(assigns(:driver)).to eq(@driver1)
+    end
+  end
+
   describe "POST #create" do
     context "with valid attributes" do
       let(:valid_attributes) do

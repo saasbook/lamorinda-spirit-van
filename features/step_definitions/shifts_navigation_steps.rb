@@ -1,11 +1,22 @@
 # frozen_string_literal: true
 
+# Scenario: User navigates from "home" to "Today's Rides"
+#     Given I am on the "home" page
+#     When I click on "Today's Rides" button
+#     Then I should be on the "Today's Rides" page
+
+#   Scenario: User navigates from "Today's Rides" to "Read-Only Shift Calendar"
+#     Given I am on the "Today's Rides" page
+#     Then I should see "View Shifts" button
+#     When I click on "View Shifts" button
+#     Then I should be on the "Read-Only Shift Calendar" page
+
 Given("I am on the {string} page") do |page_name|
   case page_name
   when "home"
     visit root_path
   when "Today's Rides"
-    visit today_rides_path
+    visit today_driver_path(id: 1)
   when "Read-Only Shift Calendar"
     visit read_only_shifts_path
   when "Shifts Calendar"
@@ -22,7 +33,7 @@ end
 Then("I should be on the {string} page") do |page_name|
   case page_name
   when "Today's Rides"
-    expect(current_path).to eq today_rides_path
+    expect(current_path).to eq today_driver_path
   when "Read-Only Shift Calendar"
     expect(current_path).to eq read_only_shifts_path
   when "Shifts Calendar"
