@@ -2,13 +2,6 @@
 
 Rails.application.routes.draw do
   resources :passengers
-  resources :drivers
-
-  # Shift, get one certain driver's id, return all related shifts
-  get "driver_all_shifts", to: "shifts#driver_all_shifts", as: "driver_all_shifts"
-
-  # Shift, Shift Calendar's Read-only view for drivers
-  get "read_only_shifts", to: "shifts#readonly_index", as: "read_only_shifts"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -32,8 +25,17 @@ Rails.application.routes.draw do
   end
 
   resources :shifts do
+    collection do
+      get "read_only"
+    end
     member do
       get "feedback"
+    end
+  end
+
+  resources :drivers do
+    member do
+      get "all_shifts"
     end
   end
 end
