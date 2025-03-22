@@ -21,6 +21,7 @@
             <th>Notes</th>
             <th>Hours</th>
             <th>Fee</th>
+            <th>Info</th>
           </tr>
         </thead>
         <tbody>
@@ -30,6 +31,7 @@
               <td><%= ride.notes %></td>
               <td><%= ride.hours %></td>
               <td><%= number_to_currency(ride.amount_paid) %></td>
+              <td><%= link_to "Info", ride_path(ride.id), class: "btn btn-primary" %></td>
             </tr>
           <% end %>
         </tbody>
@@ -43,6 +45,7 @@
             <p><strong>Notes:</strong> <%= ride.notes %></p>
             <p><strong>Hours:</strong> <%= ride.hours %></p>
             <p><strong>Fee:</strong> <%= number_to_currency(ride.amount_paid) %></p>
+            <%= link_to "Info", ride_path(ride.id), class: "btn btn-primary" %>
           </div>
         <% end %>
       </div>
