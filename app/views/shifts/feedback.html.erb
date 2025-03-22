@@ -16,9 +16,6 @@
   <% end %>
 
   <div>
-    <% puts(@shift) %>
-    <% puts(@shift.van) %>
-    <% puts(@shift) %>
     <%= form.label :van, "Van: ", style: "display: block" %>
     <%= form.number_field :van, required: false, value: @shift.van %>
     <%= form.label :pu_time, "Van pick up time from base: ", style: "display: block" %>
@@ -32,7 +29,7 @@
   </div>
 
   <div>
-    <%= form.submit "Save Feedback" %>
+    <%= form.button "Save Feedback", type: :submit, name: "commit_type", value: "feedback" %>
   </div>
 <% end %>
 
@@ -40,5 +37,5 @@
 
 <div>
   <%= link_to "Show this shift", @shift %> |
-  <%= link_to "Back to shifts", shifts_path %>
+  <%= link_to "Back to today", today_driver_path(id: @shift.driver_id) %>
 </div>

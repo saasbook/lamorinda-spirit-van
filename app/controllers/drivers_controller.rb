@@ -26,6 +26,7 @@ class DriversController < ApplicationController
 
     @driver = Driver.find(params[:id])
     @rides = Ride.today_driver_view(params[:id], @current_date)
+    @shift = Shift.today_driver_shifts(params[:id], @current_date)
   end
 
   # GET /drivers/1 or /drivers/1.json
