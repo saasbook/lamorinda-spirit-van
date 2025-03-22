@@ -24,22 +24,16 @@ namespace :import do
           puts "Row Data: #{row.to_h}"
           # Create a new Ride record
           Ride.create!(
-              day: row["Day"],
               date: Date.strptime(row["Date"], "%m/%d/%Y"),
-              driver: row["Driver"],
+              driver_id: row["driver_id"],
               van: row["Van"],
-              passenger_name_and_phone: row["Passenger Name and Phone"],
-              passenger_address: row["Passenger Address"],
-              destination: row["Destination"],
-              notes_to_driver: row["Notes to Driver"],
-              driver_initials: row["Driver Initials"],
+              passenger_id: row["passenger_id"],
+              dest_address_id: row["dest_address_id"],
+              start_address_id: row["start_address_id"],
+              notes: row["Notes"],
               hours: row["Hours"].to_f,
               amount_paid: row["Amount Paid"].to_f,
-              ride_count: row["Ride Count"].to_i,
-              c: row["C"],
-              notes_date_reserved: row["Notes/Date reserved"],
-              confirmed_with_passenger: row["Confirmed w/passenger"],
-              driver_email: row["Driver email"],
+              emailed_driver: row["emailed_driver"] == "sent",
             )
         end
 

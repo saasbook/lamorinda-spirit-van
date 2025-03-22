@@ -15,6 +15,9 @@ class PassengersController < ApplicationController
   # GET /passengers/new
   def new
     @passenger = Passenger.new
+    # since creating new passenger also have address,
+    # this will also create new address record and associates it
+    @passenger.build_address
   end
 
   # GET /passengers/1/edit
@@ -38,6 +41,8 @@ class PassengersController < ApplicationController
 
   # PATCH/PUT /passengers/1 or /passengers/1.json
   def update
+    @passenger = Passenger.find(params[:id])
+
     respond_to do |format|
       if @passenger.update(passenger_params)
         format.html { redirect_to edit_passenger_path(@passenger), notice: "Passenger updated." }
@@ -67,6 +72,7 @@ class PassengersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def passenger_params
-    params.require(:passenger).permit(:first_name, :last_name, :full_name, :address, :city, :state, :zip, :phone, :alternative_phone, :birthday, :race, :hispanic, :email, :notes, :date_registered, :audit)
+    params.require(:passenger).permit(:name, :phone, :alternative_phone, :birthday, :race, :hispanic, :email, :notes, :date_registered, :audit,
+                                      address_attributes: [:street, :city, :state, :zip])
   end
 end
