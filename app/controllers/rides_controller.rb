@@ -59,7 +59,7 @@ class RidesController < ApplicationController
                       Time.zone.today
                     end
 
-    @rides = Ride.driver_today_view(@current_date)
+    @rides = Ride.today_driver_view(@current_date)
   end
 
   def filter

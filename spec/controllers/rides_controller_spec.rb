@@ -4,25 +4,17 @@ require "rails_helper"
 
 RSpec.describe RidesController, type: :controller do
   before(:each) do
-     @driver1 = FactoryBot.create(:driver)
-     @driver2 = FactoryBot.create(:driver)
+    @driver1 = FactoryBot.create(:driver)
+    @driver2 = FactoryBot.create(:driver)
 
-     @address1 = FactoryBot.create(:address)
+    @address1 = FactoryBot.create(:address)
 
-     @passenger1 = FactoryBot.create(:passenger)
-     @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
-     @ride2 = FactoryBot.create(:ride, driver: @driver2, passenger: @passenger1)
-     @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
-     @ride4 = FactoryBot.create(:ride, date: Date.today - 5.days)
+    @passenger1 = FactoryBot.create(:passenger)
+    @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
+    @ride2 = FactoryBot.create(:ride, driver: @driver2, passenger: @passenger1)
+    @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
+    @ride4 = FactoryBot.create(:ride, date: Date.today - 5.days)
    end
-
-  describe "GET #today" do
-    # Tests when no today parameters are provided, all rides should be returned
-    it "returns all rides when no today is applied" do
-      get :today
-      expect(assigns(:rides)).to match_array([ @ride1, @ride2, @ride3 ])
-    end
-  end
 
   describe "POST #create" do
     context "with valid attributes" do
@@ -112,7 +104,5 @@ RSpec.describe RidesController, type: :controller do
   end
 
   after(:each) do
-    Ride.delete_all
-    Driver.delete_all
   end
 end

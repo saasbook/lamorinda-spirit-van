@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   resources :drivers do
     member do
       get "all_shifts"
+      get "today"
     end
   end
 end
