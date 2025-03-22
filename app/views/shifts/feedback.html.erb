@@ -16,16 +16,19 @@
   <% end %>
 
   <div>
+    <% puts(@shift) %>
+    <% puts(@shift.van) %>
+    <% puts(@shift) %>
     <%= form.label :van, "Van: ", style: "display: block" %>
-    <%= form.number_field :van, required: false %>
+    <%= form.number_field :van, required: false, value: @shift.van %>
     <%= form.label :pu_time, "Van pick up time from base: ", style: "display: block" %>
-    <%= form.text_field :pu_time, required: false %>
+    <%= form.text_field :pu_time, required: false, value: @shift.pu_time %>
     <%= form.label :do_time, "Van drop off time from base: ", style: "display: block" %>
-    <%= form.text_field :do_time, required: false %>
+    <%= form.text_field :do_time, required: false, value: @shift.do_time %>
     <%= form.label :odo_pre, "Odometer reading pre-trip: ", style: "display: block" %>
-    <%= form.text_field :odo_pre, required: false %>
+    <%= form.text_field :odo_pre, required: false, value: @shift.odo_pre %>
     <%= form.label :odo_pst, "Odometer reading post-trip: ", style: "display: block" %>
-    <%= form.text_field :odo_pst, required: false %>
+    <%= form.text_field :odo_pst, required: false, value: @shift.odo_pst %>
   </div>
 
   <div>
