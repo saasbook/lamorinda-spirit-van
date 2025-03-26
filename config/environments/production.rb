@@ -22,6 +22,14 @@ Rails.application.configure do
   # key such as config/credentials/production.key. This key is used to decrypt credentials (and other encrypted files).
   # config.require_master_key = true
 
+  ######################
+  # NEEDS TO BE CHANGED!
+  ######################
+  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  ######################
+  # NEEDS TO BE CHANGED!
+  ######################
+
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
   # config.public_file_server.enabled = false
 
