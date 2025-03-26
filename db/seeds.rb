@@ -13,3 +13,15 @@ User.create!(
   password: "password",
   role: "admin"
 )
+
+User.create!(
+  email: "dispatcher@example.com",
+  password: "password",
+  role: "dispatcher"
+)
+
+User.create!(
+  email: "driver@example.com",
+  password: "password",
+  role: "driver"
+)

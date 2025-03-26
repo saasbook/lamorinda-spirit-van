@@ -25,7 +25,17 @@ Rails.application.configure do
   ######################
   # NEEDS TO BE CHANGED!
   ######################
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.email.com',
+    port:                 587,
+    domain:               'yourdomain.com', # or your email domain
+    user_name:            ENV['GMAIL_USERNAME'], # your email address
+    password:             ENV['GMAIL_PASSWORD'], # your email password or app password
+    authentication:       'plain',
+    enable_starttls_auto: true
+  }
+  config.action_mailer.default_url_options = { host: 'yourdomain.com', protocol: 'https' }
   ######################
   # NEEDS TO BE CHANGED!
   ######################
