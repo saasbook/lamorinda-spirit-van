@@ -10,7 +10,8 @@ class User < ApplicationRecord
 
   ROLES = %w[admin dispatcher driver]
 
-  validates :role, presence: true, inclusion: { in: ROLES }
+  validates :role, inclusion: { in: ROLES }, allow_blank: true
+
 
   def admin?
     role == "admin"

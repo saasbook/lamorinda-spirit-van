@@ -27,15 +27,15 @@ Rails.application.configure do
   ######################
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtp.email.com',
+    address:              "smtp.email.com",
     port:                 587,
-    domain:               'yourdomain.com', # or your email domain
-    user_name:            ENV['GMAIL_USERNAME'], # your email address
-    password:             ENV['GMAIL_PASSWORD'], # your email password or app password
-    authentication:       'plain',
+    domain:               "yourdomain.com", # or your email domain
+    user_name:            ENV["GMAIL_USERNAME"], # your email address
+    password:             ENV["GMAIL_PASSWORD"], # your email password or app password
+    authentication:       "plain",
     enable_starttls_auto: true
   }
-  config.action_mailer.default_url_options = { host: 'yourdomain.com', protocol: 'https' }
+  config.action_mailer.default_url_options = { host: "yourdomain.com", protocol: "https" }
   ######################
   # NEEDS TO BE CHANGED!
   ######################

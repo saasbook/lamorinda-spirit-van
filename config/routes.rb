@@ -2,7 +2,9 @@
 
 Rails.application.routes.draw do
   devise_for :users
-  resources :passengers
+  namespace :admin do
+    resources :users, only: [:index, :edit, :update, :destroy]
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -16,6 +18,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "rides#filter"
+
+  resources :passengers
 
   resources :rides do
     collection do
