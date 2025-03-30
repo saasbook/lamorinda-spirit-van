@@ -18,14 +18,14 @@
   <div>
     <%= form.label :van, "Van: ", style: "display: block" %>
     <%= form.number_field :van, required: false, value: @shift.van %>
-    <%= form.label :pu_time, "Van pick up time from base: ", style: "display: block" %>
-    <%= form.text_field :pu_time, required: false, value: @shift.pu_time %>
-    <%= form.label :do_time, "Van drop off time from base: ", style: "display: block" %>
-    <%= form.text_field :do_time, required: false, value: @shift.do_time %>
-    <%= form.label :odo_pre, "Odometer reading pre-trip: ", style: "display: block" %>
-    <%= form.text_field :odo_pre, required: false, value: @shift.odo_pre %>
-    <%= form.label :odo_pst, "Odometer reading post-trip: ", style: "display: block" %>
-    <%= form.text_field :odo_pst, required: false, value: @shift.odo_pst %>
+    <%= form.label :pick_up_time, "Van pick up time from base: ", style: "display: block" %>
+    <%= form.text_field :pick_up_time, required: false, value: @shift.pick_up_time %>
+    <%= form.label :drop_off_time, "Van drop off time from base: ", style: "display: block" %>
+    <%= form.text_field :drop_off_time, required: false, value: @shift.drop_off_time %>
+    <%= form.label :odometer_pre, "Odometer reading pre-trip: ", style: "display: block" %>
+    <%= form.text_field :odometer_pre, required: false, value: @shift.odometer_pre %>
+    <%= form.label :odometer_post, "Odometer reading post-trip: ", style: "display: block" %>
+    <%= form.text_field :odometer_post, required: false, value: @shift.odometer_post %>
   </div>
 
   <div>

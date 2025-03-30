@@ -97,6 +97,6 @@ class ShiftsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def shift_params
-    params.require(:shift).permit(:shift_date, :shift_type, :driver_id, :van, :pu_time, :do_time, :odo_pre, :odo_pst)
+    params.require(:shift).permit(:shift_date, :shift_type, :driver_id, :van, :pick_up_time, :drop_off_time, :odometer_pre, :odometer_post)
   end
 end
