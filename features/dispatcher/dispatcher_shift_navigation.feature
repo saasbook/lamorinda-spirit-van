@@ -6,13 +6,11 @@ Feature: Dispatcher Shift Navigation
 
   Background:
     Given the following driver exists:
-        | name       |
-        | John Smith |
-
+      | name       |
+      | John Smith |
     And the following shift exists:
-        | driver     | shift_date | shift_type |
-        | John Smith | 2025-03-31 | am |
-
+      | driver     | shift_date | shift_type |
+      | John Smith | 2025-03-31 | am |
     And I am on the "Shifts Calendar" page
 
   Scenario: Dispatcher clicks on driver name to view all their shifts
