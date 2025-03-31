@@ -38,20 +38,17 @@ class ShiftsController < ApplicationController
 
   # POST /shifts or /shifts.json
   def create
-    # Check if there is a driver_id
     if params[:shift][:driver_id].blank?
       redirect_to new_shift_path, alert: "Driver is required to create a shift."
       return
     end
 
-    # Find driver
     @driver = Driver.find_by(id: params[:shift][:driver_id])
     if @driver.nil?
       redirect_to new_shift_path, alert: "Driver not found."
       return
     end
 
-    # Create shift
     @shift = @driver.shifts.build(shift_params)
 
     if @shift.save

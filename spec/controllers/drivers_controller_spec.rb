@@ -10,9 +10,12 @@ RSpec.describe DriversController, type: :controller do
     @address1 = FactoryBot.create(:address)
 
     @passenger1 = FactoryBot.create(:passenger)
+    @passenger2 = FactoryBot.create(:passenger)
     @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
     @ride2 = FactoryBot.create(:ride, driver: @driver2, passenger: @passenger1)
-    @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
+    @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger2)
+    @ride4 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1, date: Date.today + 1.days)
+    @ride5 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1, date: Date.today - 1.days)
   end
 
   describe "GET #index" do
@@ -28,9 +31,19 @@ RSpec.describe DriversController, type: :controller do
   end
 
   describe "GET #today" do
-    it "returns all rides when no date is applied" do
+    it "returns today's rides when no date is applied" do
       get :today, params: { id: @driver1.id }
       expect(assigns(:rides)).to match_array([ @ride1, @ride3 ])
+    end
+
+    it "returns yesterday's rides" do
+      get :today, params: { id: @driver1.id, date: Date.today - 1.days }
+      expect(assigns(:rides)).to match_array([ @ride5 ])
+    end
+
+    it "returns tomorrow's rides" do
+      get :today, params: { id: @driver1.id, date: Date.today + 1.days }
+      expect(assigns(:rides)).to match_array([ @ride4 ])
     end
   end
 
