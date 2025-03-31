@@ -28,7 +28,12 @@ Then("I should be on the {string} page") do |page_name|
   when "Shifts Calendar"
     expect(current_path).to eq shifts_path
   when "New Shift"
-    new_shift_path(date: @clicked_date.to_s)
+    expect(page.current_url).to include("/shifts/new")
+    expect(page.current_url).to include("date=#{@clicked_date}")
+  when "Driver's All Shifts"
+    expect(current_path).to match(/\/drivers\/\d+\/all_shifts/)
+  when "Shift Details"
+    expect(current_path).to match(/\/shifts\/\d+/)
   else
     raise "Unknown page name: #{page_name}"
   end
@@ -101,4 +106,28 @@ end
 Then("the date should initially be the date of the corresponding table") do
   input_value = find("#shift_shift_date").value
   expect(input_value).to eq @clicked_date.to_s
+end
+
+
+When("I click on a driver's name") do
+  driver_link = find(".driver-link", match: :first)
+  @clicked_driver_name = driver_link.text
+  driver_link.click
+end
+
+Then("I should see a list of shifts belonging to that driver") do
+  expect(page).to have_content(@clicked_driver_name)
+  expect(page).to have_css("div.shift") # Assumes shift blocks have a class for styling
+end
+
+When("I click on a shift type") do
+  shift_type_link = find(".shift-type-link", match: :first)
+  @clicked_shift_type = shift_type_link.text
+  shift_type_link.click
+end
+
+Then("I should see the details of that shift") do
+  expect(page).to have_content("Shift date")
+  expect(page).to have_content("Driver name")
+  expect(page).to have_content("Shift type")
 end
