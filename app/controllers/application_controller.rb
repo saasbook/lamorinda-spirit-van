@@ -10,11 +10,9 @@ class ApplicationController < ActionController::Base
 
   protected
   def configure_permitted_parameters
-    # Remove :role so new users don't set it on sign up
     devise_parameter_sanitizer.permit(:sign_up, keys: [])
   end
 
-  # This filter checks if a logged-in user has a role
   def check_user_role
     if current_user.role.blank?
       sign_out(current_user)
