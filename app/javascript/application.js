@@ -33,7 +33,7 @@ const initiateSearchbars = (table) => {
   
     // Create search input element and append it to the table
     $('<input type="text"/>')
-      .attr('placeholder', `Search ${column.header().textContent.trim()}...`)
+      .attr('placeholder', `Filter ${column.header().textContent.trim()}...`)
       .appendTo(column.footer())
       .on('keyup change clear', function () {
         if (column.search() !== this.value) {
