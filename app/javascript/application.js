@@ -43,6 +43,51 @@ const initiateSearchbars = (table) => {
   });
 }
 
+// Displays relevant data for rides table needed for forms
+const displayRelevantData = function(row, data, start, end, display) {
+  const api = this.api();
+  const parseAmount = val => parseFloat(val.replace(/[\$,]/g, '')) || 0;
+
+  api.columns().every(function (index) {
+    const column = this;
+    const footerCell = $(api.table().footer()).find('tr.column-summary th').eq(index);
+
+    const filteredData = api
+      .cells(null, index, { search: 'applied' })
+      .render('display')
+      .toArray()
+      .filter(val => val && val.trim() !== '');
+
+    // Amount Paid col
+    if (index === 10) {
+      const total = filteredData.reduce((sum, val) => sum + parseAmount(val), 0);
+      footerCell.html(`$${total.toFixed(2)}`);
+
+    // Origin or Destination cols
+    } else if (index === 6 || index === 7) {
+      const cityCounts = {};
+      const total = filteredData.length;
+
+      filteredData.forEach(val => {
+        // Extract just the city from a full address
+        const cityMatch = val.match(/,\s*(\w+)\s*,/);
+        const city = cityMatch ? cityMatch[1] : "Unknown";
+        cityCounts[city] = (cityCounts[city] || 0) + 1;
+      });
+
+      const percentages = Object.entries(cityCounts)
+        .map(([city, count]) => `${city}: ${(count / total * 100).toFixed(1)}%`)
+        .join("<br>");
+
+      footerCell.html(percentages);
+
+    // Other columns: count entries
+    } else {
+      footerCell.html(`${filteredData.length} entries`);
+    }
+  })
+}
+
 // Creates the Datatables
 const initiateDatatables = () => {
   const tables = [
@@ -79,6 +124,9 @@ const initiateDatatables = () => {
         dom: "<'row'<'col-md-6'l><'col-md-6'B>>" +
           "<'row'<'col-md-12'tr>>" +
           "<'row'<'col-md-6'i><'col-md-6'p>>",
+
+        footerCallback: displayRelevantData,
+        
       });
       initiateCheckboxes(newTable);
       initiateSearchbars(newTable);
