@@ -4,10 +4,10 @@ require "rails_helper"
 
 RSpec.describe PassengersController, type: :controller do
   before(:each) do
-     @address1 = FactoryBot.create(:address)
-     @passenger1 = FactoryBot.create(:passenger)
-     @passenger2 = FactoryBot.create(:passenger)
-   end
+    @address1 = FactoryBot.create(:address)
+    @passenger1 = FactoryBot.create(:passenger)
+    @passenger2 = FactoryBot.create(:passenger)
+  end
 
   describe "POST #create" do
     it "GET #new" do
