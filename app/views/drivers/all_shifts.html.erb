@@ -1,5 +1,7 @@
 <h1>All Shifts for <%= @driver.name %> (Total: <%= @shifts.count %>)</h1>
 
+<% content_for :title, "Driver's All Shifts" %>
+
 <ul>
   <% @shifts.each do |shift| %>
   <div class="shift">

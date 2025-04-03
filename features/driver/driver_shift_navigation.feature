@@ -5,7 +5,7 @@ Feature: Driver Ride and Shift Navigation
   So that I can review my schedule efficiently
 
   Scenario: Navigating from Home to Today's Rides
-    Given I am on the "home" page
+    Given I am on the "Home" page
     When I click on "Today's Rides" button
     Then I should be on the "Today's Rides" page
 

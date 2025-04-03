@@ -8,5 +8,5 @@ Feature: Dispatcher Shift Creation
     Given I am on the "Shifts Calendar" page
     Then I should see each day has a button for create a new shift
     When I click one day's "New shift" button
-    Then I should be on the "New Shift" page
+    Then I should be on the "New shift" page
     And the shift date field should show the date of the day I selected
