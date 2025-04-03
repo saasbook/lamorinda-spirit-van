@@ -3,6 +3,7 @@
 Given("I am on the {string} page") do |page_title|
   title_to_path = {
     "Log in" => new_user_session_path,
+    "Sign up" => new_user_registration_path,
     "Home" => root_path,
     "Lamorinda" => root_path,
     "Read-Only Shift Calendar" => read_only_shifts_path,

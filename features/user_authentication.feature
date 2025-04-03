@@ -8,6 +8,14 @@ Feature: User authentication and role enforcement
       | dispatcher1@example.com | password | dispatcher |
       | driver1@example.com | password | driver |
 
+  Scenario: A user can sign up with valid credentials
+    Given I am on the "Sign up" page
+    And I fill in "Email" with "newuser@example.com"
+    And I fill in "Password" with "password"
+    And I fill in "Password confirmation" with "password"
+    And I press "Sign up"
+    Then I should be on the "Log in" page
+
   Scenario Outline: A user with role <role> can sign in successfully
     Given I am on the "Log in" page
     And I fill in "Email" with "<email>"
