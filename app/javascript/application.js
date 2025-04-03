@@ -92,6 +92,7 @@ document.addEventListener("turbo:load", function() {
 
     $( "#ride_passenger_name" ).on( "autocompleteselect", function( event, ui ) {
       document.getElementById('ride_passenger_phone').value=  ui.item.phone;
+      document.getElementById('ride_passenger_notes').value=  ui.item.notes;
       document.getElementById('ride_passenger_id').value=  ui.item.id;
     } );
   }
