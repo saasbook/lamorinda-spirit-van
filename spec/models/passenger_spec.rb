@@ -18,7 +18,7 @@ RSpec.describe Passenger, type: :model do
     context "when deleting a passenger record" do
       it "does not delete the associated address record" do
         existing_address_id = @passenger1.address_id
-        expect {@passenger1.destroy}.to change(Passenger, :count).by(-1)
+        expect { @passenger1.destroy }.to change(Passenger, :count).by(-1)
         expect(Address.exists?(existing_address_id)).to be true
       end
     end
@@ -47,7 +47,7 @@ RSpec.describe Passenger, type: :model do
       it "reuses existing address when updated with matching address fields" do
         existing_address = create(:address, street: "123 Main St", city: "Orinda", state: "CA", zip: "94563")
         passenger = create(:passenger)
-      
+
         expect {
           passenger.update(address_attributes: {
             street: "123 Main St",
@@ -56,7 +56,7 @@ RSpec.describe Passenger, type: :model do
             zip: "94563"
           })
         }.not_to change(Address, :count)
-      
+
         expect(passenger.reload.address_id).to eq(existing_address.id)
       end
     end
@@ -69,7 +69,7 @@ RSpec.describe Passenger, type: :model do
           state: "CA",
           zip: "94556"
         }
-      
+
         expect {
           Passenger.create!(
             name: "Unique Address Tester",
@@ -88,7 +88,7 @@ RSpec.describe Passenger, type: :model do
     context "when creating a passenger with an existing address" do
       it "reuses an existing address" do
         existing_address = create(:address, street: "123 Shared St", city: "Orinda", state: "CA", zip: "94563")
-      
+
         passenger_attrs = {
           name: "Duplicate Address Tester",
           phone: "555-000-0000",
@@ -104,16 +104,14 @@ RSpec.describe Passenger, type: :model do
             zip:    "94563"
           }
         }
-      
+
         expect {
           Passenger.create!(passenger_attrs)
         }.not_to change(Address, :count)
-      
+
         new_passenger = Passenger.last
         expect(new_passenger.address_id).to eq(existing_address.id)
       end
     end
   end
 end
-
-
