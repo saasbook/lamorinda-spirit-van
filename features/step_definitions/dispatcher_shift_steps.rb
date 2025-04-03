@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+
+# Scenario: Dispatcher creates a new shift from calendar
 Then("I should see each day has a button for create a new shift") do
   day_cells = all("td")
   shift_buttons = day_cells.select { |td| td.has_link?("New shift") }
@@ -21,11 +23,13 @@ When("I click one day's {string} button") do |button_text|
   target_cell.click_link(button_text)
 end
 
-Then("the date should initially be the date of the corresponding table") do
+Then("the shift date field should show the date of the day I selected") do
   input_value = find("#shift_shift_date").value
   expect(input_value).to eq @clicked_date.to_s
 end
 
+
+# Scenario: Dispatcher clicks on driver name to view all their shifts
 When("I click on a driver's name") do
   driver_link = find(".driver-link", match: :first)
   @clicked_driver_name = driver_link.text
@@ -37,6 +41,8 @@ Then("I should see a list of shifts belonging to that driver") do
   expect(page).to have_css("div.shift")
 end
 
+
+# Scenario: Dispatcher clicks on shift type to view shift details
 When("I click on a shift type") do
   shift_type_link = find(".shift-type-link", match: :first)
   @clicked_shift_type = shift_type_link.text
