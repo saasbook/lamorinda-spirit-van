@@ -86,13 +86,14 @@
                  For now, we keep them read-only or placeholder to mimic the structure. -->
             <div class="mb-3">
               <%= f.label :passenger_name, "Passenger" %>
-              <%= f.text_field :passenger_name %> 
+              <%= f.text_field :passenger_name, class: "form-control"  %> 
             </div>
 
+              <%= f.hidden_field :passenger_id, class: "form-control"  %> 
+              
             <div class="mb-3">
-              <%= f.label :passenger_home_address, "Home Address" %>
-              <input type="text" class="form-control bg-secondary text-white opacity-50"
-                     value="(N/A)" readonly>
+              <%= f.label :passenger_phone, "Phone Number:" %>
+              <%= f.text_field :passenger_phone, class: "form-control", readonly: true  %> 
             </div>
 
             <!-- New Address Container with Justify Content Row -->
