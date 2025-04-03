@@ -73,6 +73,8 @@ group :development, :test do
 
   # factory bot
   gem "factory_bot_rails"
+
+  gem 'selenium-webdriver', '~> 4.30', '>= 4.30.1'
 end
 
 group :development do
