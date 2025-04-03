@@ -32,6 +32,11 @@ class Admin::UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:role)
+    # Allow admin to update role, but regular users can only update email and password
+    if current_user.admin?
+      params.require(:user).permit(:email, :password, :role)
+    else
+      params.require(:user).permit(:email, :password)
+    end
   end
 end
