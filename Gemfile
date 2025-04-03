@@ -71,6 +71,9 @@ group :development, :test do
   # make sure references to sqlite3 gem ONLY appear in dev/test groups
   gem "sqlite3"
 
+  # selenium webdriver - for headful cucumber tests
+  gem "selenium-webdriver"
+
   # factory bot
   gem "factory_bot_rails"
 end
