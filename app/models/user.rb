@@ -8,6 +8,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   # :omniauthable, omniauth_providers: [:google_oauth2]
 
+  # if you want to add new role, update the ROLES array below
+  # and add definition methods for the new role
   ROLES = %w[admin dispatcher driver]
 
   validates :role, inclusion: { in: ROLES }, allow_blank: true
