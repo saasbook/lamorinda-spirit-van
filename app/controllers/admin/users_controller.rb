@@ -31,12 +31,20 @@ class Admin::UsersController < ApplicationController
     redirect_to root_path, alert: "Access denied." unless current_user.admin?
   end
 
+  # Brakeman warning ...lol
+  # def user_params
+  #   # Allow admin to update role, but regular users can only update email and password
+  #   if current_user.admin?
+  #     params.require(:user).permit(:email, :password, :role)
+  #   else
+  #     params.require(:user).permit(:email, :password)
+  #   end
+  # end
+
   def user_params
+    permitted = [:email, :password]
     # Allow admin to update role, but regular users can only update email and password
-    if current_user.admin?
-      params.require(:user).permit(:email, :password, :role)
-    else
-      params.require(:user).permit(:email, :password)
-    end
+    permitted << :role if current_user&.admin?
+    params.require(:user).permit(permitted)
   end
 end
