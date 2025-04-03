@@ -4,6 +4,9 @@ require "rails_helper"
 
 RSpec.describe PassengersController, type: :controller do
   before(:each) do
+    @user = FactoryBot.create(:user, :dispatcher)
+    sign_in @user
+
     @address1 = FactoryBot.create(:address)
     @passenger1 = FactoryBot.create(:passenger)
     @passenger2 = FactoryBot.create(:passenger)

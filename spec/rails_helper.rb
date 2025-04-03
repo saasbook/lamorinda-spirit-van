@@ -76,4 +76,10 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+
+  # Devise test helpers
+  # This allows us to use `sign_in` in controller tests
+  # to simulate logged-in users during testing.
+  config.include Devise::Test::ControllerHelpers, type: :controller
 end

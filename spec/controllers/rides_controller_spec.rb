@@ -4,17 +4,20 @@ require "rails_helper"
 
 RSpec.describe RidesController, type: :controller do
   before(:each) do
-     @driver1 = FactoryBot.create(:driver)
-     @driver2 = FactoryBot.create(:driver)
+    @user = FactoryBot.create(:user, :dispatcher)
+    sign_in @user
 
-     @address1 = FactoryBot.create(:address)
+    @driver1 = FactoryBot.create(:driver)
+    @driver2 = FactoryBot.create(:driver)
 
-     @passenger1 = FactoryBot.create(:passenger)
-     @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
-     @ride2 = FactoryBot.create(:ride, driver: @driver2, passenger: @passenger1)
-     @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
-     @ride4 = FactoryBot.create(:ride, date: Date.today - 5.days)
-   end
+    @address1 = FactoryBot.create(:address)
+
+    @passenger1 = FactoryBot.create(:passenger)
+    @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
+    @ride2 = FactoryBot.create(:ride, driver: @driver2, passenger: @passenger1)
+    @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
+    @ride4 = FactoryBot.create(:ride, date: Date.today - 5.days)
+  end
 
   describe "POST #create" do
     context "with valid attributes" do

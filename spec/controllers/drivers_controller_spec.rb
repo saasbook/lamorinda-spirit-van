@@ -4,6 +4,9 @@ require "rails_helper"
 
 RSpec.describe DriversController, type: :controller do
   before(:each) do
+    @user = FactoryBot.create(:user, role: :driver)
+    sign_in @user
+
     @driver1 = FactoryBot.create(:driver)
     @driver2 = FactoryBot.create(:driver)
 

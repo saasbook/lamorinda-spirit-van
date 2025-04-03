@@ -4,6 +4,9 @@ require "rails_helper"
 
 RSpec.describe ShiftsController, type: :controller do
   before(:each) do
+    @user = FactoryBot.create(:user, :dispatcher)
+    sign_in @user
+
     @driver = FactoryBot.create(:driver)
     @shift = FactoryBot.create(:shift, driver: @driver)
 
