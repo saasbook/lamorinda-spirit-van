@@ -85,9 +85,8 @@
             <!-- If you want to allow picking or associating a passenger, you can add a dropdown or fields here. 
                  For now, we keep them read-only or placeholder to mimic the structure. -->
             <div class="mb-3">
-              <%= f.label :passenger_name, "Passenger Name" %>
-              <input type="text" class="form-control bg-secondary text-white opacity-50"
-                     value="(No passenger yet)" readonly>
+              <%= f.label :passenger_name, "Passenger" %>
+              <%= f.text_field :passenger_name %> 
             </div>
 
             <div class="mb-3">

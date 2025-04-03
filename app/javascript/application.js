@@ -81,3 +81,9 @@ document.addEventListener('turbo:load', () => {
     }, 5000);
   }
 });
+
+$( function() {
+  $( "#ride_passenger_name" ).autocomplete({
+    source: gon.passengers
+  });
+} );

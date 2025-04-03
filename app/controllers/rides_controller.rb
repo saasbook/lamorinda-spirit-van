@@ -15,6 +15,7 @@ class RidesController < ApplicationController
     @ride = Ride.new
     # For driver dropdown list in creating / updating
     @drivers = Driver.order(:name)
+    gon.passengers = Passenger.all.map {|p| p.name}
   end
 
   def create
