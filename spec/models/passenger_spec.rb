@@ -60,6 +60,59 @@ RSpec.describe Passenger, type: :model do
         expect(passenger.reload.address_id).to eq(existing_address.id)
       end
     end
+
+    context "when creating a passenger with a unique address" do
+      it "creates a new address" do
+        address_attrs = {
+          street: "789 Brand New Blvd",
+          city: "Moraga",
+          state: "CA",
+          zip: "94556"
+        }
+      
+        expect {
+          Passenger.create!(
+            name: "Unique Address Tester",
+            phone: "555-555-5555",
+            email: "unique@example.com",
+            race: 1,
+            hispanic: "Yes",
+            birthday: Date.today,
+            date_registered: Date.today,
+            address_attributes: address_attrs
+          )
+        }.to change(Address, :count).by(1)
+      end
+    end
+
+    context "when creating a passenger with an existing address" do
+      it "reuses an existing address" do
+        existing_address = create(:address, street: "123 Shared St", city: "Orinda", state: "CA", zip: "94563")
+      
+        passenger_attrs = {
+          name: "Duplicate Address Tester",
+          phone: "555-000-0000",
+          email: "duplicate@example.com",
+          race: 1,
+          hispanic: "Yes",
+          birthday: Date.today,
+          date_registered: Date.today,
+          address_attributes: {
+            street: "123 Shared St",
+            city:   "Orinda",
+            state:  "CA",
+            zip:    "94563"
+          }
+        }
+      
+        expect {
+          Passenger.create!(passenger_attrs)
+        }.not_to change(Address, :count)
+      
+        new_passenger = Passenger.last
+        expect(new_passenger.address_id).to eq(existing_address.id)
+      end
+    end
   end
 end
 
