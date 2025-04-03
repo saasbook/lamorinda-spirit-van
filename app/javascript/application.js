@@ -44,7 +44,7 @@ const initiateSearchbars = (table) => {
 }
 
 // Displays relevant data for rides table needed for forms
-const displayRelevantData = function(row, data, start, end, display) {
+const ridesRelevantData = function(row, data, start, end, display) {
   const api = this.api();
   const parseAmount = val => parseFloat(val.replace(/[\$,]/g, '')) || 0;
 
@@ -88,11 +88,50 @@ const displayRelevantData = function(row, data, start, end, display) {
   })
 }
 
+// Displays relevant data for passengers table needed for forms
+const passengersRelevantData = function(row, data, start, end, display) {
+  const api = this.api();
+
+  api.columns().every(function (index) {
+    const column = this;
+    const footerCell = $(api.table().footer()).find('tr.column-summary th').eq(index);
+
+    const filteredData = api
+      .cells(null, index, { search: 'applied' })
+      .render('display')
+      .toArray()
+      .filter(val => val && val.trim() !== '');
+    
+    // address column: percentage of each city
+    if (index === 3) {
+      const cityCounts = {};
+      const total = filteredData.length;
+
+      filteredData.forEach(val => {
+        // Extract just the city from a full address
+        const cityMatch = val.match(/,\s*(\w+)\s*,/);
+        const city = cityMatch ? cityMatch[1] : "Unknown";
+        cityCounts[city] = (cityCounts[city] || 0) + 1;
+      });
+
+      const percentages = Object.entries(cityCounts)
+        .map(([city, count]) => `${city}: ${(count / total * 100).toFixed(1)}%`)
+        .join("<br>");
+
+      footerCell.html(percentages);
+
+    // Other columns: count entries
+    } else {
+      footerCell.html(`${filteredData.length} entries`);
+    }
+  })
+}
+
 // Creates the Datatables
 const initiateDatatables = () => {
   const tables = [
-    { selector: '#passengers-table', order: [[2, 'asc']]},
-    { selector: '#rides-table', order: [[2, 'desc']]}
+    { selector: '#passengers-table', order: [[2, 'asc']], footerCallback: passengersRelevantData},
+    { selector: '#rides-table', order: [[2, 'desc']], footerCallback: ridesRelevantData}
   ];
 
   tables.forEach(table => {
@@ -108,25 +147,10 @@ const initiateDatatables = () => {
         pageLength: 10,
         order: table.order,
         scrollX: true,
-
-        buttons: [
-          {
-            extend: 'pdf',
-            title: 'RideData',
-            messageTop: 'List of rides',
-            orientation: 'landscape',
-            pageSize: 'A4',
-            exportOptions: {
-              columns: ':visible' // Export only visible columns
-            }
-          },
-        ],
-        dom: "<'row'<'col-md-6'l><'col-md-6'B>>" +
+        footerCallback: table.footerCallback,
+        dom: "<'row'<'col-md-6'l><'col-md-6'>>" +
           "<'row'<'col-md-12'tr>>" +
           "<'row'<'col-md-6'i><'col-md-6'p>>",
-
-        footerCallback: displayRelevantData,
-        
       });
       initiateCheckboxes(newTable);
       initiateSearchbars(newTable);
