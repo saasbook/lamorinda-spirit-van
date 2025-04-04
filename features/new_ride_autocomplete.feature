@@ -1,3 +1,4 @@
+@javascript
 Feature: Autocomplete for new ride passengers
     As a dispatcher
     So I can more easily and quicky create new Rides
