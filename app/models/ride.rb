@@ -70,6 +70,7 @@ class Ride < ApplicationRecord
 
   #   rides
   # end
+
   def start_address_attributes=(attrs)
     normalized = normalize_address(attrs)
     existing_address = Address.find_by(normalized)
