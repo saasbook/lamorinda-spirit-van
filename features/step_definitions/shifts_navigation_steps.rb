@@ -11,45 +11,27 @@
 #     When I click on "View Shifts" button
 #     Then I should be on the "Read-Only Shift Calendar" page
 
-Given("I am on the {string} page") do |page_name|
-  case page_name
-  when "home"
-    visit root_path
-  when "Today's Rides"
-    visit today_driver_path(id: 1)
-  when "Read-Only Shift Calendar"
-    visit read_only_shifts_path
-  when "Shifts Calendar"
-    visit shifts_path
-  else
-    raise "Unknown page name: #{page_name}"
-  end
-end
 
-When("I click on {string} button") do |button_text|
-  click_button(button_text) rescue click_link(button_text)
-end
+# Then("I should be on the {string} page") do |page_name|
+#   case page_name
+#   when "Today's Rides"
+#     expect(current_path).to eq today_driver_path
+#   when "Read-Only Shift Calendar"
+#     expect(current_path).to eq read_only_shifts_path
+#   when "Shifts Calendar"
+#     expect(current_path).to eq shifts_path
+#   when "New Shift"
+#     new_shift_path(date: @clicked_date.to_s)
+#   else
+#     raise "Unknown page name: #{page_name}"
+#   end
+# end
 
-Then("I should be on the {string} page") do |page_name|
-  case page_name
-  when "Today's Rides"
-    expect(current_path).to eq today_driver_path
-  when "Read-Only Shift Calendar"
-    expect(current_path).to eq read_only_shifts_path
-  when "Shifts Calendar"
-    expect(current_path).to eq shifts_path
-  when "New Shift"
-    new_shift_path(date: @clicked_date.to_s)
-  else
-    raise "Unknown page name: #{page_name}"
-  end
-end
-
-Then("I should see {string} button") do |button_text|
-  # search button or link
-  found = page.has_button?(button_text) || page.has_link?(button_text)
-  expect(found).to be true
-end
+# Then("I should see {string} button") do |button_text|
+#   # search button or link
+#   found = page.has_button?(button_text) || page.has_link?(button_text)
+#   expect(found).to be true
+# end
 
 Then("I should see the current month and year in the calendar title") do
   expected_title = Time.zone.today.strftime("%B %Y") # e.g., "March 2025"

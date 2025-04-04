@@ -23,6 +23,17 @@ module NavigationHelpers
     #
     #   when /^(.*)'s profile page$/i
     #     user_profile_path(User.find_by_login($1))
+    when /^the master passenger list$/i
+      passengers_path
+
+    when /^today's rides page$/i
+      today_driver_path(id: 1)
+
+    when /^the read-only shifts calendar page$/i
+      read_only_shifts_path
+
+    when /^the shifts calendar page$/i
+      shifts_path
 
     else
       begin

@@ -19,9 +19,9 @@ require "factory_bot_rails"
 
 World(FactoryBot::Syntax::Methods)
 
-Capybara.register_driver :selenium_chrome_headful do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
-end
+# Capybara.register_driver :selenium_chrome_headful do |app|
+#   Capybara::Selenium::Driver.new(app, browser: :chrome)
+# end
 
 
 # By default, any exception happening in your Rails application will bubble up
