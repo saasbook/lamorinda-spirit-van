@@ -478,7 +478,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rails-omakase
   rubocop-rspec
-  selenium-webdriver (~> 4.30, >= 4.30.1)
+  selenium-webdriver
   simple_calendar
   simplecov
   simplecov_json_formatter
