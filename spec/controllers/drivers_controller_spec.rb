@@ -140,6 +140,27 @@ RSpec.describe DriversController, type: :controller do
         expect(flash[:notice]).to eq("Driver was successfully created.")
       end
     end
+
+    context "with invalid attributes (simulated failure)" do
+      it "renders new with unprocessable_entity (HTML)" do
+        allow_any_instance_of(Driver).to receive(:save).and_return(false)
+
+        post :create, params: { driver: { name: "No matter", email: "anything" } }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template(:new)
+      end
+
+      it "renders errors with unprocessable_entity (JSON)" do
+        allow_any_instance_of(Driver).to receive(:save).and_return(false)
+        allow_any_instance_of(Driver).to receive(:errors).and_return({ email: ["can't be blank"] })
+
+        request.headers["Accept"] = "application/json"
+        post :create, params: { driver: { name: "ignored", email: "ignored" } }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)).to include("email")
+      end
+    end
   end
 
   describe "PATCH #update" do
@@ -156,6 +177,27 @@ RSpec.describe DriversController, type: :controller do
         patch :update, params: { id: @driver1.id, driver: updated_attributes }
         expect(response).to redirect_to(@driver1)
         expect(flash[:notice]).to eq("Driver was successfully updated.")
+      end
+    end
+
+    context "with invalid attributes (simulated failure)" do
+      it "renders edit with unprocessable_entity (HTML)" do
+        allow_any_instance_of(Driver).to receive(:update).and_return(false)
+
+        patch :update, params: { id: @driver1.id, driver: { name: "Whatever" } }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template(:edit)
+      end
+
+      it "renders errors with unprocessable_entity (JSON)" do
+        allow_any_instance_of(Driver).to receive(:update).and_return(false)
+        allow_any_instance_of(Driver).to receive(:errors).and_return({ email: ["can't be blank"] })
+
+        request.headers["Accept"] = "application/json"
+        patch :update, params: { id: @driver1.id, driver: { email: "whatever" } }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)).to include("email")
       end
     end
   end
