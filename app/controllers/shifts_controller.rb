@@ -31,11 +31,6 @@ class ShiftsController < ApplicationController
   def edit
   end
 
-  # GET /shifts/1/feedback
-  def feedback
-    @shift = Shift.find(params[:id])
-  end
-
   # POST /shifts or /shifts.json
   def create
     if params[:shift][:driver_id].blank?
