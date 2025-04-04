@@ -72,11 +72,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_03_26_230439) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "driver_id", null: false
-    t.integer "van"
-    t.string "pu_time"
-    t.string "do_time"
-    t.string "odo_pre"
-    t.string "odo_pst"
     t.index ["driver_id"], name: "index_shifts_on_driver_id"
   end
 

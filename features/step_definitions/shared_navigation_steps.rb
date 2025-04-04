@@ -6,6 +6,7 @@ Given("I am on the {string} page") do |page_title|
     "Sign up" => new_user_registration_path,
     "Home" => root_path,
     "Lamorinda" => root_path,
+    "Today's Rides" => today_rides_path,
     "Read-Only Shift Calendar" => read_only_shifts_path,
     "Shifts Calendar" => shifts_path,
     "New Shift" => new_shift_path,
