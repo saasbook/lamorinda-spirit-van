@@ -104,6 +104,7 @@ jobs:
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
+        rails db:migrate
         bundle exec rspec
 
     - name: Upload coverage reports to Codecov
