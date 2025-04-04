@@ -51,6 +51,30 @@ RSpec.describe DriversController, type: :controller do
     end
   end
 
+  describe "GET #today" do
+    before(:each) do
+      @ride1 = FactoryBot.create(:ride, driver: @driver1, date: Time.zone.today)
+      @ride3 = FactoryBot.create(:ride, driver: @driver1, date: Time.zone.today)
+      @ride4 = FactoryBot.create(:ride, driver: @driver1, date: Time.zone.today + 1.day)
+      @ride5 = FactoryBot.create(:ride, driver: @driver1, date: Time.zone.today - 1.day)
+    end
+
+    it "returns today's rides when no date is applied" do
+      get :today, params: { id: @driver1.id }
+      expect(assigns(:rides)).to match_array([@ride1, @ride3])
+    end
+
+    it "returns yesterday's rides" do
+      get :today, params: { id: @driver1.id, date: (Time.zone.today - 1.day).to_s }
+      expect(assigns(:rides)).to match_array([@ride5])
+    end
+
+    it "returns tomorrow's rides" do
+      get :today, params: { id: @driver1.id, date: (Time.zone.today + 1.day).to_s }
+      expect(assigns(:rides)).to match_array([@ride4])
+    end
+  end
+
   describe "GET #show" do
     it "assigns the requested driver to @driver" do
       get :show, params: { id: @driver1.id }
