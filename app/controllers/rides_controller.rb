@@ -13,6 +13,8 @@ class RidesController < ApplicationController
   # new (GET Request, displays form)
   def new
     @ride = Ride.new
+    @ride.build_start_address
+    @ride.build_dest_address
     # For driver dropdown list in creating / updating
     @drivers = Driver.order(:name)
     gon.passengers = Passenger.all.map { |p| { label: p.name, id: p.id, phone: p.phone, notes: p.notes } }
@@ -51,6 +53,16 @@ class RidesController < ApplicationController
     rescue ActiveRecord::RecordNotDestroyed
       flash[:alert] = "Failed to remove the ride."
       redirect_to rides_url, status: :unprocessable_entity
+  end
+
+  def today
+    @current_date = begin
+                      Date.parse(params[:date])
+                    rescue ArgumentError, TypeError
+                      Time.zone.today
+                    end
+
+    @rides = Ride.driver_today_view(@current_date)
   end
 
   def filter
