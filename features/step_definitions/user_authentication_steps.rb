@@ -26,3 +26,16 @@ Given("a dispatcher is logged in") do
   expect(page).not_to have_content("Log in")
   expect(page).to have_title("Lamorinda")
 end
+
+Given("a driver is logged in") do
+  @driver = FactoryBot.create(:user, :driver, email: "driver1@example.com", password: "password")
+  visit new_user_session_path
+
+  fill_in "Email", with: @driver.email
+  fill_in "Password", with: @driver.password
+  click_button "Log in"
+
+  expect(page).not_to have_content("Log in")
+  expect(page).to have_title("Lamorinda")
+  expect(page).to have_current_path(root_path)
+end
