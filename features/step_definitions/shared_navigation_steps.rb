@@ -18,13 +18,26 @@ Given("I am on the {string} page") do |page_title|
 end
 
 
+Then("I should be on the {string} page") do |expected_title|
+  actual_title = page.title
+  expect(actual_title).to eq(expected_title)
+end
+
+
+When("I fill in {string} with {string}") do |field, value|
+  fill_in field, with: value
+end
+
+When("I press {string}") do |button|
+  click_button button
+end
+
 When("I click on {string} button") do |button_text|
   click_button(button_text) rescue click_link(button_text)
 end
 
-Then("I should be on the {string} page") do |expected_title|
-  actual_title = page.title
-  expect(actual_title).to eq(expected_title)
+Then("I should see {string}") do |text|
+  expect(page).to have_content(text)
 end
 
 Then("I should see {string} button") do |button_text|

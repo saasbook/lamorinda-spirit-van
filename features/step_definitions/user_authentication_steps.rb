@@ -11,14 +11,18 @@ Given("the following user exists:") do |table|
   end
 end
 
-When("I fill in {string} with {string}") do |field, value|
-  fill_in field, with: value
-end
+# features/step_definitions/auth_steps.rb
+Given("a dispatcher is logged in") do
+  @dispatcher = FactoryBot.create(:user,
+                                  :dispatcher,
+                                  email: "dispatcher1@example.com",
+                                  password: "password")
+  visit new_user_session_path
 
-When("I press {string}") do |button|
-  click_button button
-end
+  fill_in "Email", with: @dispatcher.email
+  fill_in "Password", with: @dispatcher.password
+  click_button "Log in"
 
-Then("I should see {string}") do |text|
-  expect(page).to have_content(text)
+  expect(page).not_to have_content("Log in")
+  expect(page).to have_title("Lamorinda")
 end
