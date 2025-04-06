@@ -9,8 +9,6 @@ RSpec.describe ShiftsController, type: :controller do
 
     @driver = FactoryBot.create(:driver)
     @shift = FactoryBot.create(:shift, driver: @driver)
-
-    Time.zone.today
   end
 
   describe "GET #index" do

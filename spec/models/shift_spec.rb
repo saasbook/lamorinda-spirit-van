@@ -31,6 +31,7 @@ RSpec.describe Shift, type: :model do
       expect(shift.errors[:driver]).to include("must exist")
     end
   end
+
   describe ".shifts_by_date" do
     it "filters shifts by date" do
       shift1 = FactoryBot.create(:shift, shift_date: Date.today)
