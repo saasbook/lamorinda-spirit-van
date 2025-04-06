@@ -23,7 +23,6 @@ Rails.application.routes.draw do
 
   resources :rides do
     collection do
-      get "today"
       get "filter"
       get "filter_results"
     end

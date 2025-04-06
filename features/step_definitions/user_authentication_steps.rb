@@ -28,11 +28,18 @@ Given("a dispatcher is logged in") do
 end
 
 Given("a driver is logged in") do
-  @driver = FactoryBot.create(:user, :driver, email: "driver1@example.com", password: "password")
-  visit new_user_session_path
+  @driver = FactoryBot.create(:driver)
+  @driver_id = @driver.id
+  @user = FactoryBot.create(
+    :user,
+    :driver,
+    email: "driver1@example.com",
+    password: "password"
+  )
 
-  fill_in "Email", with: @driver.email
-  fill_in "Password", with: @driver.password
+  visit new_user_session_path
+  fill_in "Email", with: @user.email
+  fill_in "Password", with: @user.password
   click_button "Log in"
 
   expect(page).not_to have_content("Log in")

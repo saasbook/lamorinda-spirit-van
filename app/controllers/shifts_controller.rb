@@ -31,6 +31,11 @@ class ShiftsController < ApplicationController
   def edit
   end
 
+  # GET /shifts/1/feedback
+  def feedback
+    @shift = Shift.find(params[:id])
+  end
+
   # POST /shifts or /shifts.json
   def create
     # Check if there is a driver_id
@@ -92,6 +97,6 @@ class ShiftsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def shift_params
-    params.require(:shift).permit(:shift_date, :shift_type, :driver_id)
+    params.require(:shift).permit(:shift_date, :shift_type, :driver_id, :van, :pu_time, :do_time, :odo_pre, :odo_pst)
   end
 end

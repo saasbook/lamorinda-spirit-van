@@ -13,7 +13,6 @@ RSpec.describe ShiftsController, type: :controller do
     Time.zone.today
   end
 
-
   describe "GET #index" do
     it "returns a successful response" do
       get :index
@@ -90,6 +89,13 @@ RSpec.describe ShiftsController, type: :controller do
   describe "GET #edit" do
     it "returns a successful response" do
       get :edit, params: { id: @shift.id }
+      expect(response).to be_successful
+    end
+  end
+
+  describe "GET #feedback" do
+    it "returns a successful response" do
+      get :feedback, params: { id: @shift.id }
       expect(response).to be_successful
     end
   end
