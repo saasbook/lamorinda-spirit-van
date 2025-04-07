@@ -18,13 +18,6 @@ Given("the following passenger records exist:") do |table|
     end
   end
 
-Given("I am on the new passenger page") do
-  visit new_passenger_path
-end
-
-Given("I am on the master passenger list") do
-  visit passengers_path
-end
 
 When("I fill in all necessary information") do
   fill_in "Name", with: "New Passenger"
@@ -47,6 +40,6 @@ When("I follow {string} for {string}") do |link_text, name|
 end
 
 
-Then("I should not see {string}") do |text|
-  expect(page).not_to have_content text
-end
+# Then("I should not see {string}") do |text|
+#   expect(page).not_to have_content text
+# end
