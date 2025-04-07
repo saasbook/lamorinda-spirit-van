@@ -54,12 +54,23 @@
             <%= f.text_area :notes, class: "form-control", rows: 3 %>
           </div>
 
-          <div class="mb-3">
-            <%= f.label :emailed_driver, "Emailed Driver?", class: "form-label" %>
-            <%= f.select :emailed_driver,
-                          [["Yes", true], ["No", false]],
-                          {},
-                          class: "form-select", required: true %>
+            <div class="mb-3">
+              <%= f.label :emailed_driver, "Emailed Driver?", class: "form-label" %>
+              <%= f.select :emailed_driver,
+                           [["Yes", true], ["No", false]],
+                           {},
+                           class: "form-select", required: true %>
+            </div>
+
+                                  
+            <div class="mb-3">
+              <%= f.label :start_address_id, "Start address id (temporary so functionality works)" %>
+              <%= f.number_field :start_address_id, class: "form-control"  %> 
+            </div>
+            <div class="mb-3">
+              <%= f.label :dest_address_id, "Dest address id (temporary so functionality works)" %>
+              <%= f.number_field :dest_address_id, class: "form-control"  %> 
+            </div>
           </div>
         </div>
 
@@ -67,63 +78,114 @@
         <div class="col-md-6">
           <h5 class="fw-bold text-success">Passenger Details</h5>
 
-          <!-- If you want to allow picking or associating a passenger, you can add a dropdown or fields here. 
-                For now, we keep them read-only or placeholder to mimic the structure. -->
-          <div class="mb-3">
-            <%= f.label :passenger_name, "Passenger Name" %>
-            <input type="text" class="form-control bg-secondary text-white opacity-50"
-                    value="(No passenger yet)" readonly>
-          </div>
+            <!-- If you want to allow picking or associating a passenger, you can add a dropdown or fields here. 
+                 For now, we keep them read-only or placeholder to mimic the structure. -->
+            <div class="mb-3">
+              <%= f.label :passenger_name, "Passenger" %>
+              <%= f.text_field :passenger_name, class: "form-control"  %> 
+              <%= link_to 'New Passenger', new_passenger_path, class: "btn btn-success mt-3" %>
+            </div>
 
-          <div class="mb-3">
-            <%= f.label :passenger_home_address, "Home Address" %>
-            <input type="text" class="form-control bg-secondary text-white opacity-50"
-                    value="(N/A)" readonly>
-          </div>
+            <%= f.hidden_field :passenger_id, class: "form-control"  %> 
 
-          <!-- New Address Container with Justify Content Row -->
-          <div class="d-flex justify-content-between">
-            
-            <!-- Origin Address -->
-            <div class="col-md-5">
-              <h5 class="fw-bold text-success text-center">Origin Address</h5>
-              <%= f.fields_for :start_address do |start_f| %>
-                <div class="mb-3">
-                  <%= start_f.label :street, "Street", class: "form-label" %>
-                  <span class="text-danger">*</span>
-                  <%= start_f.text_field :street,
-                                          value: @ride.start_address&.street,
-                                          class: "form-control",
-                                          required: true %>
-                </div>
+            <div class="mb-3">
+              <%= f.label :passenger_phone, "Phone Number:" %>
+              <%= f.text_field :passenger_phone, class: "form-control", readonly: true  %> 
+            </div>
+            <div class="mb-3">
+              <%= f.label :passenger_notes, "Notes about Passenger:" %>
+              <%= f.text_field :passenger_notes, class: "form-control", readonly: true  %> 
+            </div>
 
-                <div class="mb-3">
-                  <%= start_f.label :city, "City", class: "form-label" %>
-                  <span class="text-danger">*</span>
-                  <%= start_f.text_field :city,
-                                          value: @ride.start_address&.city,
-                                          class: "form-control",
-                                          required: true %>
-                </div>
 
-                <div class="mb-3">
-                  <%= start_f.label :state, "State", class: "form-label" %>
-                  <span class="text-danger">*</span>
-                  <%= start_f.text_field :state,
-                                          value: @ride.start_address&.state,
-                                          class: "form-control",
-                                          required: true %>
-                </div>
+            <!-- New Address Container with Justify Content Row -->
+            <div class="d-flex justify-content-between">
+              <!-- Origin Address -->
+              <div class="col-md-5">
+                <h5 class="fw-bold text-success text-center">Origin Address</h5>
+                <%= f.fields_for :start_address do |start_f| %>
+                  <div class="mb-3">
+                    <%= start_f.label :street, "Street", class: "form-label" %>
+                    <span class="text-danger">*</span>
+                    <%= start_f.text_field :street,
+                                           value: @ride.start_address&.street,
+                                           class: "form-control",
+                                           required: true %>
+                  </div>
 
-                <div class="mb-3">
-                  <%= start_f.label :zip, "Zip", class: "form-label" %>
-                  <span class="text-danger">*</span>
-                  <%= start_f.text_field :zip,
-                                          value: @ride.start_address&.zip,
-                                          class: "form-control",
-                                          required: true %>
-                </div>
-              <% end %>
+                  <div class="mb-3">
+                    <%= start_f.label :city, "City", class: "form-label" %>
+                    <span class="text-danger">*</span>
+                    <%= start_f.text_field :city,
+                                           value: @ride.start_address&.city,
+                                           class: "form-control",
+                                           required: true %>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= start_f.label :state, "State", class: "form-label" %>
+                    <span class="text-danger">*</span>
+                    <%= start_f.text_field :state,
+                                           value: @ride.start_address&.state,
+                                           class: "form-control",
+                                           required: true %>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= start_f.label :zip, "Zip", class: "form-label" %>
+                    <span class="text-danger">*</span>
+                    <%= start_f.text_field :zip,
+                                           value: @ride.start_address&.zip,
+                                           class: "form-control",
+                                           required: true %>
+                  </div>
+                <% end %>
+              </div>
+
+              <!-- Spacer -->
+              <div class="col-md-1"></div>
+
+              <!-- Destination Address -->
+              <div class="col-md-5">
+                <h5 class="fw-bold text-success text-center">Destination Address</h5>
+                <%= f.fields_for :dest_address do |dest_f| %>
+                  <div class="mb-3">
+                    <%= dest_f.label :street, "Street", class: "form-label" %>
+                    <span class="text-danger">*</span>
+                    <%= dest_f.text_field :street,
+                                           value: @ride.dest_address&.street,
+                                           class: "form-control",
+                                           required: true %>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= dest_f.label :city, "City", class: "form-label" %>
+                    <span class="text-danger">*</span>
+                    <%= dest_f.text_field :city,
+                                           value: @ride.dest_address&.city,
+                                           class: "form-control",
+                                           required: true %>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= dest_f.label :state, "State", class: "form-label" %>
+                    <span class="text-danger">*</span>
+                    <%= dest_f.text_field :state,
+                                           value: @ride.dest_address&.state,
+                                           class: "form-control",
+                                           required: true %>
+                  </div>
+
+                  <div class="mb-3">
+                    <%= dest_f.label :zip, "Zip", class: "form-label" %>
+                    <span class="text-danger">*</span>
+                    <%= dest_f.text_field :zip,
+                                           value: @ride.dest_address&.zip,
+                                           class: "form-control",
+                                           required: true %>
+                  </div>
+                <% end %>
+              </div>
             </div>
 
             <!-- Spacer -->
