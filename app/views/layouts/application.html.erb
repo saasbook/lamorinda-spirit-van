@@ -16,12 +16,10 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 
-    <!-- Below is for imports (temp?) -->
-
     <!-- jQuery (Required for DataTables) -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <!-- DataTables JS Integration-->
+    <!-- DataTables JS Integration -->
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
    
     <!-- DataTables CSS -->
@@ -32,29 +30,64 @@
     <script src="https://cdn.datatables.net/buttons/3.2.2/js/dataTables.buttons.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.2.2/js/buttons.bootstrap5.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.2.2/js/buttons.colVis.min.js"></script>
-
-    <!-- PDFMake (For PDF Export) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
   
     <!-- Bootstrap CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <% if user_signed_in? %>
-      <div class="user-info">
-        <p>
-          Logged in as: <%= current_user.email %> (<%= current_user.role %>)
-          <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, form: { data: { turbo: 'false' } } %>
-        </p>
+    <div class="page-wrapper">
+      <!-- Header with sign-in -->
+      <header class="custom-header py-2 mb-3">
+        <div class="container d-flex justify-content-between align-items-center">
+
+          <div>
+            <%= link_to root_path, class: "d-inline-block" do %>
+              <img src="<%= asset_path('lamorindalogo.png') %>" alt="Lafayette Spirit Van" class="app-logo white">
+            <% end %>
+          </div>
+
+          <div class="directories">
+            <%= link_to "Passengers", passengers_path, class: "passengers-link #{'active' if current_page?(passengers_path)}" %>
+            <%= link_to "Rides", rides_path, class: "rides-link #{'active' if current_page?(rides_path)}" %>
+            <%= link_to "Calendar", shifts_path, class: "shifts-link #{'active' if current_page?(shifts_path)}" %>
+            <%= link_to "Drivers", drivers_path, class: "drivers-link #{'active' if current_page?(drivers_path)}" %>
+          </div>
+
+          <% if user_signed_in? %>
+            <div style="display: flex; flex-direction: row; align-items: center;">
+              <span>Logged in as: <%= current_user.email %> (<%= current_user.role %>)</span>
+              <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, form: { data: { turbo: 'false' } }, class: "btn btn-outline-light btn-sm ms-2" %>
+            </div>
+          <% end %>
+
+        </div>
+      </header>
+
+      <!-- Global Container  -->
+      <div class="content-wrapper container my-4" style="max-width: 80%;">
+
+        <!-- Flash Alerts -->
+        <% if notice.present? %>
+          <div class="alert alert-info text-center">
+            <%= notice %>
+          </div>
+        <% end %>
+        <% if alert.present? %>
+          <div class="alert alert-warning text-center">
+            <%= alert %>
+          </div>
+        <% end %>
+
+        <%= yield %>
       </div>
-    <% end %>
-    <%= yield %>
+
+      <!-- Footer  -->
+      <footer class="custom-footer py-2 mt-3">
+        <div class="container text-center">
+          <p class="mb-0">City of Lafayette, CA. All Rights Reserved. © <%= Time.current.year %></p>
+        </div>
+      </footer>
+    </div>
   </body>
 </html>
-
-
