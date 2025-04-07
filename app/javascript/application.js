@@ -1,6 +1,7 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails"
 import "controllers"
+import "./autocomplete.js"
 
 // Generate checkboxes for showing/hiding DataTable columns
 const initiateCheckboxes = (table) => {
@@ -81,26 +82,3 @@ document.addEventListener('turbo:load', () => {
     }, 5000);
   }
 });
-
-document.addEventListener("turbo:load", function() {
-  if (document.getElementById("ride_passenger_name")){
-    $( function() {
-      $( "#ride_passenger_name" ).autocomplete({
-        source: gon.passengers
-      });
-    } );
-
-    $( "#ride_passenger_name" ).on( "autocompleteselect", function( event, ui ) {
-      document.getElementById('ride_passenger_phone').value=  ui.item.phone;
-      document.getElementById('ride_passenger_notes').value=  ui.item.notes;
-      document.getElementById('ride_passenger_id').value=  ui.item.id;
-    } );
-  }
-})
-/*
- // E
- document.addEventListener('change', (event) => {
-  if (event.target.matches('#ride_passenger_name')) {
-    document.getElementById('ride_notes_date_reserved').value=  gon.passengers;
-  }
-});*/
