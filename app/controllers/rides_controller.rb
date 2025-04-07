@@ -47,9 +47,9 @@ class RidesController < ApplicationController
   def destroy
     @ride.destroy!
     redirect_to rides_url, notice: "Ride was successfully removed."
-    rescue ActiveRecord::RecordNotDestroyed
-      flash[:alert] = "Failed to remove the ride."
-      redirect_to rides_url, status: :unprocessable_entity
+  rescue ActiveRecord::RecordNotDestroyed
+    flash[:alert] = "Failed to remove the ride."
+    redirect_to rides_url, status: :unprocessable_entity
   end
 
   def filter

@@ -4,6 +4,9 @@ require "rails_helper"
 
 RSpec.describe RidesController, type: :controller do
   before(:each) do
+     @user = FactoryBot.create(:user, :dispatcher)
+     sign_in @user
+
      @driver1 = FactoryBot.create(:driver)
      @driver2 = FactoryBot.create(:driver)
 
@@ -15,6 +18,14 @@ RSpec.describe RidesController, type: :controller do
      @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
      @ride4 = FactoryBot.create(:ride, date: Date.today - 5.days)
    end
+
+  describe "GET #index" do
+   it "assigns all rides to @rides and renders the index template" do
+     get :index
+     expect(response).to be_successful
+     expect(assigns(:rides)).to match_array([@ride1, @ride2, @ride3, @ride4])
+   end
+ end
 
   describe "POST #create" do
     context "with valid attributes" do
@@ -86,6 +97,14 @@ RSpec.describe RidesController, type: :controller do
       expect(response).to have_http_status(:unprocessable_entity)
       expect(flash[:alert]).to eq("Failed to remove the ride.")
     end
+    it "destroys the ride and redirects with success message" do
+      expect {
+        delete :destroy, params: { id: @ride1.id }
+      }.to change(Ride, :count).by(-1)
+
+      expect(response).to redirect_to(rides_url)
+      expect(flash[:notice]).to eq("Ride was successfully removed.")
+    end
   end
 
   describe "GET #show" do
@@ -100,6 +119,14 @@ RSpec.describe RidesController, type: :controller do
       expect {
         get :show, params: { id: -1 } # Non-existent ID
       }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe "GET #filter" do
+    # Test if filter returns no rides without params
+    it "assigns the requested ride to @ride" do
+      get :filter
+      expect(assigns(:ride)).to eq(nil)
     end
   end
 
