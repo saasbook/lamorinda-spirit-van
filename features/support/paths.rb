@@ -15,6 +15,14 @@ module NavigationHelpers
   def path_to(page_name)
     case page_name
 
+    when /^the "Log in" page$/ then new_user_session_path
+    when /^the "Sign up" page$/ then new_user_registration_path
+    when /^the "Home" page$/ then root_path
+    when /^the "Lamorinda" page$/ then root_path
+    when /^the "Shifts" page$/ then read_only_shifts_path
+    when /^the "Shifts Calendar" page$/ then shifts_path
+    when /^the "New Shift" page$/ then new_shift_path
+
     when /^the home\s?page$/
       "/"
 

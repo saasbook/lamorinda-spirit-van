@@ -8,7 +8,7 @@ Feature: Driver Ride and Shift Navigation
     Given a driver is logged in
 
   Scenario: Viewing monthly shifts from Today's Rides
-    Given I am on Today's Rides page for that driver
+    Given I visit the Today's Rides page for that driver
     Then I should see "View All Shifts" button
     When I click on "View All Shifts" button
     Then I should be on the "Shifts" page
