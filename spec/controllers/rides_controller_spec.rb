@@ -122,6 +122,14 @@ RSpec.describe RidesController, type: :controller do
     end
   end
 
+  describe "GET #filter" do
+    # Test if filter returns no rides without params
+    it "assigns the requested ride to @ride" do
+      get :filter
+      expect(assigns(:ride)).to eq(nil)
+    end
+  end
+
   after(:each) do
   end
 end

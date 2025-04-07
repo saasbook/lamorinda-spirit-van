@@ -38,20 +38,17 @@ class ShiftsController < ApplicationController
 
   # POST /shifts or /shifts.json
   def create
-    # Check if there is a driver_id
     if params[:shift][:driver_id].blank?
       redirect_to new_shift_path, alert: "Driver is required to create a shift."
       return
     end
 
-    # Find driver
     @driver = Driver.find_by(id: params[:shift][:driver_id])
     if @driver.nil?
       redirect_to new_shift_path, alert: "Driver not found."
       return
     end
 
-    # Create shift
     @shift = @driver.shifts.build(shift_params)
 
     if @shift.save
@@ -97,6 +94,6 @@ class ShiftsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def shift_params
-    params.require(:shift).permit(:shift_date, :shift_type, :driver_id, :van, :pu_time, :do_time, :odo_pre, :odo_pst)
+    params.require(:shift).permit(:shift_date, :shift_type, :driver_id, :van, :pick_up_time, :drop_off_time, :odometer_pre, :odometer_post)
   end
 end
