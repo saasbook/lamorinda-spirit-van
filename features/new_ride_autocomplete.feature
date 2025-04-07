@@ -5,7 +5,7 @@ Feature: Autocomplete for new ride passengers
     I want the website to autocomplete and autofill passenger info 
 
     Background:
-        Given I am logged in as a dispatcher
+        Given a dispatcher is logged in
         And the following passengers exist:
             | Alice   |
             | Bob     |
