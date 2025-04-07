@@ -36,6 +36,13 @@
   </head>
 
   <body>
+    <div class="flash-container">
+      <% flash.each do |type, message| %>
+        <div class="alert alert-<%= type == "notice" ? "success" : "danger" %> alert-dismissible fade show" role="alert">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
     <div class="page-wrapper">
       <!-- Header with sign-in -->
       <header class="custom-header py-2 mb-3">
@@ -66,19 +73,6 @@
 
       <!-- Global Container  -->
       <div class="content-wrapper container my-4" style="max-width: 80%;">
-
-        <!-- Flash Alerts -->
-        <% if notice.present? %>
-          <div class="alert alert-info text-center">
-            <%= notice %>
-          </div>
-        <% end %>
-        <% if alert.present? %>
-          <div class="alert alert-warning text-center">
-            <%= alert %>
-          </div>
-        <% end %>
-
         <%= yield %>
       </div>
 
