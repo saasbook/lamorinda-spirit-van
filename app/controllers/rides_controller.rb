@@ -18,6 +18,7 @@ class RidesController < ApplicationController
     # For driver dropdown list in creating / updating
     @drivers = Driver.order(:name)
     gon.passengers = Passenger.all.map { |p| { label: p.name, id: p.id, phone: p.phone, notes: p.notes } }
+    gon.addresses = Address.all.map { |a| { label: a.street, zip: a.zip, city: a.city } }
   end
 
   def create
@@ -25,7 +26,8 @@ class RidesController < ApplicationController
     if @ride.save
       redirect_to rides_path, notice: "Ride was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      flash[:alert] = @ride.errors.full_messages.join
+      redirect_to new_ride_path
     end
   end
 

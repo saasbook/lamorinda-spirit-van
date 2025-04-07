@@ -46,7 +46,7 @@
               <%= f.select :driver_id,
                            options_from_collection_for_select(@drivers, :id, :name, @ride.driver_id),
                            { prompt: "Select a Driver" },
-                           { class: "form-select" } %>
+                           { class: "form-select", required: true  }%>
             </div>
 
             <div class="mb-3">
@@ -124,7 +124,8 @@
                     <%= start_f.text_field :street,
                                            value: @ride.start_address&.street,
                                            class: "form-control",
-                                           required: true %>
+                                           required: true,
+                                           autocomplete: "ride-address" %>
                   </div>
 
                   <div class="mb-3">
@@ -133,7 +134,8 @@
                     <%= start_f.text_field :city,
                                            value: @ride.start_address&.city,
                                            class: "form-control",
-                                           required: true %>
+                                           required: true,
+                                           autocomplete: "ride-address" %>
                   </div>
 
                   <div class="mb-3">
@@ -142,7 +144,8 @@
                     <%= start_f.text_field :state,
                                            value: @ride.start_address&.state,
                                            class: "form-control",
-                                           required: true %>
+                                           required: true,
+                                           autocomplete: "ride-address" %>
                   </div>
 
                   <div class="mb-3">
@@ -151,7 +154,8 @@
                     <%= start_f.text_field :zip,
                                            value: @ride.start_address&.zip,
                                            class: "form-control",
-                                           required: true %>
+                                           required: true,
+                                           autocomplete: "ride-address" %>
                   </div>
                 <% end %>
               </div>
@@ -169,7 +173,8 @@
                     <%= dest_f.text_field :street,
                                            value: @ride.dest_address&.street,
                                            class: "form-control",
-                                           required: true %>
+                                           required: true,
+                                           autocomplete: "ride-address" %>
                   </div>
 
                   <div class="mb-3">
@@ -178,7 +183,8 @@
                     <%= dest_f.text_field :city,
                                            value: @ride.dest_address&.city,
                                            class: "form-control",
-                                           required: true %>
+                                           required: true,
+                                           autocomplete: "ride-address" %>
                   </div>
 
                   <div class="mb-3">
@@ -187,7 +193,8 @@
                     <%= dest_f.text_field :state,
                                            value: @ride.dest_address&.state,
                                            class: "form-control",
-                                           required: true %>
+                                           required: true,
+                                           autocomplete: "ride-address" %>
                   </div>
 
                   <div class="mb-3">
@@ -196,7 +203,8 @@
                     <%= dest_f.text_field :zip,
                                            value: @ride.dest_address&.zip,
                                            class: "form-control",
-                                           required: true %>
+                                           required: true,
+                                           autocomplete: "ride-address" %>
                   </div>
                 <% end %>
               </div>
