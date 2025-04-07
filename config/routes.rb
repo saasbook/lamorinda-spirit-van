@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :passengers
+  devise_for :users
+  namespace :admin do
+    resources :users, only: [:index, :edit, :update, :destroy]
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -16,9 +19,10 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "rides#filter"
 
+  resources :passengers
+
   resources :rides do
     collection do
-      get "today"
       get "filter"
       get "filter_results"
     end
@@ -36,6 +40,7 @@ Rails.application.routes.draw do
   resources :drivers do
     member do
       get "all_shifts"
+      get "today"
     end
   end
 end

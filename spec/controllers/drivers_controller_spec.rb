@@ -4,8 +4,21 @@ require "rails_helper"
 
 RSpec.describe DriversController, type: :controller do
   before(:each) do
+    @user = FactoryBot.create(:user, :driver)
+    sign_in @user
+
     @driver1 = FactoryBot.create(:driver)
     @driver2 = FactoryBot.create(:driver)
+
+    @address1 = FactoryBot.create(:address)
+
+    @passenger1 = FactoryBot.create(:passenger)
+    @passenger2 = FactoryBot.create(:passenger)
+    @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
+    @ride2 = FactoryBot.create(:ride, driver: @driver2, passenger: @passenger1)
+    @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger2)
+    @ride4 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1, date: Time.zone.today + 1.days)
+    @ride5 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1, date: Time.zone.today - 1.days)
   end
 
   describe "GET #index" do
@@ -20,31 +33,25 @@ RSpec.describe DriversController, type: :controller do
     end
   end
 
-  describe "GET #all_shifts" do
-    before(:each) do
-      @shift1 = FactoryBot.create(:shift, driver: @driver1)
-      @shift2 = FactoryBot.create(:shift, driver: @driver1)
+  describe "GET #today" do
+    it "returns all rides when no date is applied" do
+      get :today, params: { id: @driver1.id }
+      expect(assigns(:rides)).to match_array([ @ride1, @ride3 ])
     end
 
-    it "assigns the requested driver's shifts to @shifts" do
-      get :all_shifts, params: { id: @driver1.id }
-      expect(assigns(:shifts)).to match_array([@shift1, @shift2])
+    it "returns today's rides when no date is applied" do
+      get :today, params: { id: @driver1.id }
+      expect(assigns(:rides)).to match_array([ @ride1, @ride3 ])
     end
 
-    it "assigns the correct driver to @driver" do
-      get :all_shifts, params: { id: @driver1.id }
-      expect(assigns(:driver)).to eq(@driver1)
+    it "returns yesterday's rides" do
+      get :today, params: { id: @driver1.id, date: Time.zone.today - 1.days }
+      expect(assigns(:rides)).to match_array([ @ride5 ])
     end
 
-    it "renders the all_shifts template if exists" do
-      get :all_shifts, params: { id: @driver1.id }
-      expect(response).to be_successful
-    end
-
-    it "raises an error when driver is not found" do
-      expect {
-        get :all_shifts, params: { id: -1 }
-      }.to raise_error(ActiveRecord::RecordNotFound)
+    it "returns tomorrow's rides" do
+      get :today, params: { id: @driver1.id, date: Time.zone.today + 1.days }
+      expect(assigns(:rides)).to match_array([ @ride4 ])
     end
   end
 
@@ -90,6 +97,13 @@ RSpec.describe DriversController, type: :controller do
     end
   end
 
+  describe "GET #all_shifts" do
+    it "assigns the requested driver to @driver" do
+      get :all_shifts, params: { id: @driver1.id }
+      expect(assigns(:driver)).to eq(@driver1)
+    end
+  end
+
   describe "POST #create" do
     context "with valid attributes" do
       let(:valid_attributes) do
@@ -113,6 +127,27 @@ RSpec.describe DriversController, type: :controller do
         expect(flash[:notice]).to eq("Driver was successfully created.")
       end
     end
+
+    context "with invalid attributes (simulated failure)" do
+      it "renders new with unprocessable_entity (HTML)" do
+        allow_any_instance_of(Driver).to receive(:save).and_return(false)
+
+        post :create, params: { driver: { name: "No matter", email: "anything" } }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template(:new)
+      end
+
+      it "renders errors with unprocessable_entity (JSON)" do
+        allow_any_instance_of(Driver).to receive(:save).and_return(false)
+        allow_any_instance_of(Driver).to receive(:errors).and_return({ email: ["can't be blank"] })
+
+        request.headers["Accept"] = "application/json"
+        post :create, params: { driver: { name: "ignored", email: "ignored" } }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)).to include("email")
+      end
+    end
   end
 
   describe "PATCH #update" do
@@ -129,6 +164,27 @@ RSpec.describe DriversController, type: :controller do
         patch :update, params: { id: @driver1.id, driver: updated_attributes }
         expect(response).to redirect_to(@driver1)
         expect(flash[:notice]).to eq("Driver was successfully updated.")
+      end
+    end
+
+    context "with invalid attributes (simulated failure)" do
+      it "renders edit with unprocessable_entity (HTML)" do
+        allow_any_instance_of(Driver).to receive(:update).and_return(false)
+
+        patch :update, params: { id: @driver1.id, driver: { name: "Whatever" } }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to render_template(:edit)
+      end
+
+      it "renders errors with unprocessable_entity (JSON)" do
+        allow_any_instance_of(Driver).to receive(:update).and_return(false)
+        allow_any_instance_of(Driver).to receive(:errors).and_return({ email: ["can't be blank"] })
+
+        request.headers["Accept"] = "application/json"
+        patch :update, params: { id: @driver1.id, driver: { email: "whatever" } }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)).to include("email")
       end
     end
   end
@@ -163,6 +219,5 @@ RSpec.describe DriversController, type: :controller do
   end
 
   after(:each) do
-    Driver.destroy_all
   end
 end
