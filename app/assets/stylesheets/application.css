@@ -50,8 +50,6 @@ html, body {
 }
 
 .app-logo {
-    position: relative;
-    left: -36%;
     height: 60px;
     border-radius: 8px;
     transition: transform 0.2s ease, filter 0.2s ease;
