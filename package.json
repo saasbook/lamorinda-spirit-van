@@ -2,7 +2,7 @@
   "name": "lamorinda",
   "version": "1.0.0",
   "description": "[Production Site]()",
-  "main": "index.js",
+  "main": "app/javascript/application.js",
   "directories": {
     "lib": "lib"
   },
@@ -10,7 +10,7 @@
     "node": "23.x"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app/javascript/application.js"
   },
   "repository": {
     "type": "git",
