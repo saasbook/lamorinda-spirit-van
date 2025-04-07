@@ -14,13 +14,6 @@
   </div>
 <% end %>
 
-<!-- Display success message if available -->
-<% if flash[:notice].present? %>
-  <div class="alert alert-success">
-    <%= flash[:notice] %>
-  </div>
-<% end %>
-
 <%= form_with(model: @passenger, local: true) do |form| %>
   <div class="row">
     <!-- LEFT COLUMN -->
