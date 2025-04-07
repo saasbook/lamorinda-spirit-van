@@ -15,6 +15,14 @@ module NavigationHelpers
   def path_to(page_name)
     case page_name
 
+    when /^the "Log in" page$/ then new_user_session_path
+    when /^the "Sign up" page$/ then new_user_registration_path
+    when /^the "Home" page$/ then root_path
+    when /^the "Lamorinda" page$/ then root_path
+    when /^the "Shifts" page$/ then read_only_shifts_path
+    when /^the "Shifts Calendar" page$/ then shifts_path
+    when /^the "New Shift" page$/ then new_shift_path
+
     when /^the home\s?page$/
       "/"
 
@@ -23,6 +31,23 @@ module NavigationHelpers
     #
     #   when /^(.*)'s profile page$/i
     #     user_profile_path(User.find_by_login($1))
+    when /^the master passenger list$/i
+      passengers_path
+
+    when /^the today's rides page$/i
+      today_rides_path
+
+    when /^the read-only shift calendar page$/i
+      read_only_shifts_path
+
+    when /^the shifts calendar page$/i
+      shifts_path
+
+    when /^the shift details page$/i
+      shift_path(1)
+
+    when /^the driver's all shifts page$/i
+      all_shifts_driver_path(1)
 
     else
       begin

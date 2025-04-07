@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given("I am on Today's Rides page for that driver") do
+Given(/^I visit the Today's Rides page for that driver$/) do
   driver_id = @driver_id || @driver&.id
   raise "No driver id defined for today's rides page" unless driver_id
 
