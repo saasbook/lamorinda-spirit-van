@@ -34,16 +34,9 @@ html, body {
     color: white;
 }
 
-.custom-header .container-fluid {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-/* Header Logo */
 .app-logo {
     height: 60px;
     border-radius: 8px;
-    margin-left: 1rem;
     transition: transform 0.2s ease, filter 0.2s ease;
   }
   
