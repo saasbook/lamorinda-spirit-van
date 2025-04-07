@@ -123,11 +123,10 @@ const initiateCheckboxes = (table) => {
           ordering: true,
           pageLength: 10,
           order: table.order,
-          scrollX: true,
-          footerCallback: table.footerCallback,
           dom: "<'row'<'col-md-6'l><'col-md-6'>>" +
             "<'row'<'col-md-12'tr>>" +
             "<'row'<'col-md-6'i><'col-md-6'p>>",
+          footerCallback: table.footerCallback,
         });
         initiateCheckboxes(newTable);
         initiateSearchbars(newTable);
