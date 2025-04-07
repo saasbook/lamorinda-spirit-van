@@ -23,6 +23,7 @@ Capybara.register_driver :selenium_chrome_headful do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
 
+Capybara.javascript_driver = :selenium_chrome_headless
 
 # By default, any exception happening in your Rails application will bubble up
 # to Cucumber so that your scenario will fail. This is a different from how
