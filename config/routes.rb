@@ -29,9 +29,6 @@ Rails.application.routes.draw do
   end
 
   resources :shifts do
-    collection do
-      get "read_only"
-    end
     member do
       get "feedback"
     end

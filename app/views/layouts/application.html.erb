@@ -77,11 +77,7 @@
                 <%= link_to "Drivers", drivers_path, class: "drivers-link #{'active' if current_page?(drivers_path)}" %>
               <% end %>
               
-              <% if current_user.admin? || current_user.dispatcher? %>
-                <%= link_to "Calendar", shifts_path, class: "shifts-link #{'active' if current_page?(shifts_path)}" %>
-              <% elsif current_user.driver? %>
-                <%= link_to "Calendar", read_only_shifts_path, class: "shifts-link #{'active' if current_page?(read_only_shifts_path)}" %>
-              <% end %>
+              <%= link_to "Calendar", shifts_path, class: "shifts-link #{'active' if current_page?(shifts_path)}" %>
             </div>
 
             <div style="display: flex; flex-direction: row; align-items: center;">
