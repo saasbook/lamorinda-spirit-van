@@ -24,6 +24,7 @@ class RidesController < ApplicationController
   def create
     @ride = Ride.new(ride_params)
     if @ride.save
+      session[:return_to] ||= rides_path
       redirect_to session[:return_to], notice: "Ride was successfully created."
     else
       render :new, status: :unprocessable_entity
