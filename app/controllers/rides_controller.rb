@@ -27,7 +27,8 @@ class RidesController < ApplicationController
       redirect_to rides_path, notice: "Ride was successfully created."
     else
       flash[:alert] = @ride.errors.full_messages.join
-      redirect_to new_ride_path
+      render :new
+      # redirect_to new_ride_path
     end
   end
 
