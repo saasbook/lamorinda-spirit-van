@@ -1,13 +1,6 @@
 <div class="container my-4">
   <h1 class="mb-4">Drivers</h1>
 
-  <!-- Flash messages -->
-  <% if flash[:notice].present? %>
-    <div class="alert alert-success"><%= flash[:notice] %></div>
-  <% elsif flash[:alert].present? %>
-    <div class="alert alert-danger"><%= flash[:alert] %></div>
-  <% end %>
-
   <!-- UI Buttons -->
   <div class="mb-3">
     <%= link_to "New Driver", new_driver_path, class: "btn btn-primary" %>
