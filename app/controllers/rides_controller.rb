@@ -2,6 +2,7 @@
 
 class RidesController < ApplicationController
   before_action :set_ride, only: [ :show, :edit, :update, :destroy ]
+  before_action -> { require_role("admin", "dispatcher") }
 
   def index
     @rides = Ride.all
