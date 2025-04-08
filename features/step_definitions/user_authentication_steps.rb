@@ -13,14 +13,17 @@ end
 
 # features/step_definitions/auth_steps.rb
 Given("a dispatcher is logged in") do
-  @dispatcher = FactoryBot.create(:user,
-                                  :dispatcher,
-                                  email: "dispatcher1@example.com",
-                                  password: "password")
+  @user = FactoryBot.create(
+    :user,
+    :dispatcher,
+    email: "dispatcher1@example.com",
+    password: "password"
+  )
+
   visit new_user_session_path
 
-  fill_in "Email", with: @dispatcher.email
-  fill_in "Password", with: @dispatcher.password
+  fill_in "Email", with: @user.email
+  fill_in "Password", with: @user.password
   click_button "Log in"
 
   expect(page).not_to have_content("Log in")
@@ -44,5 +47,5 @@ Given("a driver is logged in") do
 
   expect(page).not_to have_content("Log in")
   expect(page).to have_title("Lamorinda")
-  expect(page).to have_current_path(root_path)
+  expect(page).to have_current_path(today_driver_path(id: @driver_id))
 end

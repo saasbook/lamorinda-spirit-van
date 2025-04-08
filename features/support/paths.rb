@@ -44,6 +44,12 @@ module NavigationHelpers
     when /^the driver's all shifts page$/i
       all_shifts_driver_path(1)
 
+    when /^the admin users page$/i
+      admin_users_path
+
+    when /^the rides page$/i
+      rides_path
+
     else
       begin
         page_name =~ /^the (.*) page$/

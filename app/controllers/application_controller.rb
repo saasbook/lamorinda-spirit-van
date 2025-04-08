@@ -35,4 +35,20 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
+  # @Override
+  def after_sign_in_path_for(resource)
+    if resource.is_a?(User)
+      case resource.role
+      when "admin"
+        admin_users_path
+      when "dispatcher"
+        rides_path
+      when "driver"
+        today_driver_path(resource)
+      else
+        root_path
+      end
+    end
+  end
 end
