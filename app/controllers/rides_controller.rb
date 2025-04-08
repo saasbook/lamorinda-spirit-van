@@ -12,6 +12,7 @@ class RidesController < ApplicationController
 
   # new (GET Request, displays form)
   def new
+    session[:return_to] = request.referer
     @ride = Ride.new
     @ride.build_start_address
     @ride.build_dest_address
@@ -23,7 +24,7 @@ class RidesController < ApplicationController
   def create
     @ride = Ride.new(ride_params)
     if @ride.save
-      redirect_to rides_path, notice: "Ride was successfully created."
+      redirect_to session[:return_to], notice: "Ride was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
