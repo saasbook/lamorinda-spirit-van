@@ -17,22 +17,22 @@ RSpec.describe ApplicationController, type: :controller do
       @no_role    = FactoryBot.build_stubbed(:user, role: nil)
     end
 
-    it "redirects admin to admin_users_path" do
+    it "redirects admin to admin homepage" do
       result = controller.send(:after_sign_in_path_for, @admin)
-      expect(result).to eq(admin_users_path)
+      expect(result).to eq(root_path)
     end
 
-    it "redirects dispatcher to rides_path" do
+    it "redirects dispatcher to dispatcher homepage" do
       result = controller.send(:after_sign_in_path_for, @dispatcher)
-      expect(result).to eq(rides_path)
+      expect(result).to eq(root_path)
     end
 
-    it "redirects driver to drivers_path" do
+    it "redirects driver to driver homepage" do
       result = controller.send(:after_sign_in_path_for, @driver)
-      expect(result).to eq(drivers_path)
+      expect(result).to eq(root_path)
     end
 
-    it "redirects users with no role to root_path" do
+    it "redirects users with no role to defalut homepage" do
       result = controller.send(:after_sign_in_path_for, @no_role)
       expect(result).to eq(root_path)
     end

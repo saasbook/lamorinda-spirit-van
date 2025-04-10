@@ -2,7 +2,7 @@
 
 class ShiftsController < ApplicationController
   before_action :set_shift, only: %i[ show edit update destroy ]
-  before_action -> { require_role("admin", "dispatcher") }, only: [:new, :edit, :create, :destroy]
+  before_action -> { require_role("admin", "dispatcher") }, only: [:new, :edit, :create, :update, :destroy]
 
   # GET /shifts or /shifts.json
   def index

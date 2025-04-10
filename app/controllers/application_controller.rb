@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  include ApplicationHelper
+
   # Ensures that all actions (except Devise controllers) require a logged-in user.
   # Unauthenticated users will be redirected to the sign-in page.
   before_action :authenticate_user!
@@ -38,17 +40,6 @@ class ApplicationController < ActionController::Base
 
   # @Override
   def after_sign_in_path_for(resource)
-    if resource.is_a?(User)
-      case resource.role
-      when "admin"
-        admin_users_path
-      when "dispatcher"
-        rides_path
-      when "driver"
-        drivers_path
-      else
-        root_path
-      end
-    end
+    role_home_path
   end
 end
