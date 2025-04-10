@@ -27,15 +27,19 @@ Rails.application.configure do
   ######################
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              "smtp.email.com",
-    port:                 587,
-    domain:               "yourdomain.com", # or your email domain
-    user_name:            ENV["GMAIL_USERNAME"], # your email address
-    password:             ENV["GMAIL_PASSWORD"], # your email password or app password
-    authentication:       "plain",
-    enable_starttls_auto: true
+    address:              "smtp.163.com",
+    port:                 465,
+    domain:               "163.com",
+    user_name:            ENV["SMTP_USERNAME"],
+    password:             ENV["SMTP_PASSWORD"],
+    authentication:       :login,
+    ssl:                  true,
+    enable_starttls_auto: false
   }
-  config.action_mailer.default_url_options = { host: "yourdomain.com", protocol: "https" }
+  config.action_mailer.default_url_options = { 
+    host: "sp25-01-lamorinda-47bdcb4ecf96.herokuapp.com", 
+    protocol: "https" 
+  }
   ######################
   # NEEDS TO BE CHANGED!
   ######################
