@@ -39,6 +39,7 @@ Rails.application.configure do
     host: "sp25-daniel-tan-3dfbb9a1165f.herokuapp.com", 
     protocol: "https" 
   }
+  config.action_mailer.raise_delivery_errors = true
   ######################
   # NEEDS TO BE CHANGED!
   ######################
