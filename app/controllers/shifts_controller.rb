@@ -53,7 +53,7 @@ class ShiftsController < ApplicationController
     @shift = @driver.shifts.build(shift_params)
 
     if @shift.save
-      redirect_to @shift, notice: "Shift was successfully created."
+      redirect_to shifts_path, notice: "Shift was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
