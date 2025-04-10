@@ -27,17 +27,16 @@ Rails.application.configure do
   ######################
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              "smtp.163.com",
-    port:                 465,
-    domain:               "163.com",
-    user_name:            ENV["SMTP_USERNAME"],
-    password:             ENV["SMTP_PASSWORD"],
-    authentication:       :login,
-    ssl:                  true,
-    enable_starttls_auto: false
+    user_name: ENV['SENDGRID_USERNAME'], # should be "apikey"
+    password: ENV['SENDGRID_PASSWORD'],  # your actual SendGrid API key
+    domain: 'sp25-daniel-tan-3dfbb9a1165f.herokuapp.com',            # or herokuapp.com if you don’t have one
+    address: 'smtp.sendgrid.net',
+    port: 587,
+    authentication: :plain,
+    enable_starttls_auto: true
   }
   config.action_mailer.default_url_options = { 
-    host: "https://sp25-daniel-tan-3dfbb9a1165f.herokuapp.com", 
+    host: "sp25-daniel-tan-3dfbb9a1165f.herokuapp.com", 
     protocol: "https" 
   }
   ######################
