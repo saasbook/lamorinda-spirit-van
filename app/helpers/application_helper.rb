@@ -10,7 +10,7 @@ module ApplicationHelper
     when "dispatcher"
       rides_path
     when "driver"
-      today_driver_path(id: current_user.id)
+      drivers_path
     else
       root_path
     end

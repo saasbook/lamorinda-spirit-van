@@ -47,5 +47,5 @@ Given("a driver is logged in") do
 
   expect(page).not_to have_content("Log in")
   expect(page).to have_title("Lamorinda")
-  expect(page).to have_current_path(today_driver_path(id: @driver_id))
+  expect(page).to have_current_path(drivers_path)
 end

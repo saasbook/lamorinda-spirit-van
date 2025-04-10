@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
       when "dispatcher"
         rides_path
       when "driver"
-        today_driver_path(resource)
+        drivers_path
       else
         root_path
       end

@@ -27,9 +27,9 @@ RSpec.describe ApplicationController, type: :controller do
       expect(result).to eq(rides_path)
     end
 
-    it "redirects driver to today_driver_path" do
+    it "redirects driver to drivers_path" do
       result = controller.send(:after_sign_in_path_for, @driver)
-      expect(result).to eq(today_driver_path(@driver.id))
+      expect(result).to eq(drivers_path)
     end
 
     it "redirects users with no role to root_path" do

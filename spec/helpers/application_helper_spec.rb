@@ -32,7 +32,7 @@ RSpec.describe ApplicationHelper, type: :helper do
 
       context "as driver" do
         let(:role) { "driver" }
-        it { expect(helper.role_home_path).to eq(today_driver_path(user.id)) }
+        it { expect(helper.role_home_path).to eq(drivers_path) }
       end
 
       context "with unknown role" do
