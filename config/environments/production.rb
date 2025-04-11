@@ -40,6 +40,7 @@ Rails.application.configure do
     protocol: "https" 
   }
   config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.logger = Logger.new(STDOUT)
   ######################
   # NEEDS TO BE CHANGED!
   ######################
