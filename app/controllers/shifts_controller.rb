@@ -13,6 +13,7 @@ class ShiftsController < ApplicationController
 
   # GET /shifts/1 or /shifts/1.json
   def show
+    @rides = Ride.where(date: @shift.shift_date)
   end
 
   # GET /shifts/new
@@ -46,7 +47,7 @@ class ShiftsController < ApplicationController
     @shift = @driver.shifts.build(shift_params)
 
     if @shift.save
-      redirect_to @shift, notice: "Shift was successfully created."
+      redirect_to shifts_path, notice: "Shift was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -88,6 +89,6 @@ class ShiftsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def shift_params
-    params.require(:shift).permit(:shift_date, :shift_type, :driver_id, :van, :pick_up_time, :drop_off_time, :odometer_pre, :odometer_post)
+    params.require(:shift).permit(:shift_date, :shift_type, :driver_id, :van, :notes, :pick_up_time, :drop_off_time, :odometer_pre, :odometer_post)
   end
 end
