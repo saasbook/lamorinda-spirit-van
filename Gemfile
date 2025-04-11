@@ -80,8 +80,8 @@ group :development, :test do
   # factory bot
   gem "factory_bot_rails"
 
-  gem 'omniauth-entra-id'
-  gem 'omniauth-rails_csrf_protection'
+  gem "omniauth-entra-id"
+  gem "omniauth-rails_csrf_protection"
 end
 
 group :development do
