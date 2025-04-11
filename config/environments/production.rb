@@ -27,17 +27,17 @@ Rails.application.configure do
   ######################
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    user_name: 'apikey', # literally the string 'apikey'
-    password: ENV['SENDGRID_PASSWORD'],
-    domain: 'herokuapp.com', # or 'herokuapp.com' if no custom domain
-    address: 'smtp.sendgrid.net',
+    user_name: "apikey", # literally the string 'apikey'
+    password: ENV["SENDGRID_PASSWORD"],
+    domain: "herokuapp.com", # or 'herokuapp.com' if no custom domain
+    address: "smtp.sendgrid.net",
     port: 587,
     authentication: :plain,
     enable_starttls_auto: true
   }
-  config.action_mailer.default_url_options = { 
-    host: "sp25-daniel-tan-3dfbb9a1165f.herokuapp.com", 
-    protocol: "https" 
+  config.action_mailer.default_url_options = {
+    host: "sp25-daniel-tan-3dfbb9a1165f.herokuapp.com",
+    protocol: "https"
   }
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.logger = Logger.new(STDOUT)
