@@ -46,7 +46,7 @@ RSpec.describe ShiftsController, type: :controller do
           post :create, params: { shift: { shift_date: Date.today, shift_type: "evening", driver_id: @driver.id } }
         }.to change(Shift, :count).by(1)
 
-        expect(response).to redirect_to(Shift.last)
+        expect(response).to redirect_to(shifts_path)
       end
     end
 
