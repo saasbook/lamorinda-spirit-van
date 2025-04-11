@@ -2,17 +2,11 @@
 
 class ShiftsController < ApplicationController
   before_action :set_shift, only: %i[ show edit update destroy ]
+  before_action -> { require_role("admin", "dispatcher") }, only: [:new, :edit, :create, :update, :destroy]
 
   # GET /shifts or /shifts.json
   def index
     # @shifts = Shift.all
-    @date = params[:start_date] ? Date.parse(params[:start_date]) : Date.today
-    @shifts = Shift.where(shift_date: @date.beginning_of_month..@date.end_of_month)
-  end
-
-  # GET /read_only_shifts
-  # Read-only view for drivers
-  def read_only
     @date = params[:start_date] ? Date.parse(params[:start_date]) : Date.today
     @shifts = Shift.where(shift_date: @date.beginning_of_month..@date.end_of_month)
   end
