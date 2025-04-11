@@ -22,14 +22,11 @@ Rails.application.configure do
   # key such as config/credentials/production.key. This key is used to decrypt credentials (and other encrypted files).
   # config.require_master_key = true
 
-  ######################
-  # NEEDS TO BE CHANGED!
-  ######################
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    user_name: "apikey", # literally the string 'apikey'
+    user_name: "apikey",
     password: ENV["SENDGRID_PASSWORD"],
-    domain: "herokuapp.com", # or 'herokuapp.com' if no custom domain
+    domain: "herokuapp.com",
     address: "smtp.sendgrid.net",
     port: 587,
     authentication: :plain,
@@ -39,11 +36,8 @@ Rails.application.configure do
     host: "sp25-daniel-tan-3dfbb9a1165f.herokuapp.com",
     protocol: "https"
   }
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.logger = Logger.new(STDOUT)
-  ######################
-  # NEEDS TO BE CHANGED!
-  ######################
+  # config.action_mailer.raise_delivery_errors = true
+  # config.action_mailer.logger = Logger.new(STDOUT)
 
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
   # config.public_file_server.enabled = false
