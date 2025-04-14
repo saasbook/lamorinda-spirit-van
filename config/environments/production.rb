@@ -25,7 +25,7 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     user_name: "apikey",
-    password: ENV["SENDGRID_PASSWORD"],
+    password: ENV["SENDGRID_PASSWORD"], # The SendGrid account apikey
     domain: "herokuapp.com",
     address: "smtp.sendgrid.net",
     port: 587,
@@ -33,7 +33,7 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
   config.action_mailer.default_url_options = {
-    host: ENV["HOST_DOMAIN"],
+    host: ENV["HOST_DOMAIN"], # The domain that the app runs on
     protocol: "https"
   }
   # config.action_mailer.raise_delivery_errors = true
