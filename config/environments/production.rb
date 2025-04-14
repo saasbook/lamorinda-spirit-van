@@ -33,7 +33,7 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
   config.action_mailer.default_url_options = {
-    host: "sp25-daniel-tan-3dfbb9a1165f.herokuapp.com",
+    host: "sp25-linzhixia-63f65d253c83.herokuapp.com",
     protocol: "https"
   }
   # config.action_mailer.raise_delivery_errors = true
