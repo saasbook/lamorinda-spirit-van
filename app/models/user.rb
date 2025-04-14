@@ -14,6 +14,7 @@ class User < ApplicationRecord
 
   validates :role, inclusion: { in: ROLES }, allow_blank: true
 
+  before_destroy :ensure_at_least_one_admin_remains, if: :admin?
 
   def admin?
     role == "admin"
@@ -25,5 +26,13 @@ class User < ApplicationRecord
 
   def driver?
     role == "driver"
+  end
+
+  private
+  def ensure_at_least_one_admin_remains
+    if User.where(role: "admin").count <= 1
+      errors.add(:base, "Cannot delete the last admin user.")
+      throw(:abort)
+    end
   end
 end
