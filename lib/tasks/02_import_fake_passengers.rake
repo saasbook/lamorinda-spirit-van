@@ -7,7 +7,7 @@ namespace :import do
   task fake_passengers: :environment do
     require Rails.root.join("app", "models", "passenger")
 
-    file_path = Rails.root.join("db", "fake_passengers_with_new_fields.csv")
+    file_path = Rails.root.join("db", "fake_passengers_data.csv")
 
     unless File.exist?(file_path)
       puts "CSV file not found at #{file_path}"
