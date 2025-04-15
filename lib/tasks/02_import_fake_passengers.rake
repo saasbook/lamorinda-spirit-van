@@ -33,7 +33,7 @@ namespace :import do
           need_caregiver: row["need_caregiver"].to_i == 1,
           notes: row["Notes"].presence,
           email: row["Email"].presence,
-          date_registered: Date.strptime(row["Date Registered"], "%m/%d/%Y"),
+          date_registered: Date.strptime(row["Date Registered"], "%Y-%m-%d"),
           audit: row["Audit"]
         )
     end
