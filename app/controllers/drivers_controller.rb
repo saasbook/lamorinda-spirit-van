@@ -2,6 +2,7 @@
 
 class DriversController < ApplicationController
   before_action :set_driver, only: %i[ show edit update destroy today ]
+  before_action -> { require_role("admin", "dispatcher") }, only: [:new, :edit, :create, :update, :destroy]
 
   # GET /drivers or /drivers.json
   def index

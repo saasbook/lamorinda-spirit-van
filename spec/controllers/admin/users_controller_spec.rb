@@ -68,6 +68,16 @@ RSpec.describe Admin::UsersController, type: :controller do
       expect(response).to redirect_to(admin_users_path)
       expect(flash[:notice]).to eq("User deleted successfully.")
     end
+
+    it "does not allow deleting the last admin and shows an alert" do
+      expect(User.where(role: "admin").count).to eq(1)
+
+      delete :destroy, params: { id: @admin.id }
+
+      expect(response).to redirect_to(admin_users_path)
+      expect(flash[:alert]).to eq("Cannot delete the last admin user.")
+      expect(User.exists?(@admin.id)).to be true
+    end
   end
 
   describe "access control" do
