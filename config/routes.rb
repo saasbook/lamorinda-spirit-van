@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "rides#index"
 
-  # blazer - data reporting 
+  # blazer - data reporting
   authenticate :user, ->(user) { user.admin? } do
     mount Blazer::Engine, at: "blazer"
   end

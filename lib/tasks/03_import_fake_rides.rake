@@ -7,7 +7,7 @@ namespace :import do
   task fake_rides: :environment do
     require Rails.root.join("app", "models", "ride")
 
-    file_path = Rails.root.join("db", "fake_rides_data_with_new_fields.csv")
+    file_path = Rails.root.join("db", "fake_rides_data_with_confirmed_passenger_column.csv")
 
     unless File.exist?(file_path)
       puts "CSV file not found at #{file_path}"
@@ -30,10 +30,6 @@ namespace :import do
         passenger_id: row["passenger_id"],
         dest_address_id: row["dest_address_id"],
         start_address_id: row["start_address_id"],
-        notes: row["Notes"],
-        hours: row["Hours"].to_f,
-        amount_paid: row["Amount Paid"].to_f,
-        emailed_driver: row["emailed_driver"] == "sent",
         address_name: row["address_name"],
         notes_about_location: row["notes_about_location"],
         destination_type: row["destination_type"],
@@ -41,7 +37,13 @@ namespace :import do
         new_passenger: row["new_passenger"].to_i == 1,
         low_income: row["low_income"].to_i == 1,
         disabled: row["disabled"].to_i == 1,
-        need_caregiver: row["need_caregiver"].to_i == 1
+        need_caregiver: row["need_caregiver"].to_i == 1,
+        notes: row["Notes"],
+        hours: row["Hours"].to_f,
+        amount_paid: row["Amount Paid"].to_f,
+        notes_date_reserved: row["notes_date_reserved"],
+        confirmed_with_passenger: row["Confirmed with passenger"],
+        emailed_driver: row["emailed_driver"] == "sent",
       )
     end
 
