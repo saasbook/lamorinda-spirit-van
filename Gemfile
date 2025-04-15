@@ -80,7 +80,7 @@ group :development, :test do
   # factory bot
   gem "factory_bot_rails"
 
-  #blazer (data reporting)
+  # blazer (data reporting)
   gem "blazer"
 end
 
