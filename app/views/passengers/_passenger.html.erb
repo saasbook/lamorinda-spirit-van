@@ -19,8 +19,8 @@
             <th class="border-0 text-filter">Low Income</th>
             <th class="border-0 text-filter">Disabled</th>
             <th class="border-0 text-filter">Needs Caregiver</th>
-            <th class="border-0 text-filter">Email</th>
             <th class="border-0 text-filter">Notes</th>
+            <th class="border-0 text-filter">Email</th>
             <th class="border-0 text-filter">Date Registered</th>
             <th class="border-0 text-filter">Audit</th>
           </tr>
@@ -43,16 +43,15 @@
                   <%= passenger.hispanic? ? 'Yes' : 'No' %>
                 </span>
               </td>
-              <%# New Boolean Fields with badges %>
               <% [:wheelchair, :new_passenger, :low_income, :disabled, :need_caregiver].each do |field| %>
                 <td>
-                  <span class="badge">
-                    <%= passenger.send(field) ? '✅' : '❌' %>
+                  <span class="badge <%= passenger.send(field) ? 'bg-success' : 'bg-danger' %>">
+                    <%= passenger.send(field) ? 'Yes' : 'No' %>
                   </span>
                 </td>
               <% end %>
-              <td><%= passenger.email %></td>
               <td><%= passenger.notes %></td>
+              <td><%= passenger.email %></td>
               <td><%= passenger.date_registered.to_date %></td>
               <td><%= passenger.audit %></td>
             </tr>
