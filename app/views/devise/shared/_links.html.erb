@@ -23,7 +23,8 @@
     <%= button_to omniauth_authorize_path(resource_name, :entra_id),
       data: { turbo: false },
       form_class: "m-0 p-0 border-0",
-      class: "p-0 border-0",   
+      class: "p-0 border-0",
+      title: "Sign in with Microsoft",   
       style: "background: none;" do %>
     <%= image_tag "ms-symbollockup_signin_light.png",
       alt: "Microsoft logo",
