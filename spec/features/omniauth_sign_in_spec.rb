@@ -88,4 +88,23 @@ RSpec.describe "Sign in with Microsoft", type: :feature do
     expect(page).to have_content("Could not authenticate you from EntraId")
     expect(current_path).to eq(new_user_session_path)
   end
+
+  it "shows failure message if user creation fails" do
+    allow(User).to receive(:create).and_return(User.new)
+
+    OmniAuth.config.mock_auth[:entra_id] = OmniAuth::AuthHash.new({
+      provider: "entra_id",
+      uid: "123545",
+      info: {
+        email: "randomuser@example.com",
+        name: "Test Random"
+      }
+    })
+
+    visit new_user_session_path
+    find("button[title='Sign in with Microsoft']").click
+
+    expect(page).to have_content("failed")
+    expect(current_path).to eq(new_user_session_path)
+  end
 end

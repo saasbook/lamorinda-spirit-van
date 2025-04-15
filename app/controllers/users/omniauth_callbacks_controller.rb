@@ -10,7 +10,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       sign_in_and_redirect @user, event: :authentication
     else
       flash[:notice] = "failed"
-      redirect_to new_user_session
+      redirect_to new_user_session_path
     end
   end
 end
