@@ -53,16 +53,17 @@
 
   <body>
     
-    <%= render "layouts/flash" %>
-    <%= render "layouts/navbar" %>
+    <div class="page-wrapper">
+      <%= render "layouts/flash" %>
+      <%= render "layouts/navbar" %>
 
-    <!-- Global Container  -->
-    <div class="content-wrapper container my-4" style="max-width: 80%;">
-      <%= yield %>
+      <!-- Global Container  -->
+      <div class="content-wrapper container my-4" style="max-width: 80%;">
+        <%= yield %>
+      </div>
+
+      <%= render "layouts/footer" %>
     </div>
 
-    <%= render "layouts/footer" %>
-
-    </div>
   </body>
 </html>
