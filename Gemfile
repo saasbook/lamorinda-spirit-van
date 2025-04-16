@@ -83,7 +83,6 @@ group :development, :test do
 
   # factory bot
   gem "factory_bot_rails"
-
 end
 
 group :development do
