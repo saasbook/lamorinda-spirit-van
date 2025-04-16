@@ -52,6 +52,10 @@ gem "gon"
 # for ease of testing names
 gem "humanize"
 
+# for omniauth
+gem "omniauth-entra-id"
+gem "omniauth-rails_csrf_protection"
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
@@ -80,11 +84,6 @@ group :development, :test do
   # factory bot
   gem "factory_bot_rails"
 
-
-  gem "omniauth-entra-id"
-  gem "omniauth-rails_csrf_protection"
-
-  gem "dotenv-rails"
 end
 
 group :development do
