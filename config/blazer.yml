@@ -2,7 +2,7 @@
 
 data_sources:
   main:
-    adapter: active_record
+    url: <%= ENV["BLAZER_DATABASE_URL"] %>
 
     # statement timeout, in seconds
     # none by default
