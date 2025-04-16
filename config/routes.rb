@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root "rides#index"
+  root "drivers#index"
 
   # blazer - data reporting
   authenticate :user, ->(user) { user.admin? } do
@@ -34,9 +34,6 @@ Rails.application.routes.draw do
   end
 
   resources :shifts do
-    collection do
-      get "read_only"
-    end
     member do
       get "feedback"
     end
