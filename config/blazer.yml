@@ -2,7 +2,7 @@
 
 data_sources:
   main:
-    url: <%= ENV["BLAZER_DATABASE_URL"] %>
+    adapter: active_record
 
     # statement timeout, in seconds
     # none by default
@@ -77,7 +77,3 @@ check_schedules:
 #   url: <%= ENV["BLAZER_UPLOADS_URL"] %>
 #   schema: uploads
 #   data_source: main
-
-data_sources:
-  main:
-    adapter: active_record
