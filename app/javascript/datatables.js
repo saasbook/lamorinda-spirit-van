@@ -134,7 +134,7 @@ const initiateCheckboxes = (table) => {
     });
   }
   
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('turbo:load', () => {
     initiateDatatables();
   
     // Flash message auto-hide after 5 seconds
