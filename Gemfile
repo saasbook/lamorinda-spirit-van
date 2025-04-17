@@ -52,6 +52,10 @@ gem "gon"
 # for ease of testing names
 gem "humanize"
 
+# for omniauth
+gem "omniauth-entra-id"
+gem "omniauth-rails_csrf_protection"
+
 # blazer (data reporting)
 gem "blazer"
 
