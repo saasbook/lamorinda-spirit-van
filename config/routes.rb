@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   # blazer - data reporting
   authenticate :user, ->(user) { user.admin? } do
-    mount Blazer::Engine, at: "blazer"
+    mount Blazer::Engine, at: "blazer", as: "blazer"
   end
 
   resources :passengers
