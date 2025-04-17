@@ -17,6 +17,8 @@ class FeedbacksController < ApplicationController
 
   # GET /feedbacks/1/edit
   def edit
+    @current_date = @feedback.ride.date
+    @passenger = @feedback.ride.passenger.name
   end
 
   # POST /feedbacks or /feedbacks.json
@@ -38,8 +40,14 @@ class FeedbacksController < ApplicationController
   def update
     respond_to do |format|
       if @feedback.update(feedback_params)
-        format.html { redirect_to @feedback, notice: "Feedback was successfully updated." }
-        format.json { render :show, status: :ok, location: @feedback }
+        matched_driver = Driver.find_by("LOWER(email) = ?", current_user.email.downcase)
+        if matched_driver
+          redirect_to today_driver_path(matched_driver.id)
+          return
+        else
+          redirect_to drivers_path
+          return
+        end
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @feedback.errors, status: :unprocessable_entity }

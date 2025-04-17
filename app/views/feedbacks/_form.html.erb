@@ -22,11 +22,6 @@
   </div>
 
   <div>
-    <%= form.label :note, style: "display: block" %>
-    <%= form.text_field :note %>
-  </div>
-
-  <div>
     <%= form.label :pick_up_time, style: "display: block" %>
     <%= form.text_field :pick_up_time %>
   </div>
@@ -42,6 +37,11 @@
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.label :note, style: "display: block" %>
+    <%= form.text_field :note %>
+  </div>
+
+  <div>
+    <%= form.button "Give Feedback", type: :submit %>
   </div>
 <% end %>
