@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FeedbacksController < ApplicationController
   before_action :set_feedback, only: %i[ show edit update destroy ]
 
@@ -66,13 +68,13 @@ class FeedbacksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_feedback
-      @feedback = Feedback.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_feedback
+    @feedback = Feedback.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def feedback_params
-      params.require(:feedback).permit(:companion, :mobility, :note, :pick_up_time, :drop_off_time, :fare)
-    end
+  # Only allow a list of trusted parameters through.
+  def feedback_params
+    params.require(:feedback).permit(:companion, :mobility, :note, :pick_up_time, :drop_off_time, :fare)
+  end
 end
