@@ -75,6 +75,6 @@ class FeedbacksController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def feedback_params
-    params.require(:feedback).permit(:companion, :mobility, :note, :pick_up_time, :drop_off_time, :fare)
+    params.require(:feedback).permit(:companion, :mobility, :note, :pick_up_time, :drop_off_time, :fare, :ride_id)
   end
 end
