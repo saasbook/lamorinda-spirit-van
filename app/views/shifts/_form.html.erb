@@ -23,6 +23,8 @@
     <%= form.collection_select :driver_id, Driver.all, :id, :name, { prompt: "Select a driver" }, required: true %>
     <%= form.label :shift_type, style: "display: block" %>
     <%= form.text_field :shift_type, required: true %>
+    <%= form.label :notes, style: "display: block" %>
+    <%= form.text_field :notes %>
   </div>
 
   <div>
