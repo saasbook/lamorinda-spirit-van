@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
+ruby "3.4.1"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.2", ">= 7.2.2.1"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 1.4"
+# gem "sqlite3", ">= 1.4"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -25,11 +28,36 @@ gem "jbuilder"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
+gem "devise"
+gem "letter_opener", group: :development
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
+
+# for importing excel databases
+gem "roo"
+
+gem "activerecord-import"
+gem "csv"
+
+# for shift calendar
+gem "simple_calendar"
+
+# for transfering controller variables to JS varialbles
+gem "gon"
+
+# for ease of testing names
+gem "humanize"
+
+# for omniauth
+gem "omniauth-entra-id"
+gem "omniauth-rails_csrf_protection"
+
+# blazer (data reporting)
+gem "blazer"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -41,8 +69,26 @@ group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
+  # rubocop linter and dependents
+  gem "rubocop", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-rspec", require: false
+
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # make sure references to sqlite3 gem ONLY appear in dev/test groups
+  gem "sqlite3"
+
+  # selenium webdriver - for headful cucumber tests
+  gem "selenium-webdriver"
+
+  # factory bot
+  gem "factory_bot_rails"
+
+  # blazer (data reporting)
+  gem "blazer"
 end
 
 group :development do
@@ -50,3 +96,19 @@ group :development do
   gem "web-console"
 end
 
+# make sure the following gems are in your production group:
+group :production do
+  gem "pg"              # use PostgreSQL in production (Heroku)
+end
+
+# setup Cucumber, RSpec, Guard support
+group :test do
+  gem "rspec-rails"
+  gem "guard-rspec"
+  gem "simplecov", require: false
+  gem "simplecov_json_formatter", require: false
+  gem "cucumber-rails", require: false
+  gem "cucumber-rails-training-wheels" # basic imperative step defs like "Then I should see..."
+  gem "database_cleaner" # required by Cucumber
+  gem "rails-controller-testing"
+end

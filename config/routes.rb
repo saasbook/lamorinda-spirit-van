@@ -1,5 +1,11 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
-  get "posts/index"
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+  namespace :admin do
+    resources :users, only: [:index, :edit, :update, :destroy]
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -11,5 +17,32 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root "posts#index"
+  root "drivers#index"
+
+  # blazer - data reporting
+  authenticate :user, ->(user) { user.admin? } do
+    mount Blazer::Engine, at: "blazer", as: "blazer"
+  end
+
+  resources :passengers
+
+  resources :rides do
+    collection do
+      get "filter"
+      get "filter_results"
+    end
+  end
+
+  resources :shifts do
+    member do
+      get "feedback"
+    end
+  end
+
+  resources :drivers do
+    member do
+      get "all_shifts"
+      get "today"
+    end
+  end
 end

@@ -1,0 +1,164 @@
+h1 {
+    padding-top: 10px;
+}
+
+.today-page {
+    max-width: 90%;
+    margin: auto;
+}
+
+.today-page .today-form {
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.today-page .form-group {
+    margin-bottom: 10px;
+}
+
+.today-page .form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.today-page .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.today-page .button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.today-page .btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.today-page .btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.today-page .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.today-page #btn-print {
+    margin-left: auto;
+}
+
+.shift-button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* PC */
+.today-page .rides-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: auto;
+    overflow-x: auto;
+}
+
+.today-page .rides-table thead {
+    position: sticky;
+    top: 0;
+    background-color: #f4f4f4;
+    z-index: 10;
+}
+
+.today-page .rides-table th,
+.today-page .rides-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.today-page .rides-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+/* mobile */
+.today-page .rides-list {
+    display: none;
+}
+
+.today-page .no-rides {
+    color: red;
+    font-weight: bold;
+}
+
+/* mobile */
+@media (pointer:none), (pointer:coarse) {
+    .today-page .rides-table {
+        display: none;
+    }
+    
+    .today-page .rides-list {
+        display: block;
+    }
+
+    .today-page .ride-block {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .today-page .ride-block p {
+        margin: 5px 0;
+    }
+}
+
+/* print */
+@media print {
+    .today-page .btn,
+    .today-page .button-group {
+        display: none;
+    }
+
+    .today-page .rides-table {
+        width: 100%;
+        border: 1px solid black;
+        font-size: 12px;
+        display: table !important;
+    }
+
+    .today-page .rides-list {
+        display: none !important;
+    }
+
+    .today-page .rides-table th,
+    .today-page .rides-table td {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    .today-page .no-rides {
+        color: black;
+        font-weight: bold;
+    }
+
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    .today-page {
+        max-width: 100%;
+    }
+}
