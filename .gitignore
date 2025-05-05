@@ -33,3 +33,9 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore simplecov output
+/coverage/*
+
+# Ignore .DS_Store files in any directory
+**/.DS_Store

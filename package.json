@@ -1,0 +1,26 @@
+{
+  "name": "lamorinda",
+  "version": "1.0.0",
+  "description": "[Production Site]()",
+  "main": "app/javascript/application.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "engines": {
+    "node": "23.x"
+  },
+  "scripts": {
+    "start": "node app/javascript/application.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cs169/lamorinda-spirit-van.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cs169/lamorinda-spirit-van/issues"
+  },
+  "homepage": "https://github.com/cs169/lamorinda-spirit-van#readme"
+}
