@@ -13,3 +13,132 @@
  *= require_tree .
  *= require_self
  */
+@import "datatables_custom";
+
+/* app/assets/stylesheets/application.css */
+
+/* ========== Global Common Styles (PC + Mobile) ========== */
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.flash-container {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  width: auto;
+  max-width: 90%;
+  pointer-events: none;
+}
+
+.flash-container .alert {
+  pointer-events: auto;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrapper {
+  flex: 1;
+}
+
+.custom-header,
+.custom-footer {
+  background-color: #003e29;
+  color: white;
+}
+
+.app-logo {
+  height: 60px;
+  border-radius: 8px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.app-logo.white {
+  filter: brightness(0) invert(1);
+}
+
+.app-logo.white:hover {
+  filter: none;
+}
+
+.navbar-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-logo {
+  flex: 0 0 auto;
+}
+
+.navbar-links {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.navbar-links a {
+  font-weight: 650;
+  font-size: 1.5rem;
+  color: white;
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid transparent;
+}
+
+.navbar-links a:hover,
+.navbar-links a.active {
+  color: #cab2fb;
+  border-bottom-color: #f8f8f8;
+}
+
+.navbar-user {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+/* ========== Mobile-specific Styles (All devices with width < 576px) ========== */
+@media (max-width: 576px) {
+
+  .navbar-main {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-logo {
+    margin-bottom: 0.5rem;
+  }
+
+  .navbar-links {
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+
+  .navbar-links a {
+    font-size: 1.2rem;
+    flex: 1 1 auto;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .navbar-user {
+    margin-top: 0.5rem;
+    justify-content: flex-start;
+  }
+}

@@ -1,0 +1,83 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Ride Details</h1>
+    <button onclick="window.print()" class="btn btn-primary" id="btn-print">Print</button>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Info</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Date:</strong> <%= @ride.date.strftime('%m/%d/%Y') %></li>
+        <li class="list-group-item"><strong>Appointment Time:</strong> <%= @ride.appointment_time&.strftime('%-I:%M %p') %></li>
+        <li class="list-group-item"><strong>Van Number:</strong> <%= @ride.all_vans_numbers.present? ? @ride.all_vans_numbers : 'N/A' %></li>
+        <li class="list-group-item"><strong>Driver:</strong> <%= @ride.all_drivers_names.present? ? @ride.all_drivers_names : "Driver Not Assigned" %></li>
+        <li class="list-group-item"><strong>Hours:</strong> <%= @ride.hours %></li>
+        <li class="list-group-item"><strong>Fare Amount:</strong> <%= number_to_currency(@ride.fare_amount) %></li>
+        <li class="list-group-item"><strong>Amount Paid:</strong> <%= number_to_currency(@ride.amount_paid) %></li>
+        <li class="list-group-item"><strong>Ride Type:</strong> <%= @ride.ride_type %></li>
+        <li class="list-group-item"><strong>Fare Type:</strong> <%= @ride.fare_type %></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Passenger</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Passenger:</strong> <%= @ride.passenger&.name || "Passenger Not Assigned" %></li>
+        <li class="list-group-item"><strong>Phone:</strong> <%= @ride.passenger&.phone %></li>
+        <li class="list-group-item"><strong>Alt Phone:</strong> <%= @ride.passenger&.alternative_phone %></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Locations</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Start Address:</strong> <%= @ride.start_address ? [@ride.start_address.name, @ride.start_address.full_address, @ride.start_address.phone].compact.join(", ") : "N/A" %></li>
+        <% @all_rides.each_with_index do |ride, index| %>
+          <li class="list-group-item"><strong>Stop <%= index + 1 %>:</strong> <%= ride.dest_address ? [ride.dest_address.name, ride.dest_address.full_address, ride.dest_address.phone].compact.join(", ") : "N/A" %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Accessibility</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Wheelchair:</strong> <%= @ride.wheelchair ? "Yes" : "No" %></li>
+        <li class="list-group-item"><strong>Disabled:</strong> <%= @ride.disabled ? "Yes" : "No" %></li>
+        <li class="list-group-item"><strong>Needs Caregiver:</strong> <%= @ride.need_caregiver ? "Yes" : "No" %></li>
+        <li class="list-group-item"><strong>Accessibility Notes:</strong> <%= simple_format(@ride.passenger.notes) %></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Other</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Notes:</strong> <%= simple_format(@ride.notes_to_driver) %></li>
+        <li class="list-group-item"><strong>Status:</strong> <%= simple_format(@ride.status) %></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row mt-4 g-2">
+    <% if current_user.dispatcher? || current_user.admin? %>
+      <div class="col-12 mb-2 col-md-auto">
+        <%= link_to "Edit Ride", edit_ride_path(@ride), class: "btn btn-primary w-100" %>
+      </div>
+      <div class="col-12 mb-2 col-md-auto">
+        <%= link_to "Back to All Rides", rides_path, class: "btn btn-secondary w-100" %>
+      </div>   
+    <% end %>
+    
+    <div class="col-12 mb-2 col-md-auto">
+      <%= link_to "Back", request.referer, class: "btn btn-outline-secondary w-100" %>
+    </div>
+  </div>
+</div>

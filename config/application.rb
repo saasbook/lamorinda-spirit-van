@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "boot"
 
 require "rails"
@@ -17,6 +19,8 @@ require "action_cable/engine"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+
+
 
 module Lamorinda
   class Application < Rails::Application
@@ -38,5 +42,10 @@ module Lamorinda
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.time_zone = "Pacific Time (US & Canada)"
+
+    # For simplecalendar
+    config.beginning_of_week = :sunday
   end
 end
