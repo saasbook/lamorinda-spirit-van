@@ -189,6 +189,5 @@ document.addEventListener("turbo:load", function() {
                 }
             }
         }
-        gon.duplicate_info = null; // Clear this to prevent issues if user tries to duplicate again without refreshing
     }
 })

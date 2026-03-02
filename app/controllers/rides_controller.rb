@@ -30,9 +30,6 @@ class RidesController < ApplicationController
     @ride.driver_id = params[:driver_id]
 
     # Load all passengers with their associations at once
-    gon.duplicate_info = nil # Clear any previous duplication data
-    gon.duplicated_stops = [] # Clear any previous duplication data
-
     load_gon_data
   end
 
@@ -182,9 +179,6 @@ class RidesController < ApplicationController
     } }
     gon.addresses = Address.all.map { |a| { name: a.name, street: a.street, city: a.city, phone: a.phone } }
     gon.drivers = @drivers.map { |d| { id: d.id, name: d.name } }
-
-    gon.duplicate_info ||= nil # Ensure this is set even if not used
-    gon.duplicated_stops ||= [] # Ensure this is set even if not used
   end
 
   def sync_passenger_health_data

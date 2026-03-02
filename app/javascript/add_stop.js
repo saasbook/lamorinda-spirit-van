@@ -87,6 +87,5 @@ document.addEventListener("turbo:load", function () {
     gon.duplicated_stops.forEach(stopData => {
       addStopRow(stopData);
     });
-    gon.duplicated_stops = []; // Clear this to prevent issues if user tries to duplicate again without refreshing
   }
 });
