@@ -122,20 +122,25 @@ class RidesController < ApplicationController
     @ride.status = "Pending"           # Reset status
 
     # Clear IDs so Rails treats these as new associations
-    @ride.start_address_id = nil
-    @ride.dest_address_id = nil
+    #@ride.start_address_id = nil
+    #@ride.dest_address_id = nil
+
+    @ride.start_address = @original_ride.start_address&.dup
+    @ride.dest_address  = @original_ride.dest_address&.dup
 
     # 3. DATA FOR STOP 1 & PASSENGER (The Fix)
     # We send this to JS to simulate the user typing/selecting
     gon.duplicate_info = {
-      passenger_id: @original_ride.passenger_id,
+      passenger_id: @original_ride.passenger_id
+    }
+    """
       start_address: {
         name:   @original_ride.start_address&.name,
         street: @original_ride.start_address&.street,
         city:   @original_ride.start_address&.city,
         phone:  @original_ride.start_address&.phone
       }
-    }
+      """
 
     # 4. Prepare "Extra Stops" (Stop 2, Stop 3, ...)
     # We skip the first ride (drop(1)) because its destination is already
