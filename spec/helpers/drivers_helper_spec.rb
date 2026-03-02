@@ -3,6 +3,20 @@
 require "rails_helper"
 
 RSpec.describe DriversHelper, type: :helper do
+  describe "#clickable_phone" do
+    it "returns N/A when phone is blank" do
+      expect(helper.clickable_phone(nil)).to eq("N/A")
+      expect(helper.clickable_phone("")).to eq("N/A")
+    end
+
+    it "returns a tel link with a sanitized phone number" do
+      html = helper.clickable_phone("(123) 456-7890")
+
+      expect(html).to include('href="tel:1234567890"')
+      expect(html).to include(">(123) 456-7890</a>")
+    end
+  end
+
   describe "#clickable_address" do
     it "returns N/A when address is blank" do
       expect(helper.clickable_address(nil)).to eq("N/A")
@@ -15,7 +29,7 @@ RSpec.describe DriversHelper, type: :helper do
       html = helper.clickable_address(address)
 
       expect(html).to include(
-        "href=\"https://www.google.com/maps/search/?api=1&query=2551%20Hearst%20Ave%2C%20Berkeley\""
+        "href=\"https://www.google.com/maps/search/?api=1&amp;query=2551%20Hearst%20Ave%2C%20Berkeley\""
       )
       expect(html).to include(">2551 Hearst Ave, Berkeley</a>")
       expect(html).to include('target="_blank"')
@@ -46,7 +60,7 @@ RSpec.describe DriversHelper, type: :helper do
       html = helper.clickable_address_with_options("2551 Hearst Ave, Berkeley")
 
       expect(html).to include(
-        "href=\"https://www.google.com/maps/search/?api=1&query=2551%20Hearst%20Ave%2C%20Berkeley\""
+        "href=\"https://www.google.com/maps/search/?api=1&amp;query=2551%20Hearst%20Ave%2C%20Berkeley\""
       )
       expect(html).to include(">2551 Hearst Ave, Berkeley</a>")
 
