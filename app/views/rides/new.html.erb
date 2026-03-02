@@ -1,5 +1,6 @@
-<%= javascript_importmap_tags %>
-
+<% content_for :head do %>
+  <meta name="turbo-cache-control" content="no-cache">
+<% end %>
 <!-- app/views/rides/new.html.erb -->
 <div class="row justify-content-center">
   <div class="col-md-12">
@@ -269,7 +270,6 @@
 
               <!-- Stops Container -->
               <div id="stops-container">
-                #<%= render partial: "stop_fields", locals: {index: 1, address: nil, drivers: @drivers, selected_driver_id: @ride.driver_id} %>
                 <%= render partial: "stop_fields", locals: {
                   index: 1,
                   address: @ride.dest_address,

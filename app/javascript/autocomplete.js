@@ -14,7 +14,7 @@ document.addEventListener("turbo:load", function() {
       } );
 
       // edits the other fields upon selecting an autocomplete value
-      $("#ride_passenger_name").on("autocompleteselect", function (event, ui) {
+      $("#ride_passenger_name").off("autocompleteselect").on("autocompleteselect", function (event, ui) {
         const yesNo = (val) => (val ? "Yes" : "No");
 
         // Update hidden fields
@@ -118,8 +118,7 @@ document.addEventListener("turbo:load", function() {
       } );
       
       // Stop Addresses (uses focus event because stops are added dynamically):
-      $(document).on("focus", ".dest-autocomplete", function () {
-        const $input = $(this);
+      $(document).off("focus", ".dest-autocomplete").on("focus", ".dest-autocomplete", function () {        const $input = $(this);
         const inputId = this.id; // e.g. ride_dest_address_attributes_1_street or _name
         const isNameField = inputId.endsWith("_name");
         const baseId = inputId.replace(/_(street|name)$/, "");
@@ -190,5 +189,6 @@ document.addEventListener("turbo:load", function() {
                 }
             }
         }
+        gon.duplicate_info = null; // Clear this to prevent issues if user tries to duplicate again without refreshing
     }
 })
