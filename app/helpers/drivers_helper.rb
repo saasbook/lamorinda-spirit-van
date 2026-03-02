@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 module DriversHelper
+  def clickable_phone(phone)
+    return "N/A" if phone.blank?
+
+    sanitized_phone = phone.gsub(/[^\d+]/, "")
+    link_to(phone, "tel:#{sanitized_phone}")
+  end
+
   def clickable_address(address, label: nil, provider: :google)
     return "N/A" if address.blank?
 
