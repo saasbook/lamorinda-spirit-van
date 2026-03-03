@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'faker'
 
 Feedback.destroy_all
 Ride.destroy_all
@@ -43,5 +44,14 @@ if User.all.empty?
     email: "Emily@lamorinda.com",
     password: "password",
     role: "driver"
+  )
+end
+
+5.times do
+  Driver.create(
+    name: Faker::Name.unique.name,
+    phone: Faker::PhoneNumber.phone_number,
+    email: Faker::Internet.unique.email,
+    address: Faker::Address.street_address
   )
 end
