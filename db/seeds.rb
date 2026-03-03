@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'faker'
+
+require "faker"
 
 Feedback.destroy_all
 Ride.destroy_all
@@ -67,7 +68,7 @@ end
   )
 end
 
-2.times do 
+2.times do
   created_at = Faker::Time.between(from: 365.days.ago, to: Time.now)
 
   Driver.create(
@@ -150,7 +151,7 @@ end
 passengers = Passenger.all.to_a
 shifts = Shift.all.to_a
 
-50.times do 
+50.times do
   created_at = Faker::Time.between(from: 365.days.ago, to: Time.now)
   shift = shifts.sample
   date = shift.shift_date
@@ -181,7 +182,7 @@ shifts = Shift.all.to_a
   )
 end
 
-5.times do 
+5.times do
   created_at = Faker::Time.between(from: 365.days.ago, to: Time.now)
 
   ShiftTemplate.create(
