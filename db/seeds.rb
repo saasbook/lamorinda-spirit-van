@@ -124,13 +124,36 @@ addresses = Address.all.to_a
   )
 end
 
-passengers = Passenger.all.to_a
+40.times do
+  created_at = Faker::Time.between(from: 365.days.ago, to: Time.now)
+  shift_date = Faker::Date.between(from: 60.days.ago, to: 60.days.from_now)
+  pickup_time = Time.zone.local(shift_date.year, shift_date.month, shift_date.day, rand(8..18), [0, 15, 30, 45].sample)
+  odometer_pre = rand(10000..50000).to_s
 
-dates = []
+  Shift.create(
+    shift_date: shift_date,
+    shift_type: ["am", "pm", "Shopping", "CC", "LMV"].sample,
+    created_at: created_at,
+    updated_at: created_at + rand(1..30).days,
+    driver: drivers.sample,
+    van: rand(1..10),
+    pick_up_time: pickup_time.strftime("%-I:%M %p"),
+    drop_off_time: (pickup_time + rand(1..8).hours).strftime("%-I:%M %p"),
+    odometer_pre: odometer_pre,
+    odometer_post: (odometer_pre.to_i + rand(10..100)).to_s,
+    notes: Faker::Lorem.sentence,
+    source: ["Phone", "Email"].sample,
+    feedback_notes: Faker::Lorem.sentence
+  )
+end
+
+passengers = Passenger.all.to_a
+shifts = Shift.all.to_a
+
 50.times do 
   created_at = Faker::Time.between(from: 365.days.ago, to: Time.now)
-  date = Faker::Date.between(from: Date.today, to: 365.days.from_now)
-  dates << date
+  shift = shifts.sample
+  date = shift.shift_date
 
   Ride.create(
     van: rand(1..10),
@@ -139,7 +162,7 @@ dates = []
     created_at: created_at,
     updated_at: created_at + rand(1..30).days,
     passenger: passengers.sample,
-    driver: drivers.sample,
+    driver: shift.driver,
     notes_to_driver: Faker::Lorem.sentence,
     start_address: addresses.sample,
     dest_address: addresses.sample,
@@ -155,24 +178,6 @@ dates = []
     fare_type: ["R", "LMV", "CC", "Shopping"].sample,
     appointment_time: Time.zone.local(date.year, date.month, date.day, rand(8..18), [0, 15, 30, 45].sample),
     fare_amount: rand(5.0..50.0).round(2)
-  )
-end
-
-40.times do
-  created_at = Faker::Time.between(from: 365.days.ago, to: Time.now)
-  shift_date = dates.delete_at(rand(dates.length))
-  pickup_time = Time.zone.local(shift_date.year, shift_date.month, shift_date.day, rand(8..18), [0, 15, 30, 45].sample)
-
-  Shift.create(
-    shift_date: shift_date,
-    shift_type: ["am", "pm", "Shopping", "CC", "LMV"].sample,
-    created_at: created_at,
-    updated_at: created_at + rand(1..30).days,
-    driver: drivers.sample,
-    van: rand(1..10),
-    pick_up_time: pickup_time.strftime("%-I:%M %p"),
-    drop_off_time: (pickup_time + rand(1..8).hours).strftime("%-I:%M %p"),
-    notes: Faker::Lorem.sentence
   )
 end
 
