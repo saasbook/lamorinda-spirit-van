@@ -71,7 +71,7 @@
               <div class="mb-3">
                 <%= f.label :status, "Status" %> <span class="text-danger">*</span>
                 <%= f.select :status,
-                             [["Requested"], ['Pending'], ['Scheduled'], ['Confirmed'], ['Email sent'], ["Waitlisted"], ['Cancelled']],
+                             [["Requested"], ["Pending"], ["Scheduled"], ["Confirmed"], ["Email sent"], ["Waitlisted"], ["Cancelled"]],
                              {},
                              class: "form-select", required: true %>
               </div>
