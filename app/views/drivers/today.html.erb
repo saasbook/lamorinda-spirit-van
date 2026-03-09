@@ -34,7 +34,7 @@
             <tr>
               <td><%= ride.passenger.name %></td>
               <td>
-                <%= link_to ride.passenger.phone, "tel:#{ride.passenger.phone.gsub(/[^\d+]/, '')}" %>
+                <%= clickable_phone(ride.passenger.phone) %>
               </td>
               <td>
                 <% 

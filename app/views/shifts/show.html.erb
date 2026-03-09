@@ -8,7 +8,7 @@
 
 <%= render "shift_rides" %>
 
-<div class="text-right mt-4">
+<div class="text-right mt-4 mb-3">
   <%= link_to "Add new ride", new_ride_path(date: @shift.shift_date, driver_id: @shift.driver), class: "btn btn-primary" %>
 </div>
 
@@ -17,7 +17,9 @@
   <%= form_with model: @shift do |form| %>
     <%= form.label :notes, "Notes about Shift/Timeline:" %>
     <%= form.text_area :notes, class: "form-control", value: @shift.notes, rows: 8 %> 
-    <%= form.submit "Save", class: "form-control"  %> 
+    <div class="text-center mt-2">
+      <%= form.submit "Save", class: "btn btn-success py-2" %>
+    </div>
   <% end %>
 </div>
 
@@ -30,4 +32,3 @@
         data: { turbo_confirm: 'Are you sure?' }
   %>
 </div>
-
