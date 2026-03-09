@@ -2,7 +2,7 @@
 
 class RidesController < ApplicationController
   before_action :set_ride, only: %i[ show edit update destroy ]
-  before_action -> { require_role("admin", "dispatcher") }, only: %i[ index new edit create update destroy ]
+  before_action -> { require_role("admin", "dispatcher") }, only: %i[ index new edit create update destroy duplicate ]
 
   # Have only rides without previous rides (HEAD rides) be displayed
   # "Give me all rides whose id is not someone else's next_ride_id
