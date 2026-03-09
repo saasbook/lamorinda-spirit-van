@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Sentry.init do |config|
-  // configure the sentry dsn to heroku prod environment variable
+  # configure the sentry dsn to heroku prod environment variable
   config.dsn = ENV["SENTRY_DSN"]
   config.breadcrumbs_logger = [:active_support_logger, :http_logger]
   config.enabled_environments = %w[production]
