@@ -15,9 +15,9 @@ RSpec.describe DriversController, type: :controller do
 
     @passenger1 = FactoryBot.create(:passenger)
     @passenger2 = FactoryBot.create(:passenger)
-    @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1)
-    @ride2 = FactoryBot.create(:ride, driver: @driver2, passenger: @passenger1)
-    @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger2)
+    @ride1 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1, status: "Scheduled")
+    @ride2 = FactoryBot.create(:ride, driver: @driver2, passenger: @passenger1, status: "Requested")
+    @ride3 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger2, status: "Pending")
     @ride4 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1, date: Time.zone.tomorrow)
     @ride5 = FactoryBot.create(:ride, driver: @driver1, passenger: @passenger1, date: Time.zone.yesterday)
   end
