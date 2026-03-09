@@ -92,7 +92,7 @@ group :development, :test do
   # selenium webdriver - for headful cucumber tests
   gem "selenium-webdriver"
 
-  # factory bot
+  # factory bot & faker
   gem "factory_bot_rails"
   gem "faker"
 
