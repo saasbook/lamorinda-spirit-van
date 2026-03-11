@@ -6,7 +6,10 @@
           <table id="rides-table" class="table table-striped table-bordered table-hover mb-0 small">
           <thead class="table-dark" style="position: sticky; top: 0; z-index: 1;">
             <tr class="border-0">
-              <th class="border-0"></th> <!-- Feedback & Info & Delete Button -->
+              <th class="border-0"></th> <!-- Feedback Button -->
+              <th class="border-0"></th> <!-- Info Button -->
+              <th class="border-0"></th> <!-- Delete Button -->
+              <th class="border-0"></th> <!-- Duplicate Button -->
               <th class="border-0 text-filter">Date</th>
               <th class="border-0 text-filter">Driver(s)</th>
               <th class="border-0 text-filter">Van(s)</th>
@@ -48,7 +51,9 @@
                       class: "btn btn-sm btn-danger" %>
                   </div>
                 </td>
-
+                <td>
+                  <%= link_to 'Duplicate', duplicate_ride_path(ride), data: { turbo: false }, class: "btn btn-sm btn-secondary" %>
+                </td>
                 <td data-order="<%= ride.date.strftime('%Y-%m-%d') %>">
                   <%= ride.date.strftime('%m/%d/%Y') %>
                 </td>
@@ -120,7 +125,7 @@
           </tbody>
           <tfoot>
             <tr class="border-0">
-              <% 21.times do %>
+              <% 24.times do %>
                 <th class="border-0"></th>
               <% end %>
             </tr>
