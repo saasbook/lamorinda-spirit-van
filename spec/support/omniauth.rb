@@ -4,22 +4,7 @@ OmniAuth.config.test_mode = true
 OmniAuth.config.logger = Logger.new(nil)
 
 RSpec.configure do |config|
-  config.before(:each) do
-    OmniAuth.config.mock_auth[:entra_id] = OmniAuth::AuthHash.new({
-      provider: "entra_id",
-      uid: "12345",
-      info: {
-        email: "mike@lamorinda.com",
-        name: "Mike Lamorinda"
-      },
-      credentials: {
-        token: "mock_token",
-        expires_at: Time.now + 1.week
-      }
-    })
-  end
-
-  config.after(:each) do
+  config.after(:all) do
     OmniAuth.config.mock_auth[:entra_id] = nil
   end
 end
