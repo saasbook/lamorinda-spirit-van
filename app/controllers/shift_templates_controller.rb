@@ -67,7 +67,7 @@ class ShiftTemplatesController < ApplicationController
   def set_start_date_presence
     @start_date = params[:start_date].presence || Time.zone.today.to_s
   end
-  
+
   def set_drivers
     @drivers = Driver.order(:name)
   end
