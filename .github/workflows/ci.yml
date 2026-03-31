@@ -70,7 +70,7 @@ jobs:
       uses: browser-actions/setup-chrome@v1
       with:
         chrome-version: stable
-        install-chromedriver: true
+        # install-chromedriver: true  # Let Selenium Manager silently fetch the correct driver ver.
     - name: Run rspec Tests
       env:
         RAILS_ENV: test
