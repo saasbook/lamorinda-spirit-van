@@ -191,18 +191,20 @@ class RidesController < ApplicationController
     20 => "rides.status"
   }.freeze
 
-  # Maps DataTables column index → SQL expression for WHERE LIKE filtering
+  # Maps DataTables column index → Arel column node for WHERE LIKE filtering.
+  # Using Arel nodes instead of raw SQL strings keeps column names out of any
+  # interpolated string, which satisfies Brakeman's SQL injection checks.
+  # The van column (3) is handled separately because it requires a CAST.
   DT_FILTER_COLUMNS = {
-    2  => "drivers.name",
-    3  => "CAST(rides.van AS TEXT)",
-    4  => "passengers.name",
-    5  => "passengers.name",
-    7  => "start_addresses.city",
-    10 => "rides.ride_type",
-    14 => "rides.fare_type",
-    16 => "rides.notes_to_driver",
-    17 => "rides.notes",
-    20 => "rides.status"
+    2  => Arel::Table.new("drivers")[:name],
+    4  => Arel::Table.new("passengers")[:name],
+    5  => Arel::Table.new("passengers")[:name],
+    7  => Arel::Table.new("start_addresses")[:city],
+    10 => Arel::Table.new("rides")[:ride_type],
+    14 => Arel::Table.new("rides")[:fare_type],
+    16 => Arel::Table.new("rides")[:notes_to_driver],
+    17 => Arel::Table.new("rides")[:notes],
+    20 => Arel::Table.new("rides")[:status]
   }.freeze
 
   def rides_datatable
@@ -254,13 +256,20 @@ class RidesController < ApplicationController
       scope = scope.where("rides.date <= ?", to) if to.present?
     end
 
-    # All other filterable columns: case-insensitive LIKE
-    DT_FILTER_COLUMNS.each do |idx, sql_col|
+    # String columns: wrap in LOWER() via an Arel NamedFunction so no column
+    # name is ever interpolated into a SQL string. Arel's matches() binds the
+    # value as a parameter, so user input never touches the SQL structure.
+    DT_FILTER_COLUMNS.each do |idx, arel_col|
       val = cols.dig(idx.to_s, :search, :value).to_s.strip
       next if val.blank?
 
-      scope = scope.where(Arel.sql("LOWER(#{sql_col}) LIKE LOWER(?)"), "%#{val}%")
+      lower_col = Arel::Nodes::NamedFunction.new("LOWER", [arel_col])
+      scope = scope.where(lower_col.matches("%#{val.downcase}%"))
     end
+
+    # Column 3: van is an integer — cast to text first (literal SQL, no interpolation)
+    van_val = cols.dig("3", :search, :value).to_s.strip
+    scope = scope.where("CAST(rides.van AS TEXT) LIKE ?", "%#{van_val}%") if van_val.present?
 
     scope
   end
