@@ -20,10 +20,25 @@ RSpec.describe RidesController, type: :controller do
   end
 
   describe "GET #index" do
-    it "assigns all rides to @rides and renders the index template" do
+    # The index action was migrated to DataTables server-side processing.
+    # The HTML response is now an empty shell (no @rides assigned); the table
+    # is populated via a separate AJAX request to GET /rides.json. Tests below
+    # reflect this split instead of the old single-request approach.
+
+    it "renders the index template" do
       get :index
       expect(response).to be_successful
-      expect(assigns(:rides)).to match_array([@ride1, @ride2, @ride3, @ride4])
+      expect(response).to render_template(:index)
+    end
+
+    it "returns rides data as JSON for DataTables" do
+      # Simulates the AJAX request DataTables sends on every page load/sort/filter.
+      get :index, format: :json, params: { draw: "1", start: "0", length: "10",
+        order: { "0" => { column: "1", dir: "desc" } }, columns: {} }
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json["recordsTotal"]).to eq(4)
+      expect(json["data"].length).to be <= 4
     end
   end
 

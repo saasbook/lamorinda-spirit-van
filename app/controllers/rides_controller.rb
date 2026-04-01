@@ -259,7 +259,7 @@ class RidesController < ApplicationController
       val = cols.dig(idx.to_s, :search, :value).to_s.strip
       next if val.blank?
 
-      scope = scope.where("LOWER(#{sql_col}) LIKE LOWER(?)", "%#{val}%")
+      scope = scope.where(Arel.sql("LOWER(#{sql_col}) LIKE LOWER(?)"), "%#{val}%")
     end
 
     scope
