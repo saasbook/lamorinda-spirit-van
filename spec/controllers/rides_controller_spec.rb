@@ -41,6 +41,19 @@ RSpec.describe RidesController, type: :controller do
       expect(json["data"].length).to be <= 4
     end
 
+    it "filters rides by a text column search value" do
+      # Exercises the Arel LOWER().matches() branch in apply_dt_column_filters.
+      # Column 2 is driver name — searching for driver1's name should return only
+      # the rides assigned to that driver.
+      get :index, format: :json, params: {
+        draw: "1", start: "0", length: "10",
+        order: { "0" => { column: "1", dir: "desc" } },
+        columns: { "2" => { search: { value: @driver1.name } } }
+      }
+      json = JSON.parse(response.body)
+      expect(json["recordsFiltered"]).to be < json["recordsTotal"]
+    end
+
     it "filters rides by date range via column 1 search value" do
       # @ride4 is 5.days.ago; the other rides use the factory default (today).
       # Encoding "from|to" in columns[1][search][value] exercises the date split
