@@ -67,7 +67,7 @@ jobs:
         bundle exec rake db:migrate
         bundle exec rake db:test:prepare
     - name: Install Chrome & Chromedriver
-      uses: browser-actions/setup-chrome@v1
+      uses: browser-actions/setup-chrome@v2
       with:
         chrome-version: stable
         # install-chromedriver: true  # Let Selenium Manager silently fetch the correct driver ver.
