@@ -312,14 +312,16 @@ class RidesController < ApplicationController
   end
 
   def dt_actions_cell(ride)
+    btn = "btn btn-sm"
+    sty = "style=\"width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\""
     feedback = if ride.feedback
-      %(<a href="#{feedback_path(ride.feedback)}" class="btn btn-sm btn-primary">Feedback</a>)
+      %(<a href="#{feedback_path(ride.feedback)}" class="#{btn} btn-primary" #{sty}>Feedback</a>)
     else
-      "No Feedback"
+      %(<span class="#{btn} btn-secondary disabled" #{sty}>No Feedback</span>)
     end
-    edit      = %(<a href="#{edit_ride_path(ride)}" class="btn btn-sm btn-primary">Edit</a>)
-    duplicate = %(<a href="#{duplicate_ride_path(ride)}" data-turbo="false" class="btn btn-sm btn-primary">Duplicate</a>)
-    delete    = %(<a href="#{ride_path(ride)}" data-turbo-method="delete" data-turbo-confirm="Are you sure?" class="btn btn-sm btn-danger">Delete</a>)
+    edit      = %(<a href="#{edit_ride_path(ride)}" class="#{btn} btn-primary" #{sty}>Edit</a>)
+    duplicate = %(<a href="#{duplicate_ride_path(ride)}" data-turbo="false" class="#{btn} btn-primary" #{sty}>Duplicate</a>)
+    delete    = %(<a href="#{ride_path(ride)}" data-turbo-method="delete" data-turbo-confirm="Are you sure?" class="#{btn} btn-danger" #{sty}>Delete</a>)
     %(<div class="d-flex flex-column gap-2 align-items-center">#{feedback}#{edit}#{duplicate}#{delete}</div>)
   end
 
