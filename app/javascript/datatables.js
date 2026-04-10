@@ -190,6 +190,73 @@ const initiateSearchbars = (table) => {
   });
 };
 
+// Server-side variant of initiateSearchbars for the rides table.
+// Date range: saves to localStorage and calls draw() — the ajax.data callback
+// encodes the stored range into column 1's search value on each request.
+// Text filters: identical to client-side; DataTables includes column search
+// values automatically in every server-side AJAX request.
+const initiateRidesSearchbars = (table) => {
+  $(table.table().footer()).find("th").empty();
+
+  table.columns(".text-filter").every(function () {
+    const column = this;
+    const $cell = $(column.footer()).empty();
+    const header = column.header().textContent.trim();
+    const tableId = table.table().node().id;
+
+    if (header === "Date") {
+      const { fromDate, toDate } = loadDateState(tableId);
+
+      const $wrap = $(
+        '<div style="display:flex;flex-direction:column;gap:2px;"></div>',
+      );
+      const $from = dateInput(fromDate);
+      const $to = dateInput(toDate);
+      $wrap.append($from, $to);
+
+      const applyDateFilter = () => {
+        saveDateState(tableId, { fromDate: $from.val(), toDate: $to.val() });
+        table.draw();
+        updateFilterIndicator(table, `#${tableId}`);
+      };
+
+      const clearDateFilter = () => {
+        saveDateState(tableId, { fromDate: "", toDate: "" });
+        $from.val("");
+        $to.val("");
+        table.draw();
+        updateFilterIndicator(table, `#${tableId}`);
+      };
+
+      $from.on("change", applyDateFilter);
+      $to.on("change", applyDateFilter);
+
+      const $clearBtn = $(
+        '<button type="button" title="Clear date filter" ' +
+          'style="width:100%;margin-top:2px;padding:2px;font-size:0.7rem;' +
+          'background:#f8f9fa;border:1px solid #ddd;border-radius:3px;">Clear</button>',
+      ).on("click", clearDateFilter);
+
+      $cell.append($wrap, $clearBtn);
+
+      // Re-apply persisted date range on page load
+      if (fromDate || toDate) table.draw();
+    } else {
+      const initial = column.search() || "";
+      const $input = textInput(`${header}...`, initial).on(
+        "input change",
+        function () {
+          if (column.search() !== this.value) {
+            column.search(this.value).draw();
+            updateFilterIndicator(table, `#${tableId}`);
+          }
+        },
+      );
+      $cell.append($input);
+    }
+  });
+};
+
 // Visual for when search has been applied
 function updateFilterIndicator(table, tableSelector) {
   // Check if any column search is applied
@@ -234,11 +301,38 @@ function updateFilterIndicator(table, tableSelector) {
   }
 }
 
+// Column definitions for the rides table (server-side processing).
+// Columns spanning linked rides (drivers, vans, stops, destinations) are
+// non-orderable because they cannot be sorted at the DB level.
+const RIDES_COLUMNS = [
+  { orderable: false, searchable: false }, // 0  actions
+  { orderable: true,  searchable: true  }, // 1  date
+  { orderable: true,  searchable: true  }, // 2  driver(s)
+  { orderable: true,  searchable: true  }, // 3  van(s)
+  { orderable: true,  searchable: true  }, // 4  last name
+  { orderable: true,  searchable: true  }, // 5  first name
+  { orderable: false, searchable: false }, // 6  stops info
+  { orderable: true,  searchable: true  }, // 7  origin
+  { orderable: true,  searchable: false }, // 8  appt. time
+  { orderable: false, searchable: false }, // 9  destination(s)
+  { orderable: true,  searchable: true  }, // 10 ride type
+  { orderable: true,  searchable: false }, // 11 wheelchair
+  { orderable: true,  searchable: false }, // 12 disabled
+  { orderable: true,  searchable: false }, // 13 needs caregiver
+  { orderable: true,  searchable: true  }, // 14 fare type
+  { orderable: true,  searchable: false }, // 15 fare amount
+  { orderable: true,  searchable: true  }, // 16 notes to driver
+  { orderable: true,  searchable: true  }, // 17 notes
+  { orderable: true,  searchable: false }, // 18 hours
+  { orderable: true,  searchable: false }, // 19 amount paid
+  { orderable: true,  searchable: true  }, // 20 status
+];
+
 // Creates the Datatables
 const initiateDatatables = () => {
+  // ── Non-server-side tables ─────────────────────────────────────────────────
   const tables = [
     { selector: "#passengers-table", order: [[2, "asc"]] },
-    { selector: "#rides-table", order: [[3, "desc"]] },
     { selector: "#shift-rides-table", order: [[5, "asc"]] },
   ];
 
@@ -280,6 +374,47 @@ const initiateDatatables = () => {
       });
     }
   });
+
+  // ── Rides table — server-side processing ──────────────────────────────────
+  // Page loads instantly with an empty table; DataTables fetches only the
+  // current page via AJAX on every load/sort/filter/paginate action.
+  const ridesElement = document.querySelector("#rides-table");
+  if (ridesElement) {
+    if ($.fn.DataTable.isDataTable(ridesElement)) {
+      $(ridesElement).DataTable().destroy();
+    }
+
+    const ridesTable = $(ridesElement).DataTable({
+      serverSide: true,
+      processing: true,
+      autoWidth: false,
+      pageLength: 25,
+      order: [[1, "desc"]],
+      columns: RIDES_COLUMNS,
+      ajax: {
+        url: "/rides.json",
+        type: "GET",
+        // Encode the date range into column 1's search value as "from|to"
+        // before each request so the server can apply it as a SQL WHERE clause.
+        data: function (d) {
+          const state = loadDateState("rides-table");
+          if (state.fromDate || state.toDate) {
+            d.columns[1].search.value = `${state.fromDate}|${state.toDate}`;
+          }
+          return d;
+        },
+      },
+      dom:
+        "<'row'<'col-md-6'l><'col-md-6'Bp>>" +
+        "<'row'<'col-md-12'tr>>" +
+        "<'row'<'col-md-6'i><'col-md-6'>>",
+      buttons: ["excel", "csv", "print"],
+    });
+
+    initiateCheckboxes(ridesTable);
+    initiateRidesSearchbars(ridesTable);
+    updateFilterIndicator(ridesTable, "#rides-table");
+  }
 };
 
 document.addEventListener("turbo:load", () => {
