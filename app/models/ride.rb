@@ -53,6 +53,10 @@ class Ride < ApplicationRecord
       prev_ride = ride
     end
 
+    if created_rides.empty?
+      raise ActiveRecord::RecordInvalid.new(Ride.new)
+    end
+
     created_rides
   end
 

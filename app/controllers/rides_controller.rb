@@ -40,6 +40,7 @@ class RidesController < ApplicationController
       ActiveRecord::Base.transaction do
         new_rides = Ride.build_linked_rides!(ride_attrs, addresses, stops_data)
 
+        new_rides.each(&:save!)
         @ride = new_rides.first
       end
 
@@ -92,8 +93,8 @@ class RidesController < ApplicationController
         @ride = new_rides.first
 
         if old_feedback_attrs
-          @ride&.feedback&.destroy!
-          @ride&.create_feedback!(old_feedback_attrs)
+          @ride.feedback&.destroy!
+          @ride.create_feedback!(old_feedback_attrs)
         end
       end
 
