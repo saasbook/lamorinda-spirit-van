@@ -86,6 +86,12 @@ RSpec.describe RidesController, type: :controller do
         expect(response).to render_template(:new)
       end
 
+      it "renders new when a generic system error occurs" do
+        allow(Ride).to receive(:build_linked_rides!).and_raise(StandardError, "Unknown Error!")
+        post :create, params: { ride: valid_attributes }
+        expect(response).to render_template(:new)
+      end
+
       it "creates a new ride with 3 addresses" do
         valid_attributes[:addresses_attributes] << {
           street: "789 Third Ave",
@@ -180,6 +186,12 @@ RSpec.describe RidesController, type: :controller do
 
     it "renders edit on failure" do
       put :update, params: { id: @ride1.id, ride: { driver_id: nil } }
+      expect(response).to render_template(:edit)
+    end
+
+    it "renders edit when a generic system error occurs" do
+      allow(Ride).to receive(:build_linked_rides!).and_raise(StandardError, "Unknown Error!")
+      post :update, params: { id: @ride1.id, ride: valid_attributes }
       expect(response).to render_template(:edit)
     end
 
