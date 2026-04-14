@@ -184,15 +184,16 @@ RSpec.describe RidesController, type: :controller do
       expect(flash[:notice]).to eq("Ride was successfully updated.")
     end
 
-    it "renders edit on failure" do
+    it "renders edit on RecordInvalid failure" do
       put :update, params: { id: @ride1.id, ride: { driver_id: nil } }
       expect(response).to render_template(:edit)
     end
 
-    it "renders edit when a generic system error occurs" do
+    it "raises error when a generic system error occurs" do
       allow(Ride).to receive(:build_linked_rides!).and_raise(StandardError, "Unknown Error!")
-      post :update, params: { id: @ride1.id, ride: { driver_id: nil } }
-      expect(response).to render_template(:edit)
+      expect {
+        post :update, params: { id: @ride1.id, ride: { driver_id: nil } }
+      }.to raise_error
     end
 
     it "adds a new destination to the ride chain" do
