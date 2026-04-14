@@ -124,17 +124,17 @@ RSpec.describe RidesController, type: :controller do
             { street: "456 Second Ave", city: "Berkeley", state: "CA", zip: "94704" },
             { street: "789 Third Ave", city: "San Francisco", state: "CA", zip: "94105" }
           ],
-                  stops_attributes: [
-          { driver_id: @driver1.id, van: 1 },
-          { driver_id: @driver2.id, van: 2 }
-        ]
+          stops_attributes: [
+            { driver_id: @driver1.id, van: 1 },
+            { driver_id: @driver2.id, van: 2 }
+          ]
         )
 
         expect {
           post :create, params: { ride: attributes_with_stops }
         }.to change(Ride, :count).by(2)
 
-        created_rides = Ride.order(:created_at).last(2)
+        created_rides = Ride.order(id: :desc).limit(2)
 
         # First ride should use first stop's driver and van
         expect(created_rides[0].driver_id).to eq(@driver1.id)
@@ -260,7 +260,7 @@ RSpec.describe RidesController, type: :controller do
       put :update, params: { id: ride1.id, ride: update_attrs }
 
       # Should create 2 new rides (3 addresses = 2 ride segments)
-      updated_rides = Ride.order(:created_at).last(2)
+      updated_rides = Ride.order(id: :desc).limit(2)
 
       expect(updated_rides[0].driver_id).to eq(@driver1.id)
       expect(updated_rides[0].van).to eq(5)
