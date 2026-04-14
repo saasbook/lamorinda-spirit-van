@@ -191,7 +191,7 @@ RSpec.describe RidesController, type: :controller do
 
     it "renders edit when a generic system error occurs" do
       allow(Ride).to receive(:build_linked_rides!).and_raise(StandardError, "Unknown Error!")
-      post :update, params: { id: @ride1.id, ride: valid_attributes }
+      post :update, params: { id: @ride1.id, ride: { driver_id: nil } }
       expect(response).to render_template(:edit)
     end
 
