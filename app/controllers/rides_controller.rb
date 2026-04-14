@@ -106,10 +106,8 @@ class RidesController < ApplicationController
       render :edit, status: :unprocessable_entity
 
     rescue => e
-      flash[:alert] = "A system error occurred: #{e.message}"
       Rails.logger.error("System Error: #{e.backtrace.first(5)}")
-      render :edit, status: :unprocessable_entity
-      raise ActiveRecord::Rollback
+      raise e
     end
   end
 
