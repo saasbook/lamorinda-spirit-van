@@ -37,12 +37,10 @@ class RidesController < ApplicationController
     ride_attrs, addresses, stops_data = Ride.extract_attrs_from_params(ride_params)
 
     begin
-      ActiveRecord::Base.transaction do
-        new_rides = Ride.build_linked_rides!(ride_attrs, addresses, stops_data)
+      new_rides = Ride.build_linked_rides!(ride_attrs, addresses, stops_data)
 
-        new_rides.each(&:save!)
-        @ride = new_rides.first
-      end
+      new_rides.each(&:save!)
+      @ride = new_rides.first
 
       session[:return_to] ||= rides_path
       redirect_to session[:return_to], notice: "Ride was successfully created."
