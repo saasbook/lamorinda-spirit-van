@@ -60,8 +60,8 @@ end
 
 addresses = Address.all.to_a
 
-# crafting passengers
-30.times do
+# crafting passengers (large count to stress-test the passengers table)
+5000.times do
   created_at = Faker::Time.between(from: 365.days.ago, to: Time.now)
 
   FactoryBot.create(:passenger,
