@@ -20,10 +20,79 @@ RSpec.describe RidesController, type: :controller do
   end
 
   describe "GET #index" do
-    it "assigns all rides to @rides and renders the index template" do
+    # The index action was migrated to DataTables server-side processing.
+    # The HTML response is now an empty shell (no @rides assigned); the table
+    # is populated via a separate AJAX request to GET /rides.json. Tests below
+    # reflect this split instead of the old single-request approach.
+
+    it "renders the index template" do
       get :index
       expect(response).to be_successful
-      expect(assigns(:rides)).to match_array([@ride1, @ride2, @ride3, @ride4])
+      expect(response).to render_template(:index)
+    end
+
+    it "returns rides data as JSON for DataTables" do
+      # Simulates the AJAX request DataTables sends on every page load/sort/filter.
+      get :index, format: :json, params: { draw: "1", start: "0", length: "10",
+        order: { "0" => { column: "1", dir: "desc" } }, columns: {} }
+      expect(response).to be_successful
+      json = JSON.parse(response.body)
+      expect(json["recordsTotal"]).to eq(4)
+      expect(json["data"].length).to be <= 4
+    end
+
+    it "filters rides by a text column search value" do
+      # Exercises the Arel LOWER().matches() branch in apply_dt_column_filters.
+      # Column 2 is driver name — searching for driver1's name should return only
+      # the rides assigned to that driver.
+      get :index, format: :json, params: {
+        draw: "1", start: "0", length: "10",
+        order: { "0" => { column: "1", dir: "desc" } },
+        columns: { "2" => { search: { value: @driver1.name } } }
+      }
+      json = JSON.parse(response.body)
+      expect(json["recordsFiltered"]).to be < json["recordsTotal"]
+    end
+
+    it "filters rides by date range via column 1 search value" do
+      # @ride4 is 5.days.ago; the other rides use the factory default (today).
+      # Encoding "from|to" in columns[1][search][value] exercises the date split
+      # and both scope.where("rides.date >= ?") / scope.where("rides.date <= ?") branches.
+      from = 10.days.ago.to_date.to_s
+      to   = 1.day.ago.to_date.to_s
+      get :index, format: :json, params: {
+        draw: "1", start: "0", length: "10",
+        order: { "0" => { column: "1", dir: "desc" } },
+        columns: { "1" => { search: { value: "#{from}|#{to}" } } }
+      }
+      json = JSON.parse(response.body)
+      expect(json["recordsFiltered"]).to eq(1)
+      expect(json["recordsTotal"]).to eq(4)
+    end
+
+    it "renders No Feedback text when a ride has no feedback record" do
+      # Covers the else branch in dt_actions_cell. All rides get feedback via
+      # after_create, so we destroy it explicitly to reach that branch.
+      @ride1.feedback.destroy!
+      get :index, format: :json, params: {
+        draw: "1", start: "0", length: "10",
+        order: { "0" => { column: "1", dir: "desc" } }, columns: {}
+      }
+      json = JSON.parse(response.body)
+      expect(json["data"].any? { |row| row[0].include?("No Feedback") }).to be true
+    end
+
+    it "renders a <ul> destination list for multi-stop rides" do
+      # Covers the next_ride_id? branch in dt_destinations_cell.
+      # Linking ride1 → ride2 makes ride1 a head ride with a chained destination.
+      @ride1.update!(next_ride: @ride2)
+      get :index, format: :json, params: {
+        draw: "1", start: "0", length: "10",
+        order: { "0" => { column: "1", dir: "desc" } }, columns: {}
+      }
+      json = JSON.parse(response.body)
+      # Column index 9 is Destination(s). At least one row must have a <ul>.
+      expect(json["data"].any? { |row| row[9].include?("<ul") }).to be true
     end
   end
 
@@ -86,6 +155,12 @@ RSpec.describe RidesController, type: :controller do
         expect(response).to render_template(:new)
       end
 
+      it "renders new when a generic system error occurs" do
+        allow(Ride).to receive(:build_linked_rides!).and_raise(StandardError, "Unknown Error!")
+        post :create, params: { ride: valid_attributes }
+        expect(response).to render_template(:new)
+      end
+
       it "creates a new ride with 3 addresses" do
         valid_attributes[:addresses_attributes] << {
           street: "789 Third Ave",
@@ -124,17 +199,17 @@ RSpec.describe RidesController, type: :controller do
             { street: "456 Second Ave", city: "Berkeley", state: "CA", zip: "94704" },
             { street: "789 Third Ave", city: "San Francisco", state: "CA", zip: "94105" }
           ],
-                  stops_attributes: [
-          { driver_id: @driver1.id, van: 1 },
-          { driver_id: @driver2.id, van: 2 }
-        ]
+          stops_attributes: [
+            { driver_id: @driver1.id, van: 1 },
+            { driver_id: @driver2.id, van: 2 }
+          ]
         )
 
         expect {
           post :create, params: { ride: attributes_with_stops }
         }.to change(Ride, :count).by(2)
 
-        created_rides = Ride.order(:created_at).last(2)
+        created_rides = Ride.order(id: :desc).limit(2)
 
         # First ride should use first stop's driver and van
         expect(created_rides[0].driver_id).to eq(@driver1.id)
@@ -178,9 +253,16 @@ RSpec.describe RidesController, type: :controller do
       expect(flash[:notice]).to eq("Ride was successfully updated.")
     end
 
-    it "renders edit on failure" do
+    it "renders edit on RecordInvalid failure" do
       put :update, params: { id: @ride1.id, ride: { driver_id: nil } }
       expect(response).to render_template(:edit)
+    end
+
+    it "raises error when a generic system error occurs" do
+      allow(Ride).to receive(:build_linked_rides!).and_raise(StandardError, "Unknown Error!")
+      expect {
+        post :update, params: { id: @ride1.id, ride: { driver_id: nil } }
+      }.to raise_error
     end
 
     it "adds a new destination to the ride chain" do
@@ -260,7 +342,7 @@ RSpec.describe RidesController, type: :controller do
       put :update, params: { id: ride1.id, ride: update_attrs }
 
       # Should create 2 new rides (3 addresses = 2 ride segments)
-      updated_rides = Ride.order(:created_at).last(2)
+      updated_rides = Ride.order(id: :desc).limit(2)
 
       expect(updated_rides[0].driver_id).to eq(@driver1.id)
       expect(updated_rides[0].van).to eq(5)
