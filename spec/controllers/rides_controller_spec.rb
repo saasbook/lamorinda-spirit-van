@@ -248,7 +248,7 @@ RSpec.describe RidesController, type: :controller do
       }
 
       put :update, params: { id: @ride1.id, ride: update_attrs }
-      new_ride = Ride.order(:created_at).last
+      new_ride = Ride.order(:id).last
       expect(response).to redirect_to(edit_ride_path(new_ride))
       expect(flash[:notice]).to eq("Ride was successfully updated.")
     end
@@ -256,6 +256,54 @@ RSpec.describe RidesController, type: :controller do
     it "renders edit on RecordInvalid failure" do
       put :update, params: { id: @ride1.id, ride: { driver_id: nil } }
       expect(response).to render_template(:edit)
+    end
+
+    it "does not flash error message anymore when same (Address) Street gets assigned different Name fields" do
+      update_attrs = {
+        date: Time.zone.tomorrow,
+        driver_id: @driver1.id,
+        passenger_id: @passenger1.id,
+        addresses_attributes: [
+          {
+            name: "Royal Palace",
+            street: "100 Main St",
+            city: "Palettia",
+            state: "PA",
+            zip: "90000"
+          },
+          {
+            name: "Downtown",
+            street: "100 Powell St",
+            city: "Palettia",
+            state: "PA",
+            zip: "90100"
+          },
+          {
+            name: "Royal Palace",
+            street: "100 Main St",
+            city: "Palettia",
+            state: "PA",
+            zip: "90000"
+          }
+        ],
+        stops_attributes: [
+          { driver_id: @driver1.id, van: 1 },
+          { driver_id: @driver2.id, van: 2 }
+        ]
+      }
+
+      put :update, params: { id: @ride1.id, ride: update_attrs }
+      new_rides = Ride.order(id: :desc).limit(2)
+      expect(response).to redirect_to(edit_ride_path(new_rides[0]))
+      expect(flash[:notice]).to eq("Ride was successfully updated.")
+
+      update_attrs[:addresses_attributes][1][:name] = "Downtown Workshop"
+      put :update, params: { id: new_rides[0].id, ride: update_attrs }
+      new_rides = Ride.order(id: :desc).limit(2)
+      expect(flash.now[:alert]).to be_nil
+      expect(response).to redirect_to(edit_ride_path(new_rides[0]))
+      expect(flash[:notice]).to eq("Ride was successfully updated.")
+      expect(new_rides[0].dest_address_id).to eq(new_rides[1].start_address_id)
     end
 
     it "raises error when a generic system error occurs" do
