@@ -95,7 +95,7 @@ document.addEventListener("turbo:load", function () {
     $(function () {
       $("#ride_start_address_attributes_street").autocomplete({
         source: gon.addresses.map((a) => ({
-          label: a.street,
+          label: a.name ? `(${a.name}) ${a.street}` : a.street,
           value: a.street,
           name: a.name,
           city: a.city,
@@ -164,14 +164,14 @@ document.addEventListener("turbo:load", function () {
           ? gon.addresses
               .filter((a) => a.name)
               .map((a) => ({
-                label: `${a.name}, ${a.street}`,
+                label: `${a.name} (${a.street})`,
                 value: a.name,
                 street: a.street,
                 city: a.city,
                 phone: a.phone,
               }))
           : gon.addresses.map((a) => ({
-              label: a.street,
+              label: a.name ? `(${a.name}) ${a.street}` : a.street,
               value: a.street,
               name: a.name,
               city: a.city,
@@ -182,7 +182,7 @@ document.addEventListener("turbo:load", function () {
           source: source,
           minLength: 2,
           select: function (event, ui) {
-            $(`#${baseId}_name`).val(ui.item.name);
+            $(`#${baseId}_name`).val(ui.item.name ?? "");
             $(`#${baseId}_street`).val(ui.item.street);
             $(`#${baseId}_city`).val(ui.item.city);
             $(`#${baseId}_phone`).val(ui.item.phone);
