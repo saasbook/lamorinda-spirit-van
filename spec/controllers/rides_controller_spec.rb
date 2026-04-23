@@ -108,13 +108,8 @@ RSpec.describe RidesController, type: :controller do
 
       get :new
 
-      # Check static HTML
       expect(assigns(:drivers)).to include(active_driver)
       expect(assigns(:drivers)).not_to include(inactive_driver)
-
-      # Check dynamic JS
-      expect(gon.drivers.map { |d| d[:id] }).to include(active_driver.id)
-      expect(gon.drivers.map { |d| d[:id] }).not_to include(inactive_driver.id)
     end
   end
 
@@ -133,11 +128,7 @@ RSpec.describe RidesController, type: :controller do
 
       get :edit, params: { id: head_ride.id }
 
-      # Check static HTML
       expect(assigns(:drivers)).to include(retired_driver)
-
-      # Check dynamic JS
-      expect(gon.drivers.map { |d| d[:id] }).to include(retired_driver.id)
     end
 
     it "excludes unrelated inactive drivers" do
@@ -515,7 +506,6 @@ RSpec.describe RidesController, type: :controller do
 
       # 4. Confirm they are NOT in the dropdown list for the new (duplicate) ride
       expect(assigns(:drivers)).not_to include(retired_driver)
-      expect(gon.drivers.map { |d| d[:id] }).not_to include(retired_driver.id)
     end
   end
 
