@@ -242,7 +242,7 @@ class PassengersController < ApplicationController
   def passenger_params
     params.require(:passenger).permit(:name, :phone, :alternative_phone, :birthday, :race, :hispanic, :wheelchair, :low_income, :disabled, :need_caregiver, :email, :notes, :date_registered, :audit,
                                       :lmv_member, :mail_updates, :rqsted_newsletter,
-                                      address_attributes: [:street, :city, :zip_code])
+                                      address_attributes: [:name, :phone, :street, :city, :zip_code])
   end
 
   def passenger_create_redirect_url
