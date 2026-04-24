@@ -6,6 +6,13 @@
       <%= link_to "Prev. Day", today_driver_path(date: @current_date - 1.day), class: "btn btn-secondary" %>
       <%= link_to "Back to Today", today_driver_path(date: Time.zone.today), class: "btn btn-primary" %>
       <%= link_to "Next Day", today_driver_path(date: @current_date + 1.day), class: "btn btn-secondary" %>
+
+      <%= form_with url: today_driver_path, method: :get, local: true, class: "date-jump-form" do |f| %>
+      <%= f.date_field :date, value: @current_date, class: "form-control" %>
+      <%= f.submit "Search", class: "btn btn-outline-primary" %>
+    <% end %>
+
+
       <button onclick="window.print()" class="btn btn-primary" id="btn-print">Print</button>
     </div>
   </form>
