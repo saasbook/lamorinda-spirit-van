@@ -80,7 +80,32 @@
 
               <div class="mb-3">
                 <%= f.label :fare_amount, "Fare Amount" %>
-                <%= f.number_field :fare_amount, step: 0.01 , class: "form-control" %>
+                <%= f.number_field :fare_amount, step: 0.01, class: "form-control", id: "fare_amount_field" %>
+
+                <!-- Quick Amount Selection Buttons -->
+                <div class="mt-2 mb-3">
+                  <label class="form-label text-muted small">Quick Select:</label>
+                  <div class="btn-group">
+                    <% [0, 5, 10, 20].each do |amount| %>
+                      <button type="button" class="btn btn-sm btn-outline-secondary fare-quick-select"
+                              data-amount="<%= amount %>">
+                        $<%= amount %>
+                      </button>
+                    <% end %>
+                  </div>
+                  <script>
+                    document.addEventListener('turbo:load', function() {
+                      const amountField = document.getElementById('fare_amount_field');
+                      const quickButtons = document.querySelectorAll('.fare-quick-select');
+
+                      quickButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                          amountField.value = this.getAttribute('data-amount');
+                        });
+                      });
+                    });
+                  </script>
+                </div>
               </div>
 
               <div class="mb-3">
