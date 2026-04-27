@@ -408,7 +408,23 @@ const initiateDatatables = () => {
         "<'row'<'col-md-6'l><'col-md-6'Bp>>" +
         "<'row'<'col-md-12'tr>>" +
         "<'row'<'col-md-6'i><'col-md-6'>>",
-      buttons: ["excel", "csv", "print"],
+      buttons: [
+        {
+          extend: "excel",
+          text: "Excel",
+          action: function (e, dt, button, config) {
+            exportAllData(dt, "excel", this, e, button, config);
+          }
+        },
+        {
+          extend: "csv",
+          text: "CSV",
+          action: function (e, dt, button, config) {
+            exportAllData(dt, "csv", this, e, button, config);
+          }
+        },
+        "print"
+      ],
     });
 
     initiateCheckboxes(ridesTable);
@@ -416,6 +432,34 @@ const initiateDatatables = () => {
     updateFilterIndicator(ridesTable, "#rides-table");
   }
 };
+
+// Usage: Rides Index (Later: Passengers Index) (caller: datatable.js::initiateDatatables)
+function exportAllData(dt, type, buttonContext, e, button, config) {
+  const oldStart = dt.settings()[0]._iDisplayStart;
+  const oldLength = dt.settings()[0]._iDisplayLength;
+
+  // 1. Hook into the next AJAX request to ask for EVERYTHING
+  dt.one("preXhr", function (e, s, data) {
+    data.start = 0;
+    data.length = -1;  // Controller logic MUST handle this
+  });
+
+  // 2. Once the data arrives, trigger the built-in export and revert the UI
+  dt.one("draw", function () {
+    if (type === "excel") {
+      $.fn.dataTable.ext.buttons.excelHtml5.action.call(buttonContext, e, dt, button, config);
+    } else {
+      $.fn.dataTable.ext.buttons.csvHtml5.action.call(buttonContext, e, dt, button, config);
+    }
+
+    // 3. Revert table to original pagination so the user doesn't see 10,000 rows
+    setTimeout(() => {
+      dt.page.len(oldLength).page(Math.floor(oldStart / oldLength)).draw(false);
+    }, 500);
+  });
+
+  dt.ajax.reload();
+}
 
 document.addEventListener("turbo:load", () => {
   if (

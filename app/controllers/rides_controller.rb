@@ -209,6 +209,7 @@ class RidesController < ApplicationController
 
   def rides_datatable
     base = head_rides_base_scope
+    is_export = params[:length].to_i == -1
 
     records_total = base.count
 
@@ -220,13 +221,16 @@ class RidesController < ApplicationController
     sort_col  = DT_SORT_COLUMNS[col_idx] || "rides.date"
     base      = base.order(Arel.sql("#{sort_col} #{direction}"))
 
-    start  = params[:start].to_i
-    length = [params[:length].to_i, 1].max
+    rides = base.includes(:feedback, :driver, :passenger, :start_address, :dest_address, :next_ride)
 
-    rides = base
-              .includes(:feedback, :driver, :passenger, :start_address, :dest_address, :next_ride)
-              .offset(start)
-              .limit(length)
+    unless is_export
+      start  = params[:start].to_i
+      length = [params[:length].to_i, 1].max
+      rides = base
+                .includes(:feedback, :driver, :passenger, :start_address, :dest_address, :next_ride)
+                .offset(start)
+                .limit(length)
+    end
 
     {
       draw:            params[:draw].to_i,
