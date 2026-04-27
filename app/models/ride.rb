@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Ride < ApplicationRecord
+  RIDE_TYPES = %w[EP EM ES EG Lunch Shop].freeze
+  FARE_TYPES = %w[R LI LMV CC Shop].freeze
+
   has_one :feedback, dependent: :destroy
   belongs_to :passenger, optional: true
   belongs_to :driver
@@ -11,18 +14,16 @@ class Ride < ApplicationRecord
 
   after_create :create_initial_feedback
 
-  # this causes problems -- duplicated addresses
+  # this causes problems -- duplicated addresses  <--  Not Anymore ^^
   # accepts_nested_attributes_for :start_address
   # accepts_nested_attributes_for :dest_address
 
   def start_address_attributes=(attrs)
-    normalized = normalize_address(attrs)
-    self.start_address = Address.find_or_create_by!(normalized)
+    self.start_address = get_or_generate_address(attrs)
   end
 
   def dest_address_attributes=(attrs)
-    normalized = normalize_address(attrs)
-    self.dest_address = Address.find_or_create_by!(normalized)
+    self.dest_address = get_or_generate_address(attrs)
   end
 
   def self.build_linked_rides!(ride_attrs, addrs, stops_data = [])
@@ -106,7 +107,14 @@ class Ride < ApplicationRecord
       name: attrs[:name].to_s.strip.presence,
       street: attrs[:street].to_s.strip.titleize,
       city: attrs[:city].to_s.strip.titleize,
-      phone: attrs[:phone].to_s.strip.presence,
-    }.compact
+    }
+  end
+
+  def get_or_generate_address(attrs)
+    normalized = normalize_address(attrs)
+    addr = Address.find_or_create_by!(normalized)
+    addr.update(phone: attrs[:phone].to_s.strip.presence) if attrs[:phone].present?
+
+    addr
   end
 end
