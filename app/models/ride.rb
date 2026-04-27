@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Ride < ApplicationRecord
+  RIDE_TYPES = %w[EP EM ES EG Lunch Shop].freeze
+  FARE_TYPES = %w[R LI LMV CC Shop].freeze
+
   has_one :feedback, dependent: :destroy
   belongs_to :passenger, optional: true
   belongs_to :driver
