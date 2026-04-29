@@ -205,8 +205,9 @@ class PassengersController < ApplicationController
 
   def dt_passenger_actions_cell(passenger)
     btn    = "btn btn-sm"
-    edit   = %(<a href="#{edit_passenger_path(passenger, return_url: passengers_path)}" class="#{btn} btn-primary">Edit</a>)
-    delete = %(<a href="#{passenger_path(passenger)}" data-turbo-method="delete" data-turbo-confirm="Are you sure?" class="#{btn} btn-danger">Delete</a>)
+    sty    = "style=\"width:60.93px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\""
+    edit   = %(<a href="#{edit_passenger_path(passenger, return_url: passengers_path)}" class="#{btn} btn-primary" #{sty}>Edit</a>)
+    delete = %(<a href="#{passenger_path(passenger)}" data-turbo-method="delete" data-turbo-confirm="Are you sure?" class="#{btn} btn-danger" #{sty}>Delete</a>)
     %(<div class="d-flex flex-column gap-2 align-items-center">#{edit}#{delete}</div>)
   end
 

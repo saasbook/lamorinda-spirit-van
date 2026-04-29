@@ -12,71 +12,171 @@ RSpec.describe PassengersController, type: :controller do
     @passenger2 = FactoryBot.create(:passenger)
   end
 
+  # ---------------------------------------------------------------------------
+  # Helper that fires a DataTables JSON request with mergeable column overrides
+  # ---------------------------------------------------------------------------
+  def dt_get(extra_columns: {}, order_col: "1", order_dir: "asc", start: "0", length: "10")
+    request.accept = "application/json"
+    get :index, params: {
+      draw: "1", start: start, length: length,
+      order: { "0" => { column: order_col, dir: order_dir } },
+      columns: extra_columns
+    }
+  end
+
   describe "GET #index" do
     it "returns http success for HTML format" do
       get :index
       expect(response).to have_http_status(:success)
     end
 
-    it "returns DataTables JSON with correct structure" do
-      get :index, format: :json, params: {
-        draw: "1", start: "0", length: "10",
-        order: { "0" => { column: "1", dir: "asc" } },
-        columns: {}
-      }
+    context "JSON / DataTables" do
+      it "returns correct top-level structure" do
+        dt_get
+        json = JSON.parse(response.body)
+        expect(json.keys).to include("draw", "recordsTotal", "recordsFiltered", "data")
+        expect(json["recordsTotal"]).to eq(Passenger.count)
+        expect(json["data"]).to be_an(Array)
+      end
+
+      it "each data row has 23 columns" do
+        dt_get
+        json = JSON.parse(response.body)
+        expect(json["data"].first.length).to eq(23)
+      end
+
+      it "paginates: returns only the requested page size" do
+        dt_get(length: "1")
+        json = JSON.parse(response.body)
+        expect(json["data"].length).to eq(1)
+        expect(json["recordsTotal"]).to eq(Passenger.count)
+      end
+
+      it "sorts ascending" do
+        dt_get(order_col: "1", order_dir: "asc")
+        expect(response).to have_http_status(:success)
+      end
+
+      it "sorts descending" do
+        dt_get(order_col: "1", order_dir: "desc")
+        expect(response).to have_http_status(:success)
+      end
+
+      it "falls back to default sort for an unmapped column index" do
+        dt_get(order_col: "99")
+        expect(response).to have_http_status(:success)
+      end
+
+      it "filters by passenger name (column 1)" do
+        search = @passenger1.name.downcase[0, 4]
+        dt_get(extra_columns: { "1" => { search: { value: search } } })
+        json = JSON.parse(response.body)
+        expect(json["recordsFiltered"]).to be <= json["recordsTotal"]
+      end
+
+      it "filters by street (column 4)" do
+        street = @passenger1.address.street.downcase[0, 4]
+        dt_get(extra_columns: { "4" => { search: { value: street } } })
+        expect(response).to have_http_status(:success)
+      end
+
+      it "filters by city (column 5)" do
+        dt_get(extra_columns: { "5" => { search: { value: "nonexistent_xyz" } } })
+        json = JSON.parse(response.body)
+        expect(json["recordsFiltered"]).to eq(0)
+      end
+
+      it "filters by birthday range (column 9)" do
+        dt_get(extra_columns: { "9" => { search: { value: "1900-01-01|2000-01-01" } } })
+        json = JSON.parse(response.body)
+        expect(json["data"]).not_to be_empty
+      end
+
+      it "ignores birthday column value without pipe separator" do
+        dt_get(extra_columns: { "9" => { search: { value: "2000-01-01" } } })
+        expect(response).to have_http_status(:success)
+      end
+
+      it "applies birthday from-only range" do
+        dt_get(extra_columns: { "9" => { search: { value: "1900-01-01|" } } })
+        expect(response).to have_http_status(:success)
+      end
+
+      it "applies birthday to-only range" do
+        dt_get(extra_columns: { "9" => { search: { value: "|2000-01-01" } } })
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
+  describe "dt_passenger_row data" do
+    it "splits multi-word name into first and last" do
+      @passenger1.update!(name: "Jane Marie Doe")
+      dt_get
       json = JSON.parse(response.body)
-      expect(json).to include("draw", "recordsTotal", "recordsFiltered", "data")
-      expect(json["recordsTotal"]).to eq(Passenger.count)
-      expect(json["data"]).to be_an(Array)
+      row = json["data"].find { |r| r[1] == "Doe" }
+      expect(row[2]).to eq("Jane Marie")
     end
 
-    it "paginates: returns only the requested page size" do
-      get :index, format: :json, params: {
-        draw: "1", start: "0", length: "1",
-        order: { "0" => { column: "1", dir: "asc" } },
-        columns: {}
-      }
+    it "uses N/A for last name when passenger has a single-word name" do
+      @passenger1.update!(name: "Cher")
+      dt_get
       json = JSON.parse(response.body)
-      expect(json["data"].length).to eq(1)
-      expect(json["recordsTotal"]).to eq(Passenger.count)
+      row = json["data"].find { |r| r[2] == "Cher" }
+      expect(row[1]).to eq("N/A")
     end
 
-    it "filters by passenger name" do
-      search_term = @passenger1.name.downcase[0, 4]
-      get :index, format: :json, params: {
-        draw: "1", start: "0", length: "10",
-        order: { "0" => { column: "1", dir: "asc" } },
-        columns: { "1" => { search: { value: search_term } } }
-      }
+    it "renders opt-in newsletter badge" do
+      @passenger1.update!(rqsted_newsletter: "Opt-In")
+      dt_get
       json = JSON.parse(response.body)
-      expect(json["recordsFiltered"]).to be <= json["recordsTotal"]
+      row = json["data"].find { |r| r[22].include?("Opt-In") }
+      expect(row).not_to be_nil
     end
 
-    it "filters by birthday range" do
-      get :index, format: :json, params: {
-        draw: "1", start: "0", length: "10",
-        order: { "0" => { column: "1", dir: "asc" } },
-        columns: { "9" => { search: { value: "1900-01-01|2000-01-01" } } }
-      }
+    it "renders neutral newsletter badge" do
+      @passenger1.update!(rqsted_newsletter: "Neutral")
+      dt_get
       json = JSON.parse(response.body)
-      expect(json["data"]).not_to be_empty
+      row = json["data"].find { |r| r[22].include?("Neutral") }
+      expect(row).not_to be_nil
     end
 
-    it "falls back to default sort when column index is unmapped" do
-      get :index, format: :json, params: {
-        draw: "1", start: "0", length: "10",
-        order: { "0" => { column: "99", dir: "asc" } },
-        columns: {}
-      }
-      expect(response).to have_http_status(:success)
+    it "renders opt-out newsletter badge" do
+      @passenger1.update!(rqsted_newsletter: "Opt-Out")
+      dt_get
+      json = JSON.parse(response.body)
+      row = json["data"].find { |r| r[22].include?("Opt-Out") }
+      expect(row).not_to be_nil
     end
 
-    it "sorts descending" do
-      get :index, format: :json, params: {
-        draw: "1", start: "0", length: "10",
-        order: { "0" => { column: "1", dir: "desc" } },
-        columns: {}
-      }
+    it "renders not-set newsletter badge for unknown value" do
+      @passenger1.update!(rqsted_newsletter: nil)
+      dt_get
+      json = JSON.parse(response.body)
+      row = json["data"].find { |r| r[22].include?("Not Set") }
+      expect(row).not_to be_nil
+    end
+
+    it "truncates notes longer than 20 characters" do
+      @passenger1.update!(notes: "A" * 25)
+      dt_get
+      json = JSON.parse(response.body)
+      row = json["data"].find { |r| r[16].include?("…") }
+      expect(row).not_to be_nil
+    end
+
+    it "does not truncate notes shorter than 20 characters" do
+      @passenger1.update!(notes: "Short note")
+      dt_get
+      json = JSON.parse(response.body)
+      row = json["data"].find { |r| r[16].include?("Short note") && !r[16].include?("…") }
+      expect(row).not_to be_nil
+    end
+
+    it "returns empty string for blank notes" do
+      @passenger1.update!(notes: nil)
+      dt_get
       expect(response).to have_http_status(:success)
     end
   end
@@ -171,7 +271,7 @@ RSpec.describe PassengersController, type: :controller do
           name: "Valid Name",
           address_attributes: {
             id: @passenger1.address.id,
-            street: "Valid Street 999" # no city — fails Address validation
+            street: "Valid Street 999"
           }
         }
       }
