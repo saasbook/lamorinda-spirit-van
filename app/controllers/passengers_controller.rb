@@ -133,10 +133,15 @@ class PassengersController < ApplicationController
     sort_col  = DT_SORT_COLUMNS_PASSENGERS[col_idx] || "passengers.name"
     base      = base.order(Arel.sql("#{sort_col} #{direction}"))
 
-    start  = params[:start].to_i
-    length = [params[:length].to_i, 1].max
+    is_export = params[:length].to_i == -1
 
-    passengers = base.includes(:address).offset(start).limit(length)
+    passengers = if is_export
+      base.includes(:address)
+    else
+      start  = params[:start].to_i
+      length = [params[:length].to_i, 1].max
+      base.includes(:address).offset(start).limit(length)
+    end
 
     {
       draw:            params[:draw].to_i,

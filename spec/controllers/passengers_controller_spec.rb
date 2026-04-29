@@ -188,6 +188,18 @@ RSpec.describe PassengersController, type: :controller do
     end
   end
 
+  describe "GET #edit" do
+    it "returns http success" do
+      get :edit, params: { id: @passenger1.id }
+      expect(response).to have_http_status(:success)
+    end
+
+    it "sets safe_return_url" do
+      get :edit, params: { id: @passenger1.id, return_url: "/rides/new" }
+      expect(assigns(:safe_return_url)).to eq("/rides/new")
+    end
+  end
+
   describe "GET #new" do
     it "returns http success" do
       get :new
@@ -247,6 +259,18 @@ RSpec.describe PassengersController, type: :controller do
     it "renders new when passenger creation fails" do
       post :create, params: { passenger: { address_id: nil } }
       expect(response).to render_template(:new)
+    end
+
+    it "appends selected_passenger_id to a valid return_url after create" do
+      post :create, params: { passenger: valid_attributes, return_url: "/rides/new" }
+      new_passenger = Passenger.last
+      expect(response).to redirect_to("/rides/new?selected_passenger_id=#{new_passenger.id}")
+    end
+
+    it "falls back to passengers_path when return_url yields an invalid URI" do
+      allow(controller).to receive(:safe_return_url).and_return("\x00bad_uri")
+      post :create, params: { passenger: valid_attributes }
+      expect(response).to redirect_to(passengers_path)
     end
   end
 

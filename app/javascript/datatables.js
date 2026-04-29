@@ -488,7 +488,23 @@ const initiateDatatables = () => {
         "<'row'<'col-md-6'l><'col-md-6'Bp>>" +
         "<'row'<'col-md-12'tr>>" +
         "<'row'<'col-md-6'i><'col-md-6'>>",
-      buttons: ["excel", "csv", "print"],
+      buttons: [
+        {
+          extend: "excel",
+          text: "Excel",
+          action: function (e, dt, button, config) {
+            exportAllData(dt, "excel", this, e, button, config);
+          }
+        },
+        {
+          extend: "csv",
+          text: "CSV",
+          action: function (e, dt, button, config) {
+            exportAllData(dt, "csv", this, e, button, config);
+          }
+        },
+        "print"
+      ],
     });
 
     // Hide Street, City, Zip columns (indices 4, 5, 6) by default
