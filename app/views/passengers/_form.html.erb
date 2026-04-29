@@ -81,8 +81,7 @@
               <%= address_form.label :name, "Location Name", class: "form-label" %>
               <%= address_form.text_field :name,
                                         value: @passenger.address&.name,
-                                        class: "form-control",
-                                        placeholder: "e.g. Senior Center (optional)" %>
+                                        class: "form-control" %>
             </div>
 
             <div class="mb-3">
@@ -116,8 +115,7 @@
               <%= address_form.label :phone, "Address Phone", class: "form-label" %>
               <%= address_form.text_field :phone,
                                         value: @passenger.address&.phone,
-                                        class: "form-control",
-                                        placeholder: "e.g. 925-555-0100 (optional)" %>
+                                        class: "form-control" %>
             </div>
           <% end %>
         </div>
