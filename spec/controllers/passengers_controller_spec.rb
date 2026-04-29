@@ -67,6 +67,12 @@ RSpec.describe PassengersController, type: :controller do
         expect(response).to have_http_status(:success)
       end
 
+      it "returns all records when length is -1 (export mode)" do
+        dt_get(length: "-1")
+        json = JSON.parse(response.body)
+        expect(json["data"].length).to eq(Passenger.count)
+      end
+
       it "filters by passenger name (column 1)" do
         search = @passenger1.name.downcase[0, 4]
         dt_get(extra_columns: { "1" => { search: { value: search } } })

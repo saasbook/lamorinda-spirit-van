@@ -26,6 +26,8 @@ class Passenger < ApplicationRecord
     lookup = normalized.slice(:street, :city, :zip_code)
     existing = Address.find_by(lookup)
     if existing
+      meta = normalized.slice(:name, :phone).compact_blank
+      existing.update(meta) if meta.any?
       self.address = existing
     else
       super(normalized)
