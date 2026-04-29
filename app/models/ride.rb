@@ -14,7 +14,6 @@ class Ride < ApplicationRecord
 
   after_create :create_initial_feedback
 
-  # this causes problems -- duplicated addresses  <--  Not Anymore ^^
   # accepts_nested_attributes_for :start_address
   # accepts_nested_attributes_for :dest_address
 
