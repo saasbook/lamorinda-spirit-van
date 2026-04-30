@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Ride < ApplicationRecord
+  RIDE_TYPES = %w[EP EM ES EG Lunch Shop].freeze
+  FARE_TYPES = %w[R LI LMV CC Shop].freeze
+
   has_one :feedback, dependent: :destroy
   belongs_to :passenger, optional: true
   belongs_to :driver
@@ -11,7 +14,6 @@ class Ride < ApplicationRecord
 
   after_create :create_initial_feedback
 
-  # this causes problems -- duplicated addresses  <--  Not Anymore ^^
   # accepts_nested_attributes_for :start_address
   # accepts_nested_attributes_for :dest_address
 
@@ -59,10 +61,11 @@ class Ride < ApplicationRecord
   end
 
   def get_all_linked_rides
-    chain = [self]
+    # If 3 -> 2 -> 1, and this is 3, returns [3, 2, 1]
+    chain = []
     current = self
-    while current.next_ride
-      chain << current.next_ride
+    while current
+      chain << current
       current = current.next_ride
     end
     chain

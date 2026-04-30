@@ -4,6 +4,8 @@ class Shift < ApplicationRecord
   belongs_to :driver
   validates :shift_date, :shift_type, presence: true
 
+  SHIFT_TYPES = %w[AM PM Volunteer CC].freeze
+
   def self.shifts_by_date(shifts, shift_date)
     shifts.where(shift_date: shift_date)
   end

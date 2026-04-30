@@ -8,6 +8,7 @@ document.addEventListener("turbo:load", function () {
     $(function () {
       $("#ride_passenger_name").autocomplete({
         source: gon.passengers,
+        minLength: 2,
       });
 
       // Set autocomplete attribute because jquery automatically sets it
@@ -100,6 +101,7 @@ document.addEventListener("turbo:load", function () {
           city: a.city,
           phone: a.phone,
         })),
+        minLength: 2,
       });
 
       $("#ride_start_address_attributes_name").autocomplete({
@@ -112,6 +114,7 @@ document.addEventListener("turbo:load", function () {
             city: a.city,
             phone: a.phone,
           })),
+        minLength: 2,
       });
 
       // Set autocomplete attribute because jquery automatically sets it
@@ -177,6 +180,7 @@ document.addEventListener("turbo:load", function () {
 
         $input.autocomplete({
           source: source,
+          minLength: 2,
           select: function (event, ui) {
             $(`#${baseId}_name`).val(ui.item.name ?? "");
             $(`#${baseId}_street`).val(ui.item.street);
