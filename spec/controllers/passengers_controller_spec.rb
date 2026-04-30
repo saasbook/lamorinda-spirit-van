@@ -265,6 +265,7 @@ RSpec.describe PassengersController, type: :controller do
     it "renders new when passenger creation fails" do
       post :create, params: { passenger: { address_id: nil } }
       expect(response).to render_template(:new)
+      expect(response).to have_http_status(:unprocessable_entity)
     end
 
     it "appends selected_passenger_id to a valid return_url after create" do
@@ -295,8 +296,10 @@ RSpec.describe PassengersController, type: :controller do
     end
 
     it "renders edit when passenger update fails" do
-      post :update, params: { id: @passenger1.id, passenger: { address_id: nil } }
+      allow_any_instance_of(Passenger).to receive(:update).and_return(false)
+      post :update, params: { id: @passenger1.id, passenger: { phone: "1234567890" } }
       expect(response).to render_template(:edit)
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 
