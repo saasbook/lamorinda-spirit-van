@@ -138,12 +138,6 @@ RSpec.describe Passenger, type: :model do
       end
     end
 
-    # -------------------------------------------------------------------------
-    # Bug: address_attributes= strips name and phone before saving/finding,
-    # so those fields are never persisted and duplicates are created when only
-    # name differs on an otherwise identical street/city/zip.
-    # -------------------------------------------------------------------------
-
     context "address name and phone fields" do
       let(:base_passenger_attrs) do
         {
@@ -203,20 +197,37 @@ RSpec.describe Passenger, type: :model do
         expect(Passenger.last.address_id).to eq(existing.id)
       end
 
-      it "reuses existing address when same street/city/zip exists even if name differs" do
-        # The DB unique constraint is on (street, city, zip_code) — name is metadata,
-        # not part of the address identity. Same location = same record.
+      it "creates a duplicate when given a different address name" do
         existing = create(:address,
-          name: "Old Name", street: "400 Pine St", city: "Orinda", zip_code: "94563")
+          name: "Junior Center", street: "300 Oak St", city: "Moraga", zip_code: "94556")
 
         expect {
           Passenger.create!(
             base_passenger_attrs.merge(
               address_attributes: {
-                name:     "New Name",
-                street:   "400 Pine St",
-                city:     "Orinda",
-                zip_code: "94563"
+                name:     "Senior Center",
+                street:   "300 Oak St",
+                city:     "Moraga",
+                zip_code: "94556"
+              }
+            )
+          )
+        }.to change(Address, :count).by(1)
+
+        expect(Passenger.last.address_id).to eq(existing.id)
+      end
+
+      it "reuses existing address when same street/city/zip exists even if name differs" do
+        existing = create(:address,
+          street: "400 Pine St", city: "Orinda", phone: "123.456.7890")
+
+        expect {
+          Passenger.create!(
+            base_passenger_attrs.merge(
+              address_attributes: {
+                street: "400 Pine St",
+                city:   "Orinda",
+                phone:  "666.666.6666"
               }
             )
           )

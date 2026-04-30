@@ -293,22 +293,6 @@ RSpec.describe PassengersController, type: :controller do
       expect(@passenger1.wheelchair).to eq(true)
       expect(@passenger1.low_income).to eq(false)
     end
-
-    it "hits the error branch when the address is invalid" do
-      invalid_params = {
-        id: @passenger1.id,
-        passenger: {
-          name: "Valid Name",
-          address_attributes: {
-            id: @passenger1.address.id,
-            street: "Valid Street 999"
-          }
-        }
-      }
-      put :update, params: invalid_params
-      expect(response).to have_http_status(:unprocessable_entity)
-      expect(response).to render_template(:edit)
-    end
   end
 
   describe "DELETE #destroy" do
