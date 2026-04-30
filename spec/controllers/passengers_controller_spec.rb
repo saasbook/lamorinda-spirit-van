@@ -274,8 +274,8 @@ RSpec.describe PassengersController, type: :controller do
     end
 
     it "falls back to passengers_path when return_url yields an invalid URI" do
-      allow(controller).to receive(:safe_return_url).and_return("\x00bad_uri")
-      post :create, params: { passenger: valid_attributes }
+      bad_uri = "http://?invalid:uri!"
+      post :create, params: { passenger: valid_attributes, return_url: bad_uri }
       expect(response).to redirect_to(passengers_path)
     end
   end
@@ -292,6 +292,11 @@ RSpec.describe PassengersController, type: :controller do
       @passenger1.reload
       expect(@passenger1.wheelchair).to eq(true)
       expect(@passenger1.low_income).to eq(false)
+    end
+
+    it "renders edit when passenger update fails" do
+      post :update, params: { id: @passenger1.id, passenger: { address_id: nil } }
+      expect(response).to render_template(:edit)
     end
   end
 
