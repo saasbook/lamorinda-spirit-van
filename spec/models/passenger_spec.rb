@@ -75,11 +75,12 @@ RSpec.describe Passenger, type: :model do
 
     context "when updating a passenger with an already existing address record" do
       it "reuses existing address when updated with matching address fields" do
-        existing_address = create(:address, street: "123 Main St", city: "Orinda")
+        existing_address = create(:address, name: "Blueberry Cheese Creek", street: "123 Main St", city: "Orinda")
         passenger = create(:passenger)
 
         expect {
           passenger.update(address_attributes: {
+            name: "Blueberry Cheese Creek",
             street: "123 Main St",
             city: "Orinda",
           })
@@ -113,7 +114,7 @@ RSpec.describe Passenger, type: :model do
 
     context "when creating a passenger with an existing address" do
       it "reuses an existing address" do
-        existing_address = create(:address, street: "123 Shared St", city: "Orinda")
+        existing_address = create(:address, name: nil, street: "123 Shared St", city: "Orinda")
 
         passenger_attrs = {
           name: "Duplicate Address Tester",
@@ -197,7 +198,7 @@ RSpec.describe Passenger, type: :model do
         expect(Passenger.last.address_id).to eq(existing.id)
       end
 
-      it "creates a duplicate when given a different address name" do
+      it "creates a distinct address when given a different address name" do
         existing = create(:address,
           name: "Junior Center", street: "300 Oak St", city: "Moraga", zip_code: "94556")
 
@@ -214,17 +215,18 @@ RSpec.describe Passenger, type: :model do
           )
         }.to change(Address, :count).by(1)
 
-        expect(Passenger.last.address_id).to eq(existing.id)
+        expect(Passenger.last.address_id).not_to eq(existing.id)
       end
 
-      it "reuses existing address when same street/city/zip exists even if name differs" do
+      it "reuses existing address when same street/city/name exists even if phone differs" do
         existing = create(:address,
-          street: "400 Pine St", city: "Orinda", phone: "123.456.7890")
+          name: "Waldjaegerin", street: "400 Pine St", city: "Orinda", phone: "123.456.7890")
 
         expect {
           Passenger.create!(
             base_passenger_attrs.merge(
               address_attributes: {
+                name: "Waldjaegerin",
                 street: "400 Pine St",
                 city:   "Orinda",
                 phone:  "666.666.6666"

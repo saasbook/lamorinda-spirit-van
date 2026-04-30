@@ -252,9 +252,9 @@ RSpec.describe PassengersController, type: :controller do
     end
 
     it "reuses an existing address on create" do
-      existing = FactoryBot.create(:address, street: "100 Shared Ln", city: "Lafayette", zip_code: "94549")
+      existing = FactoryBot.create(:address, name: nil, street: "100 Shared Ln", city: "Lafayette", zip_code: "94549")
       attrs = valid_attributes.merge(address_attributes: {
-        street: "100 Shared Ln", city: "Lafayette", zip_code: "94549"
+        name: nil, street: "100 Shared Ln", city: "Lafayette", zip_code: "94549"
       })
       expect {
         post :create, params: { passenger: attrs }
