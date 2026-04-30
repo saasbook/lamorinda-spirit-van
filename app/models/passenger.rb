@@ -14,8 +14,8 @@ class Passenger < ApplicationRecord
     return super if attrs.values.all?(&:blank?)
 
     normalized = {}
-    normalized[:name]     = attrs[:name].to_s.strip          if attrs[:name].present?
-    normalized[:phone]    = attrs[:phone].to_s.strip         if attrs[:phone].present?
+    normalized[:name]     = attrs[:name].to_s.strip.presence
+    normalized[:phone]    = attrs[:phone].to_s.strip           if attrs[:phone].present?
     normalized[:street]   = attrs[:street].to_s.strip.titleize if attrs[:street].present?
     normalized[:city]     = attrs[:city].to_s.strip.titleize   if attrs[:city].present?
     normalized[:state]    = attrs[:state].to_s.strip.upcase    if attrs[:state].present?
@@ -23,15 +23,11 @@ class Passenger < ApplicationRecord
 
     # Look up only by the DB unique key (street + city + zip_code).
     # name and phone are metadata, not part of the uniqueness constraint.
-    lookup = normalized.slice(:street, :city, :zip_code)
-    existing = Address.find_by(lookup)
-    if existing
-      meta = normalized.slice(:name, :phone).compact_blank
-      existing.update(meta) if meta.any?
-      self.address = existing
-    else
-      super(normalized)
-    end
+    lookup = normalized.slice(:street, :city, :name)
+    addr = Address.find_or_create_by!(lookup)
+    meta = normalized.slice(:phone)
+    addr.update(meta) if meta.any?
+    self.address = addr
   end
 
   def hispanic?
