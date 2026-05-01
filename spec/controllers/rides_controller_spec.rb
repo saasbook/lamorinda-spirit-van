@@ -102,7 +102,7 @@ RSpec.describe RidesController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
-    it "assigns only active drivers to @drivers and gon" do
+    it "assigns only active drivers to @drivers" do
       inactive_driver = FactoryBot.create(:driver, active: false)
       active_driver = FactoryBot.create(:driver, active: true)
 
@@ -110,6 +110,16 @@ RSpec.describe RidesController, type: :controller do
 
       expect(assigns(:drivers)).to include(active_driver)
       expect(assigns(:drivers)).not_to include(inactive_driver)
+    end
+
+    it "assigns only active passengers to @passengers" do
+      inactive_passenger = FactoryBot.create(:passenger, active: false)
+      active_passenger = FactoryBot.create(:passenger, active: true)
+
+      get :new
+
+      expect(assigns(:passengers)).to include(active_passenger)
+      expect(assigns(:passengers)).not_to include(inactive_passenger)
     end
   end
 
@@ -136,6 +146,25 @@ RSpec.describe RidesController, type: :controller do
       get :edit, params: { id: @ride1.id }
 
       expect(assigns(:drivers)).not_to include(unrelated_inactive)
+    end
+
+    it "includes an inactive passenger if they are assigned to the current ride chain" do
+      quit_passenger = FactoryBot.create(:passenger, active: false)
+
+      tail_ride = FactoryBot.create(:ride, passenger: quit_passenger, driver: @driver2)
+      head_ride = FactoryBot.create(:ride, passenger: quit_passenger, driver: @driver1)
+      head_ride.update!(next_ride: tail_ride)
+
+      get :edit, params: { id: head_ride.id }
+
+      expect(assigns(:passengers)).to include(quit_passenger)
+    end
+
+    it "excludes unrelated inactive passengers" do
+      unrelated_inactive = FactoryBot.create(:passenger, active: false)
+      get :edit, params: { id: @ride1.id }
+
+      expect(assigns(:passengers)).not_to include(unrelated_inactive)
     end
   end
 
@@ -506,6 +535,21 @@ RSpec.describe RidesController, type: :controller do
 
       # 4. Confirm they are NOT in the dropdown list for the new (duplicate) ride
       expect(assigns(:drivers)).not_to include(retired_driver)
+    end
+
+    it "blocks an inactive passenger even if they were the original passenger" do
+      # 1. Create a passenger and a ride assigned to them
+      quit_passenger = FactoryBot.create(:passenger, active: true)
+      old_ride = FactoryBot.create(:ride, passenger: quit_passenger, driver: @driver1)
+
+      # 2. Passenger quits
+      quit_passenger.update(active: false)
+
+      # 3. Duplicate the old ride
+      get :duplicate, params: { id: old_ride.id }
+
+      # 4. Confirm they are NOT in the dropdown list for the new (duplicate) ride
+      expect(assigns(:passengers)).not_to include(quit_passenger)
     end
   end
 
