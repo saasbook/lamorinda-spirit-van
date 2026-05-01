@@ -320,7 +320,7 @@ class RidesController < ApplicationController
 
   def dt_actions_cell(ride)
     btn = "btn btn-sm"
-    sty = "style=\"width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\""
+    sty = "style=\"width:81.09px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\""
     feedback = if ride.feedback
       %(<a href="#{feedback_path(ride.feedback)}" class="#{btn} btn-primary" #{sty}>Feedback</a>)
     else
