@@ -221,9 +221,9 @@ class RidesController < ApplicationController
     sort_col  = DT_SORT_COLUMNS[col_idx] || "rides.date"
     base      = base.order(Arel.sql("#{sort_col} #{direction}"))
 
-    rides = base.includes(:feedback, :driver, :passenger, :start_address, :dest_address, :next_ride)
-
-    unless is_export
+    if is_export
+      rides = base.includes(:feedback, :driver, :passenger, :start_address, :dest_address, :next_ride)
+    else
       start  = params[:start].to_i
       length = [params[:length].to_i, 1].max
       rides = base

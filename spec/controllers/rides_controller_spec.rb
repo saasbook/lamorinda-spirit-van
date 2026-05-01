@@ -33,12 +33,22 @@ RSpec.describe RidesController, type: :controller do
 
     it "returns rides data as JSON for DataTables" do
       # Simulates the AJAX request DataTables sends on every page load/sort/filter.
-      get :index, format: :json, params: { draw: "1", start: "0", length: "10",
+      get :index, format: :json, params: { draw: "1", start: "1", length: "3",
         order: { "0" => { column: "1", dir: "desc" } }, columns: {} }
       expect(response).to be_successful
       json = JSON.parse(response.body)
       expect(json["recordsTotal"]).to eq(4)
-      expect(json["data"].length).to be <= 4
+      expect(json["data"].length).to be <= 3
+    end
+
+    it "doesn't apply pagination limits if is_export" do
+      get :index, format: :json, params: {
+        draw: "1", start: "0", length: "-1",
+        order: { "0" => { column: "1", dir: "asc" } },
+        columns: { "2" => { search: { value: @driver1.name } } }
+      }
+      json = JSON.parse(response.body)
+      expect(json["recordsFiltered"]).to eq(json["data"].length)
     end
 
     it "filters rides by a text column search value" do
