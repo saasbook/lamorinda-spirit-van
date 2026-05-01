@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Ride < ApplicationRecord
+  RIDE_TYPES = %w[EP EM ES EG Lunch Shop].freeze
+  FARE_TYPES = %w[R LI LMV CC Shop].freeze
+
   has_one :feedback, dependent: :destroy
   belongs_to :passenger, optional: true
   belongs_to :driver
@@ -11,64 +14,58 @@ class Ride < ApplicationRecord
 
   after_create :create_initial_feedback
 
-  # this causes problems -- duplicated addresses
   # accepts_nested_attributes_for :start_address
   # accepts_nested_attributes_for :dest_address
 
   def start_address_attributes=(attrs)
-    normalized = normalize_address(attrs)
-    self.start_address = Address.find_or_create_by!(normalized)
+    self.start_address = get_or_generate_address(attrs)
   end
 
   def dest_address_attributes=(attrs)
-    normalized = normalize_address(attrs)
-    self.dest_address = Address.find_or_create_by!(normalized)
+    self.dest_address = get_or_generate_address(attrs)
   end
 
-  def self.build_linked_rides(ride_attrs, addrs, stops_data = [])
+  def self.build_linked_rides!(ride_attrs, addrs, stops_data = [])
     created_rides = []
     prev_ride = nil
 
-    ActiveRecord::Base.transaction do
-      i = 0
-      while i < (addrs.length - 1)
-        origin = addrs[i]
-        destination = addrs[i + 1]
+    addrs&.each_cons(2)&.with_index do |(origin, destination), i|
+      # Create ride with base attributes
+      ride = Ride.new(ride_attrs)
 
-        # Create ride with base attributes
-        ride = Ride.new(ride_attrs)
-        ride.start_address_attributes = origin
-        ride.dest_address_attributes = destination
+      # These setters use find_or_create_by! and would raise ActiveRecord::RecordInvalid if necessary
+      ride.start_address_attributes = origin
+      ride.dest_address_attributes = destination
 
-        # Override driver and van if provided in stops_data
-        if stops_data.present? && stops_data[i].present?
-          stop_data = stops_data[i]
-          ride.driver_id = stop_data[:driver_id] if stop_data[:driver_id].present?
-          ride.van = stop_data[:van] if stop_data[:van].present?
-        end
-
-        if prev_ride
-          prev_ride.next_ride = ride
-          prev_ride.save!
-        end
-
-        ride.save!
-        created_rides << ride
-        prev_ride = ride
-        i += 1
+      # Override driver and van if provided in stops_data
+      if stops_data&.[](i)
+        stop_data = stops_data[i]
+        ride.driver_id = stop_data[:driver_id] if stop_data[:driver_id].present?
+        ride.van = stop_data[:van] if stop_data[:van].present?
       end
+
+      if prev_ride
+        prev_ride.next_ride = ride
+      end
+
+      ride.validate!
+      created_rides << ride
+      prev_ride = ride
     end
 
-    [created_rides, true]
-  rescue => e
-    [e, false]
+    if created_rides.empty?
+      raise ActiveRecord::RecordInvalid.new(Ride.new)
+    end
+
+    created_rides
   end
 
   def get_all_linked_rides
-    chain = [self]
+    # If 3 -> 2 -> 1, and this is 3, returns [3, 2, 1]
+    chain = []
     current = self
-    while current.next_ride
-      chain << current.next_ride
+    while current
+      chain << current
       current = current.next_ride
     end
     chain
@@ -110,7 +107,14 @@ class Ride < ApplicationRecord
       name: attrs[:name].to_s.strip.presence,
       street: attrs[:street].to_s.strip.titleize,
       city: attrs[:city].to_s.strip.titleize,
-      phone: attrs[:phone].to_s.strip.presence,
-    }.compact
+    }
+  end
+
+  def get_or_generate_address(attrs)
+    normalized = normalize_address(attrs)
+    addr = Address.find_or_create_by!(normalized)
+    addr.update(phone: attrs[:phone].to_s.strip.presence) if attrs[:phone].present?
+
+    addr
   end
 end

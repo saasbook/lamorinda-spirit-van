@@ -2,6 +2,7 @@
 
 class RidesController < ApplicationController
   before_action :set_ride, only: %i[ show edit update destroy ]
+  before_action :set_active_drivers, only: %i[ new edit create update duplicate ]
   before_action -> { require_role("admin", "dispatcher") }, only: %i[ index new edit create update destroy duplicate ]
 
   # Have only rides without previous rides (HEAD rides) be displayed
@@ -25,9 +26,6 @@ class RidesController < ApplicationController
     @ride.build_start_address
     @ride.build_dest_address
 
-    # For driver dropdown list in creating / updating
-    @drivers = Driver.order(:name)
-
     # For autofilling first stop's driver
     @ride.driver_id = params[:driver_id]
 
@@ -37,24 +35,30 @@ class RidesController < ApplicationController
 
   def create
     ride_attrs, addresses, stops_data = Ride.extract_attrs_from_params(ride_params)
-    result_rides, success = Ride.build_linked_rides(ride_attrs, addresses, stops_data)
 
-    if success
-      @ride = result_rides[0]
+    begin
+      new_rides = Ride.build_linked_rides!(ride_attrs, addresses, stops_data)
+
+      new_rides.each(&:save!)
+      @ride = new_rides.first
+
       session[:return_to] ||= rides_path
       redirect_to session[:return_to], notice: "Ride was successfully created."
-    else
+
+    rescue ActiveRecord::RecordInvalid => e
       @ride = Ride.new(ride_attrs)
-      @ride.valid?
-      flash[:alert] = @ride.errors.full_messages.join
-      Rails.logger.info("Ride creation failed: #{@ride.errors.full_messages}")
-      render :new
+      flash.now[:alert] = "Creation failed: #{e.record.errors.full_messages.join('! ')}"
+      render :new, status: :unprocessable_entity
+
+    rescue => e
+      flash[:alert] = "A system error occurred: #{e.message}"
+      Rails.logger.error("System Error: #{e.backtrace.first(5)}")
+      render :new, status: :unprocessable_entity
     end
   end
 
   def edit
     # For driver dropdown list in creating / updating
-    set_ride
     @all_rides = @ride.get_all_linked_rides
 
     # Load all passengers with their associations at once
@@ -65,38 +69,41 @@ class RidesController < ApplicationController
   end
 
   def update
-    set_ride
-    @drivers = Driver.order(:name)
-
     # Before destroying, copy feedback
     @feedback = @ride.feedback
     old_feedback_attrs = @feedback.attributes.except("id", "created_at", "updated_at", "ride_id") if @feedback
 
+    all_rides = @ride.get_all_linked_rides
     ride_attrs, addresses, stops_data = Ride.extract_attrs_from_params(ride_params)
 
-    # Destroy old ride chain
-    all_rides = @ride.get_all_linked_rides
-    ActiveRecord::Base.transaction do
-      all_rides.reverse_each(&:destroy!)
-    end
+    begin
+      new_rides = Ride.build_linked_rides!(ride_attrs, addresses, stops_data)
 
-    # Rebuild new ride chain
-    result_rides, success = Ride.build_linked_rides(ride_attrs, addresses, stops_data)
+      ActiveRecord::Base.transaction do
+        # Destroy old ride chain
+        all_rides.reverse_each(&:destroy!)
 
-    if success
-      @ride = result_rides[0]
-      @ride.feedback.destroy if @ride.feedback && old_feedback_attrs
-      @ride.create_feedback!(old_feedback_attrs) if old_feedback_attrs
-      @ride.save!
+        new_rides.each(&:save!)
+        @ride = new_rides.first
+
+        if old_feedback_attrs
+          @ride.feedback&.destroy!
+          @ride.create_feedback!(old_feedback_attrs)
+        end
+      end
+
       flash[:notice] = "Ride was successfully updated."
       redirect_to edit_ride_path(@ride)
-    else
-      @all_rides = @ride.get_all_linked_rides
+
+    rescue ActiveRecord::RecordInvalid => e
+      @all_rides = all_rides
       @ride = Ride.new(ride_attrs)
-      @ride.valid?
-      flash[:alert] = @ride.errors.full_messages.join
-      Rails.logger.info("Ride update failed: #{@ride.errors.full_messages}")
-      render :edit
+      flash.now[:alert] = "Update failed: #{e.record.errors.full_messages.join('! ')}"
+      render :edit, status: :unprocessable_entity
+
+    rescue => e
+      Rails.logger.error("System Error: #{e.backtrace.first(5)}")
+      raise e
     end
   end
 
@@ -317,7 +324,7 @@ class RidesController < ApplicationController
 
   def dt_actions_cell(ride)
     btn = "btn btn-sm"
-    sty = "style=\"width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\""
+    sty = "style=\"width:81.09px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\""
     feedback = if ride.feedback
       %(<a href="#{feedback_path(ride.feedback)}" class="#{btn} btn-primary" #{sty}>Feedback</a>)
     else
@@ -358,8 +365,15 @@ class RidesController < ApplicationController
     @ride = Ride.find(params[:id])
   end
 
+  def set_active_drivers
+    @drivers = Driver.active
+                     .or(Driver.where(id: @ride.present? ? @ride.get_all_linked_rides.pluck(:driver_id) : []))
+                     .order(:name)
+                     .distinct
+    gon.drivers = @drivers.map { |d| { id: d.id, name: d.name } }
+  end
+
   def load_gon_data
-    @drivers = Driver.order(:name)
     passengers_with_data = Passenger.includes(:address, :rides)
 
     gon.passengers = passengers_with_data.map { |p| {

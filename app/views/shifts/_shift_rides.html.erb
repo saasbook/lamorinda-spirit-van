@@ -16,7 +16,7 @@
               <th class="border-0">Notes</th>
               <th class="border-0">Status</th>
             </tr>
-          </thead>
+          </thead>    
 
           <tbody>
             <% @rides.each do |ride| %>
@@ -30,13 +30,14 @@
                       No Feedback
                     <% end %>
                     <%= link_to 'Edit', edit_ride_path(ride), class: "btn btn-sm btn-primary" %>
+                    <%= link_to 'Duplicate', duplicate_ride_path(ride), data: { turbo: false }, class: "btn btn-sm btn-primary" %>
                     <%= link_to 'Delete', ride,
                         data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
                         class: "btn btn-sm btn-danger" %>
                   </div>
                 </td>
                 <td><%= ride.passenger&.name || 'N/A' %></td>
-                <td><%= link_to ride.passenger.phone || 'N/A', "tel:#{ride.passenger.phone.gsub(/[^\d+]/, '')}" %></td>
+                <td><%= link_to ride.passenger&.phone || 'N/A', "tel:#{ride.passenger&.phone&.gsub(/[^\d+]/, '')}" %></td>
                 <td>
                   <% 
                     all_rides = ride.get_all_linked_rides

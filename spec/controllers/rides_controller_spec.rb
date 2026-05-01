@@ -106,6 +106,49 @@ RSpec.describe RidesController, type: :controller do
     end
   end
 
+  describe "GET #new" do
+    it "returns a successful response" do
+      get :new
+      expect(response).to have_http_status(:success)
+    end
+
+    it "assigns only active drivers to @drivers and gon" do
+      inactive_driver = FactoryBot.create(:driver, active: false)
+      active_driver = FactoryBot.create(:driver, active: true)
+
+      get :new
+
+      expect(assigns(:drivers)).to include(active_driver)
+      expect(assigns(:drivers)).not_to include(inactive_driver)
+    end
+  end
+
+  describe "GET #edit" do
+    it "returns a successful response" do
+      get :edit, params: { id: @ride1.id }
+      expect(response).to have_http_status(:success)
+    end
+
+    it "includes an inactive driver if they are assigned to the current ride chain" do
+      retired_driver = FactoryBot.create(:driver, active: false)
+
+      tail_ride = FactoryBot.create(:ride, passenger: @passenger1, driver: retired_driver)
+      head_ride = FactoryBot.create(:ride, passenger: @passenger1, driver: @driver1)
+      head_ride.update!(next_ride: tail_ride)
+
+      get :edit, params: { id: head_ride.id }
+
+      expect(assigns(:drivers)).to include(retired_driver)
+    end
+
+    it "excludes unrelated inactive drivers" do
+      unrelated_inactive = FactoryBot.create(:driver, active: false)
+      get :edit, params: { id: @ride1.id }
+
+      expect(assigns(:drivers)).not_to include(unrelated_inactive)
+    end
+  end
+
   describe "POST #create" do
     context "with valid attributes" do
       let(:valid_attributes) do
@@ -139,16 +182,6 @@ RSpec.describe RidesController, type: :controller do
         }
       end
 
-      it "GET #new" do
-        get :new
-        expect(response).to have_http_status(:success)
-      end
-
-      it "GET #edit" do
-        get :edit, params: { id: @ride1.id }
-        expect(response).to have_http_status(:success)
-      end
-
       # Tests successful creation of a ride with multiple stops
       it "creates a new ride and redirects" do
         expect {
@@ -162,6 +195,12 @@ RSpec.describe RidesController, type: :controller do
       # Tests failed creation due to missing required parameters
       it "renders new when ride creation fails" do
         post :create, params: { ride: { driver_id: nil } }
+        expect(response).to render_template(:new)
+      end
+
+      it "renders new when a generic system error occurs" do
+        allow(Ride).to receive(:build_linked_rides!).and_raise(StandardError, "Unknown Error!")
+        post :create, params: { ride: valid_attributes }
         expect(response).to render_template(:new)
       end
 
@@ -203,17 +242,17 @@ RSpec.describe RidesController, type: :controller do
             { street: "456 Second Ave", city: "Berkeley", state: "CA", zip: "94704" },
             { street: "789 Third Ave", city: "San Francisco", state: "CA", zip: "94105" }
           ],
-                  stops_attributes: [
-          { driver_id: @driver1.id, van: 1 },
-          { driver_id: @driver2.id, van: 2 }
-        ]
+          stops_attributes: [
+            { driver_id: @driver1.id, van: 1 },
+            { driver_id: @driver2.id, van: 2 }
+          ]
         )
 
         expect {
           post :create, params: { ride: attributes_with_stops }
         }.to change(Ride, :count).by(2)
 
-        created_rides = Ride.order(:created_at).last(2)
+        created_rides = Ride.order(id: :desc).limit(2)
 
         # First ride should use first stop's driver and van
         expect(created_rides[0].driver_id).to eq(@driver1.id)
@@ -252,14 +291,69 @@ RSpec.describe RidesController, type: :controller do
       }
 
       put :update, params: { id: @ride1.id, ride: update_attrs }
-      new_ride = Ride.order(:created_at).last
+      new_ride = Ride.order(:id).last
       expect(response).to redirect_to(edit_ride_path(new_ride))
       expect(flash[:notice]).to eq("Ride was successfully updated.")
     end
 
-    it "renders edit on failure" do
+    it "renders edit on RecordInvalid failure" do
       put :update, params: { id: @ride1.id, ride: { driver_id: nil } }
       expect(response).to render_template(:edit)
+    end
+
+    it "does not flash error message anymore when same (Address) Street gets assigned different Name fields" do
+      update_attrs = {
+        date: Time.zone.tomorrow,
+        driver_id: @driver1.id,
+        passenger_id: @passenger1.id,
+        addresses_attributes: [
+          {
+            name: "Royal Palace",
+            street: "100 Main St",
+            city: "Palettia",
+            state: "PA",
+            zip: "90000"
+          },
+          {
+            name: "Downtown",
+            street: "100 Powell St",
+            city: "Palettia",
+            state: "PA",
+            zip: "90100"
+          },
+          {
+            name: "Royal Palace",
+            street: "100 Main St",
+            city: "Palettia",
+            state: "PA",
+            zip: "90000"
+          }
+        ],
+        stops_attributes: [
+          { driver_id: @driver1.id, van: 1 },
+          { driver_id: @driver2.id, van: 2 }
+        ]
+      }
+
+      put :update, params: { id: @ride1.id, ride: update_attrs }
+      new_rides = Ride.order(id: :desc).limit(2)
+      expect(response).to redirect_to(edit_ride_path(new_rides[0]))
+      expect(flash[:notice]).to eq("Ride was successfully updated.")
+
+      update_attrs[:addresses_attributes][1][:name] = "Downtown Workshop"
+      put :update, params: { id: new_rides[0].id, ride: update_attrs }
+      new_rides = Ride.order(id: :desc).limit(2)
+      expect(flash.now[:alert]).to be_nil
+      expect(response).to redirect_to(edit_ride_path(new_rides[0]))
+      expect(flash[:notice]).to eq("Ride was successfully updated.")
+      expect(new_rides[0].dest_address_id).to eq(new_rides[1].start_address_id)
+    end
+
+    it "raises error when a generic system error occurs" do
+      allow(Ride).to receive(:build_linked_rides!).and_raise(StandardError, "Unknown Error!")
+      expect {
+        post :update, params: { id: @ride1.id, ride: { driver_id: nil } }
+      }.to raise_error
     end
 
     it "adds a new destination to the ride chain" do
@@ -339,7 +433,7 @@ RSpec.describe RidesController, type: :controller do
       put :update, params: { id: ride1.id, ride: update_attrs }
 
       # Should create 2 new rides (3 addresses = 2 ride segments)
-      updated_rides = Ride.order(:created_at).last(2)
+      updated_rides = Ride.order(id: :desc).limit(2)
 
       expect(updated_rides[0].driver_id).to eq(@driver1.id)
       expect(updated_rides[0].van).to eq(5)
@@ -407,6 +501,21 @@ RSpec.describe RidesController, type: :controller do
 
       duplicated_ride = assigns(:ride)
       expect(duplicated_ride.status).to eq("Pending")
+    end
+
+    it "blocks an inactive driver even if they were the original driver" do
+      # 1. Create a driver and a ride assigned to them
+      retired_driver = FactoryBot.create(:driver, active: true)
+      old_ride = FactoryBot.create(:ride, driver: retired_driver)
+
+      # 2. Driver retires
+      retired_driver.update(active: false)
+
+      # 3. Duplicate the old ride
+      get :duplicate, params: { id: old_ride.id }
+
+      # 4. Confirm they are NOT in the dropdown list for the new (duplicate) ride
+      expect(assigns(:drivers)).not_to include(retired_driver)
     end
   end
 
