@@ -121,6 +121,7 @@ class PassengersController < ApplicationController
   }.freeze
 
   def passengers_datatable
+    is_export = params[:length].to_i == -1
     base = Passenger.left_outer_joins(:address)
 
     records_total = base.count
@@ -133,14 +134,15 @@ class PassengersController < ApplicationController
     sort_col  = DT_SORT_COLUMNS_PASSENGERS[col_idx] || "passengers.name"
     base      = base.order(Arel.sql("#{sort_col} #{direction}"))
 
-    is_export = params[:length].to_i == -1
-
     passengers = if is_export
       base.includes(:address)
     else
       start  = params[:start].to_i
       length = [params[:length].to_i, 1].max
-      base.includes(:address).offset(start).limit(length)
+      base
+        .includes(:address)
+        .offset(start)
+        .limit(length)
     end
 
     {
