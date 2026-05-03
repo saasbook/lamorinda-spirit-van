@@ -33,12 +33,22 @@ RSpec.describe RidesController, type: :controller do
 
     it "returns rides data as JSON for DataTables" do
       # Simulates the AJAX request DataTables sends on every page load/sort/filter.
-      get :index, format: :json, params: { draw: "1", start: "0", length: "10",
+      get :index, format: :json, params: { draw: "1", start: "1", length: "3",
         order: { "0" => { column: "1", dir: "desc" } }, columns: {} }
       expect(response).to be_successful
       json = JSON.parse(response.body)
       expect(json["recordsTotal"]).to eq(4)
-      expect(json["data"].length).to be <= 4
+      expect(json["data"].length).to be <= 3
+    end
+
+    it "doesn't apply pagination limits if is_export" do
+      get :index, format: :json, params: {
+        draw: "1", start: "0", length: "-1",
+        order: { "0" => { column: "1", dir: "asc" } },
+        columns: { "2" => { search: { value: @driver1.name } } }
+      }
+      json = JSON.parse(response.body)
+      expect(json["recordsFiltered"]).to eq(json["data"].length)
     end
 
     it "filters rides by a text column search value" do
@@ -96,6 +106,49 @@ RSpec.describe RidesController, type: :controller do
     end
   end
 
+  describe "GET #new" do
+    it "returns a successful response" do
+      get :new
+      expect(response).to have_http_status(:success)
+    end
+
+    it "assigns only active drivers to @drivers and gon" do
+      inactive_driver = FactoryBot.create(:driver, active: false)
+      active_driver = FactoryBot.create(:driver, active: true)
+
+      get :new
+
+      expect(assigns(:drivers)).to include(active_driver)
+      expect(assigns(:drivers)).not_to include(inactive_driver)
+    end
+  end
+
+  describe "GET #edit" do
+    it "returns a successful response" do
+      get :edit, params: { id: @ride1.id }
+      expect(response).to have_http_status(:success)
+    end
+
+    it "includes an inactive driver if they are assigned to the current ride chain" do
+      retired_driver = FactoryBot.create(:driver, active: false)
+
+      tail_ride = FactoryBot.create(:ride, passenger: @passenger1, driver: retired_driver)
+      head_ride = FactoryBot.create(:ride, passenger: @passenger1, driver: @driver1)
+      head_ride.update!(next_ride: tail_ride)
+
+      get :edit, params: { id: head_ride.id }
+
+      expect(assigns(:drivers)).to include(retired_driver)
+    end
+
+    it "excludes unrelated inactive drivers" do
+      unrelated_inactive = FactoryBot.create(:driver, active: false)
+      get :edit, params: { id: @ride1.id }
+
+      expect(assigns(:drivers)).not_to include(unrelated_inactive)
+    end
+  end
+
   describe "POST #create" do
     context "with valid attributes" do
       let(:valid_attributes) do
@@ -127,16 +180,6 @@ RSpec.describe RidesController, type: :controller do
             },
           ]
         }
-      end
-
-      it "GET #new" do
-        get :new
-        expect(response).to have_http_status(:success)
-      end
-
-      it "GET #edit" do
-        get :edit, params: { id: @ride1.id }
-        expect(response).to have_http_status(:success)
       end
 
       # Tests successful creation of a ride with multiple stops
@@ -258,7 +301,7 @@ RSpec.describe RidesController, type: :controller do
       expect(response).to render_template(:edit)
     end
 
-    it "immediately flashes error message when same Street gets assigned different name fields" do
+    it "does not flash error message anymore when same (Address) Street gets assigned different Name fields" do
       update_attrs = {
         date: Time.zone.tomorrow,
         driver_id: @driver1.id,
@@ -299,8 +342,10 @@ RSpec.describe RidesController, type: :controller do
 
       update_attrs[:addresses_attributes][1][:name] = "Downtown Workshop"
       put :update, params: { id: new_rides[0].id, ride: update_attrs }
-      expect(flash.now[:alert]).to eq("Update failed: Street has already been taken")
-      expect(response).to render_template(:edit)
+      new_rides = Ride.order(id: :desc).limit(2)
+      expect(flash.now[:alert]).to be_nil
+      expect(response).to redirect_to(edit_ride_path(new_rides[0]))
+      expect(flash[:notice]).to eq("Ride was successfully updated.")
       expect(new_rides[0].dest_address_id).to eq(new_rides[1].start_address_id)
     end
 
@@ -456,6 +501,21 @@ RSpec.describe RidesController, type: :controller do
 
       duplicated_ride = assigns(:ride)
       expect(duplicated_ride.status).to eq("Pending")
+    end
+
+    it "blocks an inactive driver even if they were the original driver" do
+      # 1. Create a driver and a ride assigned to them
+      retired_driver = FactoryBot.create(:driver, active: true)
+      old_ride = FactoryBot.create(:ride, driver: retired_driver)
+
+      # 2. Driver retires
+      retired_driver.update(active: false)
+
+      # 3. Duplicate the old ride
+      get :duplicate, params: { id: old_ride.id }
+
+      # 4. Confirm they are NOT in the dropdown list for the new (duplicate) ride
+      expect(assigns(:drivers)).not_to include(retired_driver)
     end
   end
 
