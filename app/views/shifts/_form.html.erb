@@ -20,7 +20,7 @@
 
   <div>
     <%= form.label :driver_id, "Driver", style: "display: block" %>
-    <%= form.collection_select :driver_id, Driver.all, :id, :name, { prompt: "Select a driver" }, required: true %>
+    <%= form.collection_select :driver_id, @drivers, :id, :name, { prompt: "Select a driver" }, required: true %>
     <%= form.label :shift_type, style: "display: block" %>
     <%= form.text_field :shift_type, list: "shift_type_options",
         required: true, placeholder: "Select or type a shift type",

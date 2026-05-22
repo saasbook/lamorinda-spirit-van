@@ -7,14 +7,14 @@ class ShiftTemplatesController < ApplicationController
   # GET /shift_templates/new
   def new
     @shift_template = ShiftTemplate.new(params.permit(:day_of_week))
-    set_drivers
+    set_active_drivers
     set_start_date_presence
   end
 
   # GET /shift_templates/1/edit
   def edit
     set_shift_template
-    set_drivers
+    set_active_drivers
     set_start_date_presence
   end
 
@@ -27,7 +27,7 @@ class ShiftTemplatesController < ApplicationController
         format.html { redirect_to shifts_path(start_date: @start_date), notice: "Shift template was successfully created." }
         format.json { render :show, status: :created, location: @shift_template }
       else
-        set_drivers
+        set_active_drivers
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @shift_template.errors, status: :unprocessable_entity }
       end
@@ -42,7 +42,7 @@ class ShiftTemplatesController < ApplicationController
         format.html { redirect_to shifts_path(start_date: @start_date), notice: "Shift template was successfully updated." }
         format.json { render :show, status: :ok, location: @shift_template }
       else
-        set_drivers
+        set_active_drivers
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @shift_template.errors, status: :unprocessable_entity }
       end
@@ -68,8 +68,11 @@ class ShiftTemplatesController < ApplicationController
     @start_date = params[:start_date].presence || Time.zone.today.to_s
   end
 
-  def set_drivers
-    @drivers = Driver.order(:name)
+  def set_active_drivers
+    @drivers = Driver.active
+                     .or(Driver.where(id: @shift_template&.driver_id&.present? ? Driver.find_by(id: @shift_template.driver_id) : []))
+                     .order(:name)
+                     .distinct
   end
 
   # Use callbacks to share common setup or constraints between actions.

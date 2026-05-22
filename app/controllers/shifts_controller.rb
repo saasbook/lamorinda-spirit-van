@@ -2,8 +2,9 @@
 
 class ShiftsController < ApplicationController
   before_action :set_shift, only: %i[ show edit update destroy ]
-  before_action -> { require_role("admin") }, only: [:fill_from_template, :clear_month]
-  before_action -> { require_role("admin", "dispatcher") }, only: [:new, :edit, :create, :destroy]
+  before_action :set_active_drivers, only: %i[ new edit create update ]
+  before_action -> { require_role("admin") }, only: %i[ fill_from_template clear_month ]
+  before_action -> { require_role("admin", "dispatcher") }, only: %i[ new edit create destroy ]
 
   # Currently the "capture_return_to" method is used for redirect from the shifts calendar to /drivers/id/today?date=XXX page
   before_action -> { capture_return_to(:return_to_drivers_today_from_shifts_index) }, only: :index
@@ -25,7 +26,7 @@ class ShiftsController < ApplicationController
     end
 
     @rides = Ride.includes(:passenger, :start_address, :dest_address, :next_ride)
-    .where(driver_id: @shift.driver.id, date: @shift.shift_date)
+                 .where(driver_id: @shift.driver_id, date: @shift.shift_date)
 
     # Walk up to the root for each ride, collect unique roots
     @rides = @rides.map { |r| r.walk_to_root }.uniq
@@ -125,6 +126,13 @@ class ShiftsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_shift
     @shift = Shift.find(params[:id])
+  end
+
+  def set_active_drivers
+    @drivers = Driver.active
+                     .or(Driver.where(id: @shift&.driver_id&.present? ? Driver.find_by(id: @shift.driver_id) : []))
+                     .order(:name)
+                     .distinct
   end
 
   # Only allow a list of trusted parameters through.
