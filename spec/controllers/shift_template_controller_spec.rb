@@ -16,6 +16,16 @@ RSpec.describe ShiftTemplatesController, type: :controller do
       get :new
       expect(response).to be_successful
     end
+
+    it "assigns only active drivers to @drivers" do
+      inactive_driver = FactoryBot.create(:driver, active: false)
+      active_driver = FactoryBot.create(:driver, active: true)
+
+      get :new
+
+      expect(assigns(:drivers)).to include(active_driver)
+      expect(assigns(:drivers)).not_to include(inactive_driver)
+    end
   end
 
   describe "POST #create" do
@@ -45,6 +55,21 @@ RSpec.describe ShiftTemplatesController, type: :controller do
     it "returns a successful response" do
       get :edit, params: { id: @shift_template.id }
       expect(response).to be_successful
+    end
+
+    it "includes an inactive driver if they are assigned to the current shift template" do
+      retired_driver = FactoryBot.create(:driver, active: false)
+      shift_template = FactoryBot.create(:shift_template, driver: retired_driver)
+      get :edit, params: { id: shift_template.id }
+
+      expect(assigns(:drivers)).to include(retired_driver)
+    end
+
+    it "excludes unrelated inactive drivers" do
+      unrelated_inactive = FactoryBot.create(:driver, active: false)
+      get :edit, params: { id: @shift_template.id }
+
+      expect(assigns(:drivers)).not_to include(unrelated_inactive)
     end
   end
 
