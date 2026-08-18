@@ -16,7 +16,7 @@ Feature: Autocomplete for new ride passengers
         And I am on the new ride page
 
     Scenario: Autocomplete prompts names as you type
-        When I fill in "Passenger" with "B"
-        Then I should see "Bob"
-        And I should see "Bill"
-        And I should not see "Alice"
+        When I fill in "Passenger" with "li"
+        Then I should see "Alice"
+        And I should see "Charlie"
+        And I should not see "Bob"

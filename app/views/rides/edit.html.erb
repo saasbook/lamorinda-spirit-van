@@ -112,12 +112,26 @@
 
               <div class="mb-3">
                 <%= f.label :ride_type, "Ride Type" %>
-                <%= f.text_field :ride_type, class: "form-control" %>
+                <%= f.text_field :ride_type, list: "ride_type_options",
+                    class: "form-control", autocomplete: "off",
+                    placeholder: "Select or type a ride type" %>
+                <datalist id="ride_type_options">
+                  <% Ride::RIDE_TYPES.each do |option| %>
+                    <option value="<%= option %>">
+                  <% end %>
+                </datalist>
               </div>
 
               <div class="mb-3">
                 <%= f.label :fare_type, "Fare Type" %>
-                <%= f.text_field :fare_type, class: "form-control" %>
+                <%= f.text_field :fare_type, list: "fare_type_options",
+                    class: "form-control", autocomplete: "off",
+                    placeholder: "Select or type a fare type" %>
+                <datalist id="fare_type_options">
+                  <% Ride::FARE_TYPES.each do |option| %>
+                    <option value="<%= option %>">
+                  <% end %>
+                </datalist>
               </div>
 
               <div class="mb-3">
